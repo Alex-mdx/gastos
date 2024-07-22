@@ -1,4 +1,6 @@
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/preferences.dart';
+import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +14,23 @@ class GastosView extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
-        appBar: AppBar(title: const Text('Gastos')),
+        appBar: AppBar(title: const Text('Gastos :)'), actions: [
+          Consumer<AppThemeProvider>(builder: (context, theme, child) {
+            return Switch(
+                value: Preferences.tema,
+                onChanged: (value) {
+                  theme.toogleTheme();
+                });
+          })
+        ]),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
                 child: Column(children: [
               HistorialSemanalWidget(provider: provider),
+              const Divider(),
+              const Column(
+                  children: [Text("Recomendacion de gasto para esta semana")]),
               const Divider(),
               const Center(child: CardGastoWidget())
             ]))),

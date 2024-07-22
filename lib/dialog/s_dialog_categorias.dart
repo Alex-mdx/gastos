@@ -48,7 +48,7 @@ class DialogCategorias extends StatelessWidget {
                       });
                 }
               },
-              child: Text('Ingresar'))
+              child: const Text('Ingresar'))
         ]));
   }
 }

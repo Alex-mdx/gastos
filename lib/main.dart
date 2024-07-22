@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -27,9 +28,11 @@ Future<void> main() async {
   await Preferences.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
-    runApp(MultiProvider(
-        providers: [ChangeNotifierProvider(create: (_) => GastoProvider()),ChangeNotifierProvider(create: (_)=>NavigationProvider())],
-        child: const ProsCobro()));
+    runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => GastoProvider()),
+      ChangeNotifierProvider(create: (_) => NavigationProvider()),
+      ChangeNotifierProvider(create: (_) => AppThemeProvider())
+    ], child: const ProsCobro()));
   });
 }
 
@@ -52,6 +55,7 @@ class ProsCobro extends StatelessWidget {
               ],
               debugShowCheckedModeBanner: false,
               title: 'Gastos',
+              theme: Preferences.tema ? light : dark,
               navigatorKey: NavigationKey.navigatorKey,
               initialRoute: AppRoutes.initialRoute,
               routes: AppRoutes.routes));

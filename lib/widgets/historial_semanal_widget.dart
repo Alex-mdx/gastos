@@ -20,7 +20,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     "Miércoles",
     "Jueves",
     "Viernes",
-    "Sabado",
+    "Sábado",
     "Domingo"
   ];
   final now = DateTime.now();

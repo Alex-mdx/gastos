@@ -1,14 +1,15 @@
 import 'dart:developer';
-
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
+import 'package:gastos/dialog/s_dialog_foto_gasto.dart';
+import 'package:gastos/dialog/s_dialog_periodo_gasto.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
 import '../dialog/s_dialog_categorias.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CardGastoWidget extends StatelessWidget {
   const CardGastoWidget({super.key});
@@ -80,67 +81,82 @@ class CardGastoWidget extends StatelessWidget {
                 ButtonBar(children: [
                   IconButton(
                       onPressed: () {
-                        showBottomSheet(
-                            context: context,
-                            enableDrag: true,
-                            builder: (context) {
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Text('Ingresar evidencia'),
-                                        ElevatedButton.icon(
-                                            onPressed: () async {
-                                              final ImagePicker picker =
-                                                  ImagePicker();
-                                              final XFile? photo =
-                                                  await picker.pickImage(
-                                                      source:
-                                                          ImageSource.camera,
-                                                      requestFullMetadata:
-                                                          false);
-                                            },
-                                            label: const Text('Camara'),
-                                            icon: const Icon(Icons.camera_alt)),
-                                        ElevatedButton.icon(
-                                            onPressed: () async {
-                                              final ImagePicker picker =
-                                                  ImagePicker();
-                                              final List<XFile> images =
-                                                  await picker.pickMultiImage(
-                                                      requestFullMetadata:
-                                                          false);
-                                            },
-                                            label: const Text('galleria'),
-                                            icon:
-                                                const Icon(Icons.image_search))
-                                      ]));
-                            });
-                      },
-                      icon: const Icon(Icons.add_photo_alternate)),
-                  IconButton(
-                      onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (context) => const Dialog(
+                            builder: (context) {
+                              return Dialog(
                                 child: Padding(
-                                    padding: EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text('Archivo de evidencia'),
-                                          Divider(),
-                                          Wrap(children: [])
-                                        ]))));
+                                          const Text('Ingresar evidencia'),
+                                          ElevatedButton.icon(
+                                              onPressed: () async {
+                                                final ImagePicker picker =
+                                                    ImagePicker();
+                                                final XFile? photo =
+                                                    await picker.pickImage(
+                                                        source:
+                                                            ImageSource.camera,
+                                                        requestFullMetadata:
+                                                            false);
+                                                if (photo != null) {
+                                                  final data =
+                                                      await photo.readAsBytes();
+                                                  provider.imagenesActual
+                                                      .add(data);
+                                                }
+                                              },
+                                              label: const Text('Camara'),
+                                              icon:
+                                                  const Icon(Icons.camera_alt)),
+                                          ElevatedButton.icon(
+                                              onPressed: () async {
+                                                final ImagePicker picker =
+                                                    ImagePicker();
+                                                final List<XFile> images =
+                                                    await picker.pickMultiImage(
+                                                        limit: 10,
+                                                        requestFullMetadata:
+                                                            false);
+                                                if (images.isNotEmpty) {
+                                                  for (var element in images) {
+                                                    final data = await element
+                                                        .readAsBytes();
+                                                    provider.imagenesActual
+                                                        .add(data);
+                                                  }
+                                                }
+                                              },
+                                              label: const Text('galleria'),
+                                              icon: const Icon(
+                                                  Icons.image_search))
+                                        ])),
+                              );
+                            });
                       },
-                      icon: const Icon(Icons.photo_library))
+                      icon: const Icon(Icons.add_photo_alternate)),
+                  badges.Badge(
+                      showBadge: provider.imagenesActual.isNotEmpty,
+                      badgeContent: Text("${provider.imagenesActual.length}"),
+                      child: IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => const DialogFotoGasto());
+                          },
+                          icon: const Icon(Icons.photo_library)))
                 ])
               ]),
               Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => const DialogPeriodoGasto());
+                      },
                       label: const Text('Gasto Cronologico'),
                       icon: const Icon(Icons.calendar_month)))
             ])));
