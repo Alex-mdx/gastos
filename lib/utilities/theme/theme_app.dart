@@ -169,18 +169,3 @@ ThemeData dark = ThemeData(
                   borderRadius:
                       BorderRadius.all(Radius.circular(borderRadius)))))),
 );
-
-class AppThemeProvider with ChangeNotifier {
-  bool _changeTheme = true;
-  bool get changeTheme => _changeTheme;
-  set changeTheme(bool valor) {
-    _changeTheme = valor;
-    notifyListeners();
-  }
-
-  void toogleTheme() {
-    changeTheme = !changeTheme;
-    Preferences.tema = changeTheme;
-    notifyListeners();
-  }
-}

@@ -58,8 +58,8 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: AnimatedFlipCounter(
-                              value: 100,
-                              duration: Durations.long3,
+                              value: widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList()),
+                              duration: Durations.long3,fractionDigits: 2,
                               prefix: "\$",
                               textStyle: TextStyle(fontSize: 3.w, fontWeight: FontWeight.bold)))),
                   itemCount: dias.length))),
@@ -67,8 +67,12 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: (1.5).h, fontWeight: FontWeight.bold)),
       AnimatedFlipCounter(
-          value: 1,
-          duration: Durations.long3,
+          value: widget.provider.listaGastos.isEmpty ? 0: (widget.provider.generarPago(
+                  montos: widget.provider.listaGastos
+                      .map((e) => e.monto!)
+                      .toList())) /
+              widget.provider.listaGastos.length,
+          duration: Durations.long3,fractionDigits: 2,
           prefix: "\$",
           textStyle: TextStyle(fontSize: (2).h, fontWeight: FontWeight.bold))
     ]);

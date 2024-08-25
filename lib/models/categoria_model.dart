@@ -6,11 +6,11 @@ class CategoriaModel {
   CategoriaModel(
       {this.id, required this.nombre, required this.descripcion});
 
-  CategoriaModel copyWith({int? id, String? nombre, String? descipcion}) =>
+  CategoriaModel copyWith({int? id, String? nombre, String? descripcion}) =>
       CategoriaModel(
           id: id ?? this.id,
           nombre: nombre ?? this.nombre,
-          descripcion: descipcion ?? this.descripcion);
+          descripcion: descripcion ?? this.descripcion);
 
   factory CategoriaModel.fromJson(Map<String, dynamic> json) => CategoriaModel(
       id: json["id"], nombre: json["nombre"], descripcion: json["descripcion"]);

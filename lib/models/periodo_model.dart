@@ -1,8 +1,8 @@
 class PeriodoModelo {
-  String year;
-  String mes;
-  String dia;
-  int modificable;
+  String? year;
+  String? mes;
+  String? dia;
+  int? modificable;
 
   PeriodoModelo(
       {required this.year,

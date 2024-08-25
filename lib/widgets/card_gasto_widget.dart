@@ -5,24 +5,37 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/dialog/s_dialog_foto_gasto.dart';
 import 'package:gastos/dialog/s_dialog_periodo_gasto.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../dialog/s_dialog_camara.dart';
 import '../dialog/s_dialog_categorias.dart';
 import 'package:badges/badges.dart' as badges;
 
-class CardGastoWidget extends StatelessWidget {
+class CardGastoWidget extends StatefulWidget {
   const CardGastoWidget({super.key});
 
   @override
+  State<CardGastoWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<CardGastoWidget> {
+  DateTime now = DateTime.now();
+  TextEditingController nota = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
     final provider = Provider.of<GastoProvider>(context);
     return Card(
         elevation: 2,
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
+              Center(
+                  child: Text(
+                      provider.convertirFecha(
+                          fecha: provider.selectFecha ?? now),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18.sp))),
+              const Divider(),
               ButtonBar(children: [
                 SizedBox(
                     width: 70.w,
@@ -42,6 +55,13 @@ class CardGastoWidget extends StatelessWidget {
                                     subtitle: Text(item.descripcion)),
                         overlayHeight: 5,
                         onChanged: (value) {
+                          if (value != null) {
+                            final modelTemp = provider.gastoActual
+                                .copyWith(categoriaId: value.id);
+                            provider.gastoActual = modelTemp;
+                            log("${provider.gastoActual.toJson()}");
+                          }
+
                           log('changing value to: $value');
                         })),
                 IconButton(
@@ -55,15 +75,26 @@ class CardGastoWidget extends StatelessWidget {
               ]),
               Row(mainAxisSize: MainAxisSize.min, children: [
                 IconButton(
-                    onPressed: () {
-                      showDatePicker(
-                          context: context,
-                          initialDatePickerMode: DatePickerMode.day,
-                          initialEntryMode: DatePickerEntryMode.calendarOnly,
-                          initialDate: now,
-                          firstDate:
-                              now.subtract(const Duration(days: 365 * 10)),
-                          lastDate: now);
+                    onPressed: () async {
+                      provider.selectFecha = (await showDatePicker(
+                              context: context,
+                              initialDatePickerMode: DatePickerMode.day,
+                              initialEntryMode:
+                                  DatePickerEntryMode.calendarOnly,
+                              initialDate: now,
+                              firstDate:
+                                  now.subtract(const Duration(days: 365 * 15)),
+                              lastDate: now)) ??
+                          now;
+                      final modelTemp = provider.gastoActual.copyWith(
+                          fecha: provider.convertirFechaHora(
+                              fecha: provider.selectFecha ?? now),
+                          dia:
+                              (provider.selectFecha?.day ?? now.day).toString(),
+                          mes: (provider.selectFecha?.month ?? now.month)
+                              .toString());
+                      provider.gastoActual = modelTemp;
+                      log("${provider.gastoActual.toJson()}");
                     },
                     icon: const Icon(Icons.edit_calendar)),
                 SizedBox(
@@ -71,70 +102,28 @@ class CardGastoWidget extends StatelessWidget {
                     child: SpinBox(
                         min: .5,
                         max: 10000,
-                        value: 50,
+                        value: provider.gastoActual.monto ?? 0,
                         decimals: 2,
                         acceleration: .5,
                         decoration: const InputDecoration(
                             icon: Icon(Icons.attach_money)),
                         direction: Axis.vertical,
-                        onChanged: (value) => print(value))),
+                        onSubmitted: (p0) {
+                          final tempModel =
+                              provider.gastoActual.copyWith(monto: p0);
+                          provider.gastoActual = tempModel;
+                        },
+                        onChanged: (value) {
+                          final tempModel =
+                              provider.gastoActual.copyWith(monto: value);
+                          provider.gastoActual = tempModel;
+                        })),
                 ButtonBar(children: [
                   IconButton(
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text('Ingresar evidencia'),
-                                          ElevatedButton.icon(
-                                              onPressed: () async {
-                                                final ImagePicker picker =
-                                                    ImagePicker();
-                                                final XFile? photo =
-                                                    await picker.pickImage(
-                                                        source:
-                                                            ImageSource.camera,
-                                                        requestFullMetadata:
-                                                            false);
-                                                if (photo != null) {
-                                                  final data =
-                                                      await photo.readAsBytes();
-                                                  provider.imagenesActual
-                                                      .add(data);
-                                                }
-                                              },
-                                              label: const Text('Camara'),
-                                              icon:
-                                                  const Icon(Icons.camera_alt)),
-                                          ElevatedButton.icon(
-                                              onPressed: () async {
-                                                final ImagePicker picker =
-                                                    ImagePicker();
-                                                final List<XFile> images =
-                                                    await picker.pickMultiImage(
-                                                        limit: 10,
-                                                        requestFullMetadata:
-                                                            false);
-                                                if (images.isNotEmpty) {
-                                                  for (var element in images) {
-                                                    final data = await element
-                                                        .readAsBytes();
-                                                    provider.imagenesActual
-                                                        .add(data);
-                                                  }
-                                                }
-                                              },
-                                              label: const Text('galleria'),
-                                              icon: const Icon(
-                                                  Icons.image_search))
-                                        ])),
-                              );
-                            });
+                            builder: (context) => const DialogCamara());
                       },
                       icon: const Icon(Icons.add_photo_alternate)),
                   badges.Badge(
@@ -155,10 +144,24 @@ class CardGastoWidget extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (context) => const DialogPeriodoGasto());
+                            builder: (context) =>
+                                DialogPeriodoGasto(provider: provider));
                       },
                       label: const Text('Gasto Cronologico'),
-                      icon: const Icon(Icons.calendar_month)))
+                      icon: const Icon(Icons.calendar_month))),
+              const Divider(),
+              TextField(
+                  controller: nota,
+                  keyboardType: TextInputType.text,
+                  onChanged: (value) {
+                    final tempModel =
+                        provider.gastoActual.copyWith(nota: nota.text);
+                    provider.gastoActual = tempModel;
+                  },
+                  onSubmitted: (value) {
+                    log("${provider.gastoActual.toJson()}");
+                  },
+                  decoration: const InputDecoration(hintText: "Notas de gasto"))
             ])));
   }
 }

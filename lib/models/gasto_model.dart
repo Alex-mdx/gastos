@@ -4,69 +4,70 @@ import 'dart:typed_data';
 import 'periodo_model.dart';
 
 class GastoModelo {
-    int id;
-    int categoriaId;
-    double monto;
-    String fecha;
-    String dia;
-    String mes;
-    int peridico;
-    PeriodoModelo periodo;
-    int gasto;
-    List<Uint8List> evidencia;
+  int? id;
+  int? categoriaId;
+  double? monto;
+  String? fecha;
+  String? dia;
+  String? mes;
+  int? peridico;
+  PeriodoModelo periodo;
+  int? gasto;
+  List<Uint8List> evidencia;
+  String? nota;
 
-    GastoModelo({
-        required this.id,
-        required this.categoriaId,
-        required this.monto,
-        required this.fecha,
-        required this.dia,
-        required this.mes,
-        required this.peridico,
-        required this.periodo,
-        required this.gasto,
-        required this.evidencia,
-    });
+  GastoModelo(
+      {this.id,
+      required this.categoriaId,
+      required this.monto,
+      required this.fecha,
+      required this.dia,
+      required this.mes,
+      required this.peridico,
+      required this.periodo,
+      required this.gasto,
+      required this.evidencia,
+      required this.nota});
 
-    GastoModelo copyWith({
-        int? id,
-        int? categoriaId,
-        double? monto,
-        String? fecha,
-        String? dia,
-        String? mes,
-        int? peridico,
-        PeriodoModelo? periodo,
-        int? gasto,
-        List<Uint8List>? evidencia,
-    }) => 
-        GastoModelo(
-            id: id ?? this.id,
-            categoriaId: categoriaId ?? this.categoriaId,
-            monto: monto ?? this.monto,
-            fecha: fecha ?? this.fecha,
-            dia: dia ?? this.dia,
-            mes: mes ?? this.mes,
-            peridico: peridico ?? this.peridico,
-            periodo: periodo ?? this.periodo,
-            gasto: gasto ?? this.gasto,
-            evidencia: evidencia ?? this.evidencia,
-        );
+  GastoModelo copyWith(
+          {int? id,
+          int? categoriaId,
+          double? monto,
+          String? fecha,
+          String? dia,
+          String? mes,
+          int? peridico,
+          PeriodoModelo? periodo,
+          int? gasto,
+          List<Uint8List>? evidencia,
+          String? nota}) =>
+      GastoModelo(
+          id: id ?? this.id,
+          categoriaId: categoriaId ?? this.categoriaId,
+          monto: monto ?? this.monto,
+          fecha: fecha ?? this.fecha,
+          dia: dia ?? this.dia,
+          mes: mes ?? this.mes,
+          peridico: peridico ?? this.peridico,
+          periodo: periodo ?? this.periodo,
+          gasto: gasto ?? this.gasto,
+          evidencia: evidencia ?? this.evidencia,
+          nota: nota ?? this.nota);
 
-    factory GastoModelo.fromJson(Map<String, dynamic> json) => GastoModelo(
-        id: json["id"],
-        categoriaId: json["categoria_id"],
-        monto: json["monto"]?.toDouble(),
-        fecha: json["fecha"],
-        dia: json["dia"],
-        mes: json["mes"],
-        peridico: json["peridico"],
-        periodo: PeriodoModelo.fromJson(jsonDecode(json["periodo"])),
-        gasto: json["gasto"],
-        evidencia: List<Uint8List>.from(json["evidencia"].map((x) => x)),
-    );
+  factory GastoModelo.fromJson(Map<String, dynamic> json) => GastoModelo(
+      id: json["id"],
+      categoriaId: json["categoria_id"],
+      monto: double.parse(json["monto"]),
+      fecha: json["fecha"],
+      dia: json["dia"],
+      mes: json["mes"],
+      peridico: json["peridico"],
+      periodo: PeriodoModelo.fromJson(jsonDecode(json["periodo"].toString())),
+      gasto: json["gasto"],
+      evidencia: List<Uint8List>.from(json["evidencia"].map((x) => x)),
+      nota: json["nota"]);
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "categoria_id": categoriaId,
         "monto": monto,
@@ -74,8 +75,9 @@ class GastoModelo {
         "dia": dia,
         "mes": mes,
         "peridico": peridico,
-        "periodo": periodo,
-        "gasto": jsonEncode(gasto),
+        "periodo": jsonEncode(periodo),
+        "gasto": gasto,
         "evidencia": List<Uint8List>.from(evidencia.map((x) => x)),
-    };
+        "nota": nota
+      };
 }

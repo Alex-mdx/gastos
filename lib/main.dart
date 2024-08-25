@@ -30,8 +30,7 @@ Future<void> main() async {
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => GastoProvider()),
-      ChangeNotifierProvider(create: (_) => NavigationProvider()),
-      ChangeNotifierProvider(create: (_) => AppThemeProvider())
+      ChangeNotifierProvider(create: (_) => NavigationProvider())
     ], child: const ProsCobro()));
   });
 }
@@ -40,7 +39,7 @@ class ProsCobro extends StatelessWidget {
   const ProsCobro({super.key});
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
+    return ResponsiveSizer(builder: (context, orientation, deviceType) {
       return OKToast(
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
@@ -55,7 +54,7 @@ class ProsCobro extends StatelessWidget {
               ],
               debugShowCheckedModeBanner: false,
               title: 'Gastos',
-              theme: Preferences.tema ? light : dark,
+              theme: light,
               navigatorKey: NavigationKey.navigatorKey,
               initialRoute: AppRoutes.initialRoute,
               routes: AppRoutes.routes));

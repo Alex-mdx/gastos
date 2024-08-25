@@ -17,7 +17,8 @@ class GastosController {
       peridico INTEGER,
       periodo TEXT,
       gasto INTEGER,
-      evidencia TEXT
+      evidencia TEXT,
+      nota TEXT
       )""");
   }
 
@@ -37,8 +38,8 @@ class GastosController {
   static Future<List<GastoModelo>> getItems() async {
     final db = await database();
     List<GastoModelo> modelo = [];
-    List<Map<String, dynamic>> data =
-        await db.query(nombreDB, orderBy: "id");
+    final data =(
+        await db.query(nombreDB));
     for (var element in data) {
       modelo.add(GastoModelo.fromJson(element));
     }

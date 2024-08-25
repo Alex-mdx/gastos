@@ -13,7 +13,7 @@ class CategoriaController {
   }
 
   static Future<sql.Database> database() async {
-    return sql.openDatabase('app_gasto.db', version: 1,
+    return sql.openDatabase('app_categoria.db', version: 1,
         onCreate: (sql.Database database, int version) async {
       await createTables(database);
     });
