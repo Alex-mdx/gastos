@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/widgets/grafico_view.dart';
-import 'package:gastos/widgets/historial_view.dart';
 
-import '../widgets/gastos_view.dart';
+import '../views/gastos_view.dart';
+import '../views/historial_view.dart';
 
 class NavigationProvider extends ChangeNotifier {
   NavigationProvider() : _pageControlller = PageController(initialPage: 1);

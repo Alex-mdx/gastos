@@ -38,7 +38,8 @@ class GastoProvider with ChangeNotifier {
       dia: null,
       mes: null,
       peridico: null,
-      periodo: PeriodoModelo(year: null, mes: null, dia: null, modificable: null),
+      periodo:
+          PeriodoModelo(year: null, mes: null, dia: null, modificable: null),
       gasto: null,
       evidencia: [],
       nota: null);
@@ -70,11 +71,16 @@ class GastoProvider with ChangeNotifier {
     var fConvertida = DateFormat('yyyy-MM-dd').format(fecha);
     return fConvertida;
   }
+
   String convertirFechaHora({required DateTime fecha}) {
     String formatoFechaHora = DateFormat('yyyy-MM-dd HH:mm:ss').format(fecha);
     return formatoFechaHora;
   }
-  
+
+  String convertirHora({required DateTime fecha}) {
+    String formatoFechaHora = DateFormat('HH:mm:ss').format(fecha);
+    return formatoFechaHora;
+  }
 
   double generarPago({required List<double> montos}) {
     double monto = 0.0;

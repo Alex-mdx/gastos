@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
-import 'card_gasto_widget.dart';
+import '../widgets/card_gasto_widget.dart';
 
 class GastosView extends StatelessWidget {
   const GastosView({super.key});

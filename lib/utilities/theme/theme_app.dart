@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gastos/utilities/preferences.dart';
 import 'theme_color.dart';
 
 const double borderRadius = 10.0;
