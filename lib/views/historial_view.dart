@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class HistorialView extends StatefulWidget {
@@ -44,24 +44,23 @@ class _HistorialViewState extends State<HistorialView> {
                         });
                   },
                   child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 4.sp, horizontal: 12.sp),
                       decoration: BoxDecoration(
                           color: appointment.color,
                           borderRadius: BorderRadius.circular(borderRadius)),
                       width: calendarAppointmentDetails.bounds.width,
                       height: calendarAppointmentDetails.bounds.height,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${appointment.id}.- ${appointment.subject}"),
-                          Text(
-                              provider.convertirHora(
-                                  fecha: appointment.startTime),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold))
-                        ],
-                      )));
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${appointment.id}.- ${appointment.subject}"),
+                            Text(
+                                "Hora: ${provider.convertirHora(fecha: appointment.startTime)}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold))
+                          ])));
             },
             monthViewSettings: const MonthViewSettings(
                 showAgenda: true, numberOfWeeksInView: 6),

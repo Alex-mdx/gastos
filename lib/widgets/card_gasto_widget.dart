@@ -36,7 +36,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18.sp))),
               const Divider(),
-              ButtonBar(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 SizedBox(
                     width: 70.w,
                     child: CustomDropdown(

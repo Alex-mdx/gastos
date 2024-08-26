@@ -89,4 +89,17 @@ class GastoProvider with ChangeNotifier {
     }
     return monto;
   }
+
+  int contarDiaSemana({required List<String> fechas, required int intDia}) {
+  int contador = 0;
+
+  for (String fechaString in fechas) {
+    DateTime fecha = DateTime.parse(fechaString);
+    if (fecha.weekday == intDia) {
+      contador++;
+    }
+  }
+
+  return contador;
+}
 }
