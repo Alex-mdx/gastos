@@ -58,8 +58,9 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: AnimatedFlipCounter(
-                              value: widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList()),
-                              duration: Durations.long3,fractionDigits: 2,
+                              value:  (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)) == 0? 0 :  (widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList())) / (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)),
+                              duration: Durations.long3,
+                              fractionDigits: 2,
                               prefix: "\$",
                               textStyle: TextStyle(fontSize: 3.w, fontWeight: FontWeight.bold)))),
                   itemCount: dias.length))),
@@ -67,12 +68,9 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: (1.5).h, fontWeight: FontWeight.bold)),
       AnimatedFlipCounter(
-          value: widget.provider.listaGastos.isEmpty ? 0: (widget.provider.generarPago(
-                  montos: widget.provider.listaGastos
-                      .map((e) => e.monto!)
-                      .toList())) /
-              widget.provider.listaGastos.length,
-          duration: Durations.long3,fractionDigits: 2,
+          value: widget.provider.promedioTotalSemana(),
+          duration: Durations.long3,
+          fractionDigits: 2,
           prefix: "\$",
           textStyle: TextStyle(fontSize: (2).h, fontWeight: FontWeight.bold))
     ]);
