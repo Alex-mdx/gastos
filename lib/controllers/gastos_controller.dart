@@ -1,4 +1,3 @@
-
 import 'package:sqflite/sqflite.dart' as sql;
 
 import '../models/gasto_model.dart';
@@ -38,12 +37,25 @@ class GastosController {
   static Future<List<GastoModelo>> getItems() async {
     final db = await database();
     List<GastoModelo> modelo = [];
-    final data =(
-        await db.query(nombreDB));
+    final data = (await db.query(nombreDB));
     for (var element in data) {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
+  }
+
+  static Future<GastoModelo?> find(int id) async {
+    final db = await database();
+
+    final data = (await db.query(nombreDB, where: "id = ?", whereArgs: [id]))
+        .firstOrNull;
+    GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
+    return modelo;
+  }
+
+  static Future<void> updateItem(GastoModelo gasto) async {
+    final db = await database();
+    await db.update(nombreDB, gasto.toJson(), where: "id = ?", whereArgs: [gasto.id]);
   }
 
   static Future<void> deleteItem(int id) async {

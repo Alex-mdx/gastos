@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+import '../dialog/s_dialog_historial_pago.dart';
 
 class HistorialView extends StatefulWidget {
   const HistorialView({super.key});
@@ -30,18 +33,20 @@ class _HistorialViewState extends State<HistorialView> {
               final Appointment appointment =
                   calendarAppointmentDetails.appointments.first;
               return InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                Text(appointment.subject),
-                                Text("${appointment.startTime}")
-                              ]));
-                        });
+                  onTap: () async {
+                    final modelado = await GastosController.find(
+                        int.parse(appointment.id.toString()));
+                    if (modelado != null) {
+                      Future.delayed(Duration.zero, () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogHistorialPago(gasto: modelado);
+                            });
+                      });
+                    } else {
+                      showToast("Esta venta ya no existe");
+                    }
                   },
                   child: Container(
                       padding: EdgeInsets.symmetric(

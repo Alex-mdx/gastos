@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
+import '../models/gasto_model.dart';
+import '../models/periodo_model.dart';
 import '../widgets/card_gasto_widget.dart';
 
 class GastosView extends StatelessWidget {
@@ -50,6 +52,21 @@ class GastosView extends StatelessWidget {
                       log("${finalTemp.toJson()}");
                       await GastosController.insert(finalTemp);
                       provider.listaGastos = await GastosController.getItems();
+                      provider.gastoActual = GastoModelo(
+                          categoriaId: null,
+                          monto: null,
+                          fecha: null,
+                          dia: null,
+                          mes: null,
+                          peridico: null,
+                          periodo: PeriodoModelo(
+                              year: null,
+                              mes: null,
+                              dia: null,
+                              modificable: null),
+                          gasto: null,
+                          evidencia: [],
+                          nota: null);
                       showToast("Tarjeta de gasto Guardada con exito");
                     });
               } else {

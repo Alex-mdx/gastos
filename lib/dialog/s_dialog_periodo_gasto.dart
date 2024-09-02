@@ -99,18 +99,10 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                           ])))),
               ElevatedButton.icon(
                   onPressed: () async {
-                    if (((year == 0 ||
-                            (double.parse(
-                                    provider.gastoActual.periodo.year ?? '0') ==
-                                0)) &&
-                        (mes == 0 ||
-                            (double.parse(
-                                    provider.gastoActual.periodo.mes ?? '0') ==
-                                0)) &&
-                        (dia == 0 ||
-                            (double.parse(
-                                    provider.gastoActual.periodo.dia ?? '0') ==
-                                0)))) {
+                    dia == 0 ? provider.gastoActual.periodo.dia ?? 0 : dia;
+                    mes == 0 ? provider.gastoActual.periodo.mes ?? 0 : mes;
+                    year == 0 ? provider.gastoActual.periodo.year ?? 0 : year;
+                    if (((year == 0) && (mes == 0) && (dia == 0))) {
                       showToast("Modifique algun campo de dia, mes o año");
                     } else {
                       await Dialogs.showMorph(
