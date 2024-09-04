@@ -90,44 +90,16 @@ class GastoProvider with ChangeNotifier {
     return monto;
   }
 
-  double promedioTotalSemana() {
-    double monto = 0.0;
-    for (var i = 0; i < 7; i++) {
-      monto += contarSemana(
-              fechas: listaGastos
-                  .where((element) =>
-                      DateTime.parse(element.fecha!).weekday == i + 1)
-                  .map((e) => DateTime.parse(e.fecha!))
-                  .toList(),
-              dia: i + 1) == 0? 0: generarPago(
-              montos: listaGastos
-                  .where((element) =>
-                      DateTime.tryParse(element.fecha!)?.weekday == i + 1)
-                  .map((e) => e.monto!)
-                  .toList()) /
-          contarSemana(
-              fechas: listaGastos
-                  .where((element) =>
-                      DateTime.parse(element.fecha!).weekday == i + 1)
-                  .map((e) => DateTime.parse(e.fecha!))
-                  .toList(),
-              dia: i + 1);
+  int contarDiaSemana({required List<String> fechas, required int intDia}) {
+  int contador = 0;
+
+  for (String fechaString in fechas) {
+    DateTime fecha = DateTime.parse(fechaString);
+    if (fecha.weekday == intDia) {
+      contador++;
     }
-    return monto;
   }
 
-  int contarSemana({required List<DateTime> fechas, required int dia}) {
-    int contador = 0;
-    DateTime? ultimaDate;
-
-    for (var element in fechas) {
-      if (element.weekday == dia) {
-        if (ultimaDate == null || element.day != ultimaDate.day) {
-          contador++;
-          ultimaDate = element;
-        }
-      }
-    }
-    return contador;
-  }
+  return contador;
+}
 }
