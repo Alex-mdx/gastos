@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 class LightThemeColors {
   static const primary = Color.fromARGB(255, 4, 142, 223);
-<<<<<<< HEAD
-  static const second = Color.fromARGB(255, 240, 244, 255);
-=======
   static const second = Color.fromARGB(255, 241, 243, 243);
->>>>>>> 7c1d419dc829f80dfbe5a22b8f49ae734793f978
 
   static const green = Color.fromARGB(255, 1, 207, 53);
   static const red = Color.fromARGB(255, 231, 20, 38);

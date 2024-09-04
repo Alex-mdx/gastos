@@ -18,11 +18,12 @@ class DialogHistorialPago extends StatefulWidget {
 }
 
 class _DialogHistorialPagoState extends State<DialogHistorialPago> {
-  @override
+  
   double dia = 0;
   double mes = 0;
   double year = 0;
   bool modificable = false;
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Dialog(
