@@ -31,12 +31,12 @@ Future<void> main() async {
     runApp(MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => GastoProvider()),
       ChangeNotifierProvider(create: (_) => NavigationProvider())
-    ], child: const ProsCobro()));
+    ], child: const Main()));
   });
 }
 
-class ProsCobro extends StatelessWidget {
-  const ProsCobro({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(builder: (context, orientation, deviceType) {
