@@ -5,13 +5,18 @@ class PeriodoModelo {
   int? modificable;
 
   PeriodoModelo(
-      {required this.year,
+      {
+      required this.year,
       required this.mes,
       required this.dia,
       required this.modificable});
 
   PeriodoModelo copyWith(
-          {String? year, String? mes, String? dia, int? modificable}) =>
+          {
+          String? year,
+          String? mes,
+          String? dia,
+          int? modificable}) =>
       PeriodoModelo(
           year: year ?? this.year,
           mes: mes ?? this.mes,
@@ -24,6 +29,10 @@ class PeriodoModelo {
       dia: json["dia"],
       modificable: json["modificable"]);
 
-  Map<String, dynamic> toJson() =>
-      {"year": year, "mes": mes, "dia": dia, "modificable": modificable};
+  Map<String, dynamic> toJson() => {
+        "year": year,
+        "mes": mes,
+        "dia": dia,
+        "modificable": modificable
+      };
 }

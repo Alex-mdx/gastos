@@ -3,7 +3,6 @@ import 'theme_color.dart';
 
 const double borderRadius = 10.0;
 ThemeData light = ThemeData(
-    primaryColor: LightThemeColors.primary,
     colorScheme: ColorScheme.fromSeed(seedColor: LightThemeColors.primary),
     dividerColor: LightThemeColors.grey,
     textTheme: const TextTheme(
@@ -62,7 +61,6 @@ ThemeData light = ThemeData(
     highlightColor: Colors.grey[100],
     tooltipTheme: TooltipThemeData(textStyle: const TextStyle(color: Colors.white, fontSize: 18), decoration: BoxDecoration(color: LightThemeColors.primary, borderRadius: BorderRadius.circular(borderRadius))),
     dividerTheme: const DividerThemeData(color: LightThemeColors.grey, thickness: 2),
-    
     textButtonTheme: TextButtonThemeData(style: ButtonStyle(splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory, shape: WidgetStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius)))))));
 ThemeData dark = ThemeData(
   primaryColor: DarkThemeColors.primary,

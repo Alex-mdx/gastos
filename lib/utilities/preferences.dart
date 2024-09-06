@@ -13,4 +13,7 @@ class Preferences {
 
   static bool get tema => _preferences?.getBool('tema') ?? false;
   static set tema(bool value) => _preferences?.setBool('tema', value);
+
+  static double get calidadFoto => _preferences?.getDouble('calidad_foto') ?? 75;
+  static set calidadFoto(double value) => _preferences?.setDouble('calidad_foto', value);
 }

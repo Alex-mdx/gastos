@@ -23,7 +23,7 @@ class _DialogCamaraState extends State<DialogCamara> {
               ElevatedButton.icon(
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
-                    final XFile? photo = await picker.pickImage(
+                    final XFile? photo = await picker.pickImage(maxHeight: 750,maxWidth: 480,
                         source: ImageSource.camera, requestFullMetadata: false);
                     if (photo != null) {
                       final data = await photo.readAsBytes();

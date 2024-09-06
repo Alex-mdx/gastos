@@ -18,11 +18,16 @@ class DialogHistorialPago extends StatefulWidget {
 }
 
 class _DialogHistorialPagoState extends State<DialogHistorialPago> {
-  
   double dia = 0;
   double mes = 0;
   double year = 0;
   bool modificable = false;
+  @override
+  void initState() {
+    modificable = widget.gasto.periodo.modificable == 1 ? true : false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
@@ -82,8 +87,10 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                       child: SpinBox(
                                           min: 0,
                                           max: 30,
-                                          decoration: const InputDecoration(
-                                              helperText: "Dia"),
+                                          decoration: InputDecoration(
+                                              label: Text("Dia",
+                                                  style: TextStyle(
+                                                      fontSize: 16.sp))),
                                           keyboardType: const TextInputType
                                               .numberWithOptions(
                                               decimal: false, signed: false),
@@ -101,8 +108,10 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                       child: SpinBox(
                                           min: 0,
                                           max: 11,
-                                          decoration: const InputDecoration(
-                                              helperText: "Mes"),
+                                          decoration: InputDecoration(
+                                              label: Text("Mes",
+                                                  style: TextStyle(
+                                                      fontSize: 16.sp))),
                                           keyboardType: const TextInputType
                                               .numberWithOptions(
                                               decimal: false, signed: false),
@@ -120,8 +129,10 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                       child: SpinBox(
                                           min: 0,
                                           max: 10,
-                                          decoration: const InputDecoration(
-                                              helperText: "Año"),
+                                          decoration: InputDecoration(
+                                              label: Text("Año",
+                                                  style: TextStyle(
+                                                      fontSize: 16.sp))),
                                           keyboardType: const TextInputType
                                               .numberWithOptions(
                                               decimal: false, signed: false),

@@ -33,20 +33,6 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               const Text("Seleccione el periodo"),
               Column(children: [
-                const Row(children: [
-                  Expanded(
-                      child: Text("Dia",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold))),
-                  Expanded(
-                      child: Text("Mes",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold))),
-                  Expanded(
-                      child: Text("Año",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold)))
-                ]),
                 SizedBox(
                     height: 25.h,
                     child: Row(children: [
@@ -59,6 +45,11 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                                       dia.toString()),
                               acceleration: 1,
                               direction: Axis.vertical,
+                              decoration: InputDecoration(
+                                  label: Text("Dia",
+                                      style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold))),
                               onChanged: (value) => dia = value)),
                       Expanded(
                           child: SpinBox(
@@ -69,6 +60,11 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                                       mes.toString()),
                               acceleration: 1,
                               direction: Axis.vertical,
+                              decoration: InputDecoration(
+                                  label: Text("Mes",
+                                      style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold))),
                               onChanged: (value) => mes = value)),
                       Expanded(
                           child: SpinBox(
@@ -79,6 +75,11 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                                       year.toString()),
                               acceleration: 1,
                               direction: Axis.vertical,
+                              decoration: InputDecoration(
+                                  label: Text("Año",
+                                      style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold))),
                               onChanged: (value) => year = value))
                     ]))
               ]),

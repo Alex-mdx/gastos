@@ -1,12 +1,15 @@
 import 'dart:developer';
 
 import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
@@ -19,7 +22,18 @@ class GastosView extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
-        appBar: AppBar(title: const Text('Gastos')),
+        appBar: AppBar(
+            title: Text('Gastos',
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+            actions: [
+              Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: IconButton.filled(
+                      onPressed: () {
+                        Navigation.pushNamed(route: AppRoutes.opciones);
+                      },
+                      icon: const Icon(Icons.settings, color: Colors.white)))
+            ]),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
