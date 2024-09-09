@@ -14,6 +14,7 @@ class GastosController {
       dia TEXT,
       mes TEXT,
       peridico INTEGER,
+      ultima_fecha String,
       periodo TEXT,
       gasto INTEGER,
       evidencia TEXT,

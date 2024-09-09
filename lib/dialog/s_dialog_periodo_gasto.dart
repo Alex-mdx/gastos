@@ -6,7 +6,6 @@ import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
-import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -84,20 +83,18 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                     ]))
               ]),
               Center(
-                  child: Container(
-                      color: LightThemeColors.second,
-                      child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(children: [
-                            const Text("Modificable"),
-                            Checkbox(
-                                value: modificable,
-                                onChanged: (value) {
-                                  setState(() {
-                                    modificable = !modificable;
-                                  });
-                                })
-                          ])))),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(children: [
+                        const Text("Modificable"),
+                        Checkbox(
+                            value: modificable,
+                            onChanged: (value) {
+                              setState(() {
+                                modificable = !modificable;
+                              });
+                            })
+                      ]))),
               ElevatedButton.icon(
                   onPressed: () async {
                     dia == 0 ? provider.gastoActual.periodo.dia ?? 0 : dia;
@@ -106,10 +103,16 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                     if (((year == 0) && (mes == 0) && (dia == 0))) {
                       showToast("Modifique algun campo de dia, mes o año");
                     } else {
+                      int diaYear = int.parse((year * 365).round().toString());
+                      int diaMes = int.parse((mes * 31).round().toString());
+                      DateTime fechaModificada = DateTime.now().add(Duration(
+                          days: int.parse(
+                              (dia.round() + diaMes + diaYear).toString())));
+                      provider.selectProxima = fechaModificada;
                       await Dialogs.showMorph(
                           title: 'Guardar periodo',
                           description:
-                              '¿Esta seguro de recordar periodicamente este tipo de gasto cada ${year != 0 ? "${widget.provider.convertirNumero(moneda: year)} año(s) " : ""}${mes != 0 ? "${widget.provider.convertirNumero(moneda: mes)} mes(es) " : ""}${dia != 0 ? "${widget.provider.convertirNumero(moneda: dia)} dias(s) " : ""}?',
+                              '¿Esta seguro de recordar periodicamente este tipo de gasto cada ${year != 0 ? "${widget.provider.convertirNumero(moneda: year)} año(s) " : ""}${mes != 0 ? "${widget.provider.convertirNumero(moneda: mes)} mes(es) " : ""}${dia != 0 ? "${widget.provider.convertirNumero(moneda: dia)} dia(s) " : ""}?\nProximo recordatorio: ${provider.convertirFecha(fecha: fechaModificada)}',
                           loadingTitle: "Guardando",
                           onAcceptPressed: (context) async {
                             PeriodoModelo newPeriodo = PeriodoModelo(

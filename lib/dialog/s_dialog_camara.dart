@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/funcion_parser.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +25,18 @@ class _DialogCamaraState extends State<DialogCamara> {
               ElevatedButton.icon(
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
-                    final XFile? photo = await picker.pickImage(maxHeight: 750,maxWidth: 480,
-                        source: ImageSource.camera, requestFullMetadata: false);
+                    final XFile? photo = await picker.pickImage(
+                        maxHeight: 750,
+                        maxWidth: 480,
+                        source: ImageSource.camera,
+                        requestFullMetadata: false);
                     if (photo != null) {
                       final data = await photo.readAsBytes();
                       setState(() {
-                        provider.imagenesActual.add(data);
+                        provider.imagenesActual.add(Parser.reducirUint8List(
+                            imgBytes: data,
+                            calidad: int.parse(
+                                Preferences.calidadFoto.round().toString()))!);
                       });
                       Navigation.pop();
                     }
@@ -45,8 +53,11 @@ class _DialogCamaraState extends State<DialogCamara> {
                         limit: 10, requestFullMetadata: false);
                     if (images.isNotEmpty) {
                       for (var element in images) {
-                        final data = await element.readAsBytes();
-                        provider.imagenesActual.add(data);
+                        final data = (await element.readAsBytes());
+                        provider.imagenesActual.add(Parser.reducirUint8List(
+                            imgBytes: data,
+                            calidad: int.parse(
+                                Preferences.calidadFoto.round(). toString()))!);
                       }
                       Navigation.pop();
                     }

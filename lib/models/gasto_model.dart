@@ -11,6 +11,7 @@ class GastoModelo {
   String? dia;
   String? mes;
   int? peridico;
+  String? ultimaFecha;
   PeriodoModelo periodo;
   int? gasto;
   List<Uint8List> evidencia;
@@ -24,6 +25,7 @@ class GastoModelo {
       required this.dia,
       required this.mes,
       required this.peridico,
+      required this.ultimaFecha,
       required this.periodo,
       required this.gasto,
       required this.evidencia,
@@ -37,6 +39,7 @@ class GastoModelo {
           String? dia,
           String? mes,
           int? peridico,
+          String? ultimaFecha,
           PeriodoModelo? periodo,
           int? gasto,
           List<Uint8List>? evidencia,
@@ -49,6 +52,7 @@ class GastoModelo {
           dia: dia ?? this.dia,
           mes: mes ?? this.mes,
           peridico: peridico ?? this.peridico,
+          ultimaFecha: ultimaFecha ?? this.ultimaFecha,
           periodo: periodo ?? this.periodo,
           gasto: gasto ?? this.gasto,
           evidencia: evidencia ?? this.evidencia,
@@ -62,6 +66,7 @@ class GastoModelo {
       dia: json["dia"],
       mes: json["mes"],
       peridico: json["peridico"],
+      ultimaFecha: json["ultima_fecha"],
       periodo: PeriodoModelo.fromJson(jsonDecode(json["periodo"].toString())),
       gasto: json["gasto"],
       evidencia: List<Uint8List>.from(json["evidencia"].map((x) => x)),
@@ -75,6 +80,7 @@ class GastoModelo {
         "dia": dia,
         "mes": mes,
         "peridico": peridico,
+        "ultima_fecha":ultimaFecha,
         "periodo": jsonEncode(periodo),
         "gasto": gasto,
         "evidencia": List<Uint8List>.from(evidencia.map((x) => x)),

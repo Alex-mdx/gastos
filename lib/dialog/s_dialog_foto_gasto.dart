@@ -3,6 +3,7 @@ import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 import '../utilities/services/navigation_services.dart';
 
@@ -16,12 +17,15 @@ class DialogFotoGasto extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              const Text('Archivo de evidencia'),
+              Text('Archivo de evidencia',
+                  style:
+                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
               const Divider(),
               provider.imagenesActual.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                           "No ha ingresado ninguna evidencia fotografica",
+                          style: TextStyle(fontSize: 15.sp),
                           textAlign: TextAlign.center))
                   : Wrap(
                       children: provider.imagenesActual

@@ -58,6 +58,10 @@ class GastosView extends StatelessWidget {
                       //?La tabla de gasto es para notificar si dicha tarjeta es modificable
                       final finalTemp = provider.gastoActual.copyWith(
                           gasto: 1,
+                          ultimaFecha: provider.selectProxima == null
+                              ? null
+                              : provider.convertirFecha(
+                                  fecha: provider.selectProxima!),
                           fecha: provider.gastoActual.fecha ??
                               provider.convertirFechaHora(fecha: now),
                           dia: provider.gastoActual.dia ?? (now.day).toString(),
@@ -66,6 +70,7 @@ class GastosView extends StatelessWidget {
                       log("${finalTemp.toJson()}");
                       await GastosController.insert(finalTemp);
                       provider.listaGastos = await GastosController.getItems();
+                      provider.selectProxima = provider.selectProxima;
                       provider.gastoActual = GastoModelo(
                           categoriaId: null,
                           monto: null,
@@ -73,6 +78,7 @@ class GastosView extends StatelessWidget {
                           dia: null,
                           mes: null,
                           peridico: null,
+                          ultimaFecha: null,
                           periodo: PeriodoModelo(
                               year: null,
                               mes: null,

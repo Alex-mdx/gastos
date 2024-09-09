@@ -31,6 +31,13 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime? _selectProxima;
+  DateTime? get selectProxima => _selectProxima;
+  set selectProxima(DateTime? valor) {
+    _selectProxima = valor;
+    notifyListeners();
+  }
+
   GastoModelo _gastoActual = GastoModelo(
       categoriaId: null,
       monto: null,
@@ -38,6 +45,7 @@ class GastoProvider with ChangeNotifier {
       dia: null,
       mes: null,
       peridico: null,
+      ultimaFecha: null,
       periodo:
           PeriodoModelo(year: null, mes: null, dia: null, modificable: null),
       gasto: null,

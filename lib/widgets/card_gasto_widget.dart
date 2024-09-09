@@ -94,7 +94,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           mes: (provider.selectFecha?.month ?? now.month)
                               .toString());
                       provider.gastoActual = modelTemp;
-                      log("${provider.gastoActual.toJson()}");
                     },
                     icon: const Icon(Icons.edit_calendar)),
                 SizedBox(
