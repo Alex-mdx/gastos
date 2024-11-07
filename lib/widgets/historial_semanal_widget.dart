@@ -49,30 +49,69 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       child: Text(dias[index],
                           style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                  ? (4).w
-                                  : 3.w,
+                                  ? 16.sp
+                                  : 14.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
                                   : FontWeight.normal))),
                   oppositeContentsBuilder: (context, index) => Card(
                       child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(6.sp),
                           child: AnimatedFlipCounter(
-                              value:  (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)) == 0? 0 :  (widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList())) / (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)),
+                              value: (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)) == 0 ? 0 : (widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList())) / (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)),
                               duration: Durations.long3,
-                              fractionDigits: 2,
+                              fractionDigits: 1,
                               prefix: "\$",
-                              textStyle: TextStyle(fontSize: 3.w, fontWeight: FontWeight.bold)))),
+                              textStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))),
                   itemCount: dias.length))),
-      Text('Gasto Estimado Semanal',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: (1.5).h, fontWeight: FontWeight.bold)),
-      AnimatedFlipCounter(
-          value: widget.provider.promedioTotalSemana(),
-          duration: Durations.long3,
-          fractionDigits: 2,
-          prefix: "\$",
-          textStyle: TextStyle(fontSize: (2).h, fontWeight: FontWeight.bold))
+      Row(children: [
+        Expanded(
+            flex: 2,
+            child: Text('Gasto Actual',
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
+        Expanded(
+            flex: 2,
+            child: Text('Gasto Promedio Semanal',
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
+        Expanded(
+            flex: 1,
+            child: Text('%',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))
+      ]),
+      Row(children: [
+        Expanded(
+            flex: 2,
+            child: AnimatedFlipCounter(
+                value: widget.provider.promedioTotalSemana(),
+                duration: Durations.long3,
+                fractionDigits: 2,
+                prefix: "\$",
+                textStyle:
+                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
+        Expanded(
+            flex: 2,
+            child: AnimatedFlipCounter(
+                value: widget.provider.promedioTotalSemana(),
+                duration: Durations.long3,
+                fractionDigits: 2,
+                prefix: "\$",
+                textStyle:
+                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
+        Expanded(
+            flex: 1,
+            child: AnimatedFlipCounter(
+                value: 0,
+                duration: Durations.long3,
+                fractionDigits: 0,
+                suffix: "%",
+                textStyle:
+                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)))
+      ])
     ]);
   }
 }

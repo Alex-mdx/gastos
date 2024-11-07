@@ -29,7 +29,18 @@ class CategoriaController {
     final db = await database();
     List<CategoriaModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =
-        await db.query(nombreDB, orderBy: "nombre");
+        await db.query(nombreDB, orderBy: "nombre", limit: 10);
+    for (var element in categoria) {
+      categoriaModelo.add(CategoriaModel.fromJson(element));
+    }
+    return categoriaModelo;
+  }
+
+  static Future<List<CategoriaModel>> buscar(String word) async {
+    final db = await database();
+    List<CategoriaModel> categoriaModelo = [];
+    List<Map<String, dynamic>> categoria = await db.query(nombreDB,
+        where: "nombre LIKE ?", whereArgs: ['%$word%'], orderBy: "nombre");
     for (var element in categoria) {
       categoriaModelo.add(CategoriaModel.fromJson(element));
     }

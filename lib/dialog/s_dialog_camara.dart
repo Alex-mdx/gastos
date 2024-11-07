@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gastos/utilities/funcion_parser.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -26,18 +24,17 @@ class _DialogCamaraState extends State<DialogCamara> {
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
                     final XFile? photo = await picker.pickImage(
-                        maxHeight: 750,
+                        maxHeight: 854,
                         maxWidth: 480,
+                        imageQuality: 80,
                         source: ImageSource.camera,
                         requestFullMetadata: false);
                     if (photo != null) {
                       final data = await photo.readAsBytes();
                       setState(() {
-                        provider.imagenesActual.add(Parser.reducirUint8List(
-                            imgBytes: data,
-                            calidad: int.parse(
-                                Preferences.calidadFoto.round().toString()))!);
+                        provider.imagenesActual.add(data);
                       });
+                      print(data.lengthInBytes);
                       Navigation.pop();
                     }
                     final modelTemp = provider.gastoActual
@@ -50,14 +47,15 @@ class _DialogCamaraState extends State<DialogCamara> {
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
                     final List<XFile> images = await picker.pickMultiImage(
-                        limit: 10, requestFullMetadata: false);
+                        imageQuality: 80,
+                        maxHeight: 854,
+                        maxWidth: 480,
+                        limit: 10,
+                        requestFullMetadata: false);
                     if (images.isNotEmpty) {
                       for (var element in images) {
                         final data = (await element.readAsBytes());
-                        provider.imagenesActual.add(Parser.reducirUint8List(
-                            imgBytes: data,
-                            calidad: int.parse(
-                                Preferences.calidadFoto.round(). toString()))!);
+                        provider.imagenesActual.add(data);
                       }
                       Navigation.pop();
                     }

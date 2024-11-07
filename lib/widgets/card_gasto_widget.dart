@@ -1,18 +1,26 @@
 import 'dart:developer';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
+import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/dialog/s_dialog_foto_gasto.dart';
 import 'package:gastos/dialog/s_dialog_periodo_gasto.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 import '../dialog/s_dialog_camara.dart';
 import '../dialog/s_dialog_categorias.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../models/categoria_model.dart';
+
 class CardGastoWidget extends StatefulWidget {
-  const CardGastoWidget({super.key});
+  final GastoProvider provider;
+  const CardGastoWidget({super.key, required this.provider});
 
   @override
   State<CardGastoWidget> createState() => _MyWidgetState();
@@ -20,10 +28,10 @@ class CardGastoWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<CardGastoWidget> {
   DateTime now = DateTime.now();
-  TextEditingController nota = TextEditingController();
+  SingleSelectController<CategoriaModel> controller =
+      SingleSelectController(null);
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<GastoProvider>(context);
     return Card(
         elevation: 2,
         child: Padding(
@@ -31,35 +39,82 @@ class _MyWidgetState extends State<CardGastoWidget> {
             child: Column(children: [
               Center(
                   child: Text(
-                      provider.convertirFecha(
-                          fecha: provider.selectFecha ?? now),
+                      widget.provider.convertirFecha(
+                          fecha: widget.provider.selectFecha ?? now),
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18.sp))),
               const Divider(),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 SizedBox(
                     width: 70.w,
-                    child: CustomDropdown(
+                    child: CustomDropdown.searchRequest(
+                        futureRequest: (p0) async =>
+                            await CategoriaController.buscar(p0),
+                        searchHintText: "Nombre categoria de gasto",
+                        noResultFoundText: "Sin resultados",
+                        controller: controller,
+                        decoration: CustomDropdownDecoration(
+                            prefixIcon: Icon(LineIcons.wavyMoneyBill,
+                                color: LightThemeColors.green, size: 22.sp),
+                            closedSuffixIcon: controller.value != null
+                                ? IconButton(
+                                    iconSize: 22.sp,
+                                    onPressed: () {
+                                      setState(() {
+                                        controller.clear();
+                                      });
+                                    },
+                                    icon:
+                                        Icon(Icons.close_rounded, size: 20.sp))
+                                : null),
                         headerBuilder: (context, selectedItem, enabled) => Text(
                             selectedItem.nombre,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: 15.sp, fontWeight: FontWeight.bold)),
                         hintText: 'Tipo de Gasto',
-                        items: provider.listaCategoria,
+                        items: widget.provider.listaCategoria,
                         listItemPadding: const EdgeInsets.only(bottom: 1),
-                        listItemBuilder:
-                            (context, item, isSelected, onItemSelect) =>
-                                ListTile(
-                                    dense: true,
-                                    title: Text(item.nombre),
-                                    subtitle: Text(item.descripcion)),
-                        overlayHeight: 5,
+                        listItemBuilder: (context, item, isSelected,
+                                onItemSelect) =>
+                            ListTile(
+                                dense: true,
+                                title: Text(item.nombre,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text(item.descripcion,
+                                    style: TextStyle(fontSize: 14.sp)),
+                                trailing: IconButton(
+                                    onPressed: () {
+                                      Dialogs.showMorph(
+                                          title: "Eliminar",
+                                          description:
+                                              "¿Desea eliminar la cateogoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
+                                          loadingTitle: "Eliminando",
+                                          onAcceptPressed: (context) async {
+                                            await CategoriaController
+                                                .deleteItem(item.id!);
+                                            final data =
+                                                await CategoriaController
+                                                    .getItems();
+                                            setState(() {
+                                              controller.clear();
+                                              widget.provider.listaCategoria =
+                                                  data;
+                                            });
+                                            Navigation.pop();
+                                          });
+                                    },
+                                    icon: Icon(Icons.delete,
+                                        size: 18.sp,
+                                        color: LightThemeColors.red))),
+                        overlayHeight: 40.h,
                         onChanged: (value) {
                           if (value != null) {
-                            final modelTemp = provider.gastoActual
+                            final modelTemp = widget.provider.gastoActual
                                 .copyWith(categoriaId: value.id);
-                            provider.gastoActual = modelTemp;
-                            log("${provider.gastoActual.toJson()}");
+                            widget.provider.gastoActual = modelTemp;
+                            log("${widget.provider.gastoActual.toJson()}");
                           }
 
                           log('changing value to: $value');
@@ -71,12 +126,12 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           builder: (context) =>
                               const Dialog(child: DialogCategorias()));
                     },
-                    icon: const Icon(Icons.add))
+                    icon: Icon(Icons.add,size: 20.sp))
               ]),
               Row(mainAxisSize: MainAxisSize.min, children: [
                 IconButton(
                     onPressed: () async {
-                      provider.selectFecha = (await showDatePicker(
+                      widget.provider.selectFecha = (await showDatePicker(
                               context: context,
                               initialDatePickerMode: DatePickerMode.day,
                               initialEntryMode:
@@ -86,14 +141,14 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   now.subtract(const Duration(days: 365 * 15)),
                               lastDate: now)) ??
                           now;
-                      final modelTemp = provider.gastoActual.copyWith(
-                          fecha: provider.convertirFechaHora(
-                              fecha: provider.selectFecha ?? now),
-                          dia:
-                              (provider.selectFecha?.day ?? now.day).toString(),
-                          mes: (provider.selectFecha?.month ?? now.month)
+                      final modelTemp = widget.provider.gastoActual.copyWith(
+                          fecha: widget.provider.convertirFechaHora(
+                              fecha: widget.provider.selectFecha ?? now),
+                          dia: (widget.provider.selectFecha?.day ?? now.day)
+                              .toString(),
+                          mes: (widget.provider.selectFecha?.month ?? now.month)
                               .toString());
-                      provider.gastoActual = modelTemp;
+                      widget.provider.gastoActual = modelTemp;
                     },
                     icon: const Icon(Icons.edit_calendar)),
                 SizedBox(
@@ -101,7 +156,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                     child: SpinBox(
                         min: .5,
                         max: 10000,
-                        value: provider.gastoActual.monto ?? 0,
+                        value: widget.provider.gastoActual.monto ?? 0,
                         decimals: 2,
                         acceleration: .5,
                         decoration: const InputDecoration(
@@ -109,56 +164,61 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         direction: Axis.vertical,
                         onSubmitted: (p0) {
                           final tempModel =
-                              provider.gastoActual.copyWith(monto: p0);
-                          provider.gastoActual = tempModel;
+                              widget.provider.gastoActual.copyWith(monto: p0);
+                          widget.provider.gastoActual = tempModel;
                         },
                         onChanged: (value) {
-                          final tempModel =
-                              provider.gastoActual.copyWith(monto: value);
-                          provider.gastoActual = tempModel;
+                          final tempModel = widget.provider.gastoActual
+                              .copyWith(monto: value);
+                          widget.provider.gastoActual = tempModel;
                         })),
-                ButtonBar(children: [
+                OverflowBar(children: [
                   IconButton(
                       onPressed: () {
                         showDialog(
                             context: context,
                             builder: (context) => const DialogCamara());
                       },
-                      icon: const Icon(Icons.add_photo_alternate)),
+                      icon: Icon(Icons.add_photo_alternate,
+                          size: 22.sp, color: LightThemeColors.green)),
                   badges.Badge(
-                      showBadge: provider.imagenesActual.isNotEmpty,
-                      badgeContent: Text("${provider.imagenesActual.length}"),
+                      showBadge: widget.provider.imagenesActual.isNotEmpty,
+                      badgeContent:
+                          Text("${widget.provider.imagenesActual.length}"),
                       child: IconButton(
                           onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (context) => const DialogFotoGasto());
                           },
-                          icon: const Icon(Icons.photo_library)))
+                          icon: Icon(Icons.photo_library,
+                              size: 22.sp, color: LightThemeColors.darkBlue)))
                 ])
               ]),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton.icon(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                DialogPeriodoGasto(provider: provider));
-                      },
-                      label: const Text('Gasto Cronologico'),
-                      icon: const Icon(Icons.calendar_month))),
+              if (kDebugMode)
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => DialogPeriodoGasto(
+                                  provider: widget.provider));
+                        },
+                        label: Text('Gasto Cronologico',
+                            style: TextStyle(fontSize: 15.sp)),
+                        icon: const Icon(Icons.calendar_month))),
               const Divider(),
               TextField(
-                  controller: nota,
+                  controller: widget.provider.notas,
                   keyboardType: TextInputType.text,
                   onChanged: (value) {
-                    final tempModel =
-                        provider.gastoActual.copyWith(nota: nota.text);
-                    provider.gastoActual = tempModel;
+                    final tempModel = widget.provider.gastoActual
+                        .copyWith(nota: widget.provider.notas.text);
+                    widget.provider.gastoActual = tempModel;
                   },
                   onSubmitted: (value) {
-                    log("${provider.gastoActual.toJson()}");
+                    log("${widget.provider.gastoActual.toJson()}");
                   },
                   decoration: const InputDecoration(hintText: "Notas de gasto"))
             ])));

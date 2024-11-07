@@ -1,13 +1,17 @@
+import 'package:animated_read_more_text/animated_read_more_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utilities/services/navigation_services.dart';
 
 class DialogHistorialPago extends StatefulWidget {
   final GastoModelo gasto;
@@ -22,6 +26,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
   double mes = 0;
   double year = 0;
   bool modificable = false;
+  bool expandible = false;
   @override
   void initState() {
     modificable = widget.gasto.periodo.modificable == 1 ? true : false;
@@ -48,6 +53,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         await GastosController.deleteItem(widget.gasto.id!);
                         provider.listaGastos =
                             await GastosController.getItems();
+                        Navigation.pop();
                       });
                 },
                 icon: Icon(Icons.delete,
@@ -57,6 +63,9 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
           child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
+                Text("Fecha: ${widget.gasto.fecha}",
+                    style: TextStyle(
+                        fontSize: 16.sp, fontWeight: FontWeight.bold)),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -67,129 +76,63 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                           "Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == widget.gasto.categoriaId)?.nombre ?? "Desconocido"}",
                           style: TextStyle(fontSize: 16.sp))
                     ]),
-                Text("Fecha: ${widget.gasto.fecha}",
-                    style: TextStyle(fontSize: 16.sp)),
-                if (widget.gasto.peridico == 1)
-                  Card(
-                      margin: const EdgeInsets.all(8),
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(children: [
-                            Text("Gasto Peridico",
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold)),
-                            const Divider(),
-                            SizedBox(
-                                height: 25.h,
-                                child: Row(children: [
-                                  Expanded(
-                                      child: SpinBox(
-                                          min: 0,
-                                          max: 30,
-                                          decoration: InputDecoration(
-                                              label: Text("Dia",
-                                                  style: TextStyle(
-                                                      fontSize: 16.sp))),
-                                          keyboardType: const TextInputType
-                                              .numberWithOptions(
-                                              decimal: false, signed: false),
-                                          enabled: widget.gasto.periodo
-                                                      .modificable ==
-                                                  1
-                                              ? true
-                                              : false,
-                                          value: double.parse(
-                                              widget.gasto.periodo.dia!),
-                                          acceleration: 1,
-                                          direction: Axis.vertical,
-                                          onChanged: (value) => dia = value)),
-                                  Expanded(
-                                      child: SpinBox(
-                                          min: 0,
-                                          max: 11,
-                                          decoration: InputDecoration(
-                                              label: Text("Mes",
-                                                  style: TextStyle(
-                                                      fontSize: 16.sp))),
-                                          keyboardType: const TextInputType
-                                              .numberWithOptions(
-                                              decimal: false, signed: false),
-                                          enabled: widget.gasto.periodo
-                                                      .modificable ==
-                                                  1
-                                              ? true
-                                              : false,
-                                          value: double.parse(
-                                              widget.gasto.periodo.mes!),
-                                          acceleration: 1,
-                                          direction: Axis.vertical,
-                                          onChanged: (value) => mes = value)),
-                                  Expanded(
-                                      child: SpinBox(
-                                          min: 0,
-                                          max: 10,
-                                          decoration: InputDecoration(
-                                              label: Text("Año",
-                                                  style: TextStyle(
-                                                      fontSize: 16.sp))),
-                                          keyboardType: const TextInputType
-                                              .numberWithOptions(
-                                              decimal: false, signed: false),
-                                          enabled: widget.gasto.periodo
-                                                      .modificable ==
-                                                  1
-                                              ? true
-                                              : false,
-                                          value: double.parse(
-                                              widget.gasto.periodo.year!),
-                                          acceleration: 1,
-                                          direction: Axis.vertical,
-                                          onChanged: (value) => year = value))
-                                ])),
-                            Center(
-                                child: Container(
-                                    color: LightThemeColors.second,
-                                    child: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Row(children: [
-                                          const Text("Modificable"),
-                                          Checkbox(
-                                              value: modificable,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  modificable = !modificable;
-                                                });
-                                              })
-                                        ]))))
-                          ]))),
+                AnimatedReadMoreText(
+                    "Notas: ${widget.gasto.nota ?? "Sin notas"}",
+                    maxLines: 2,
+                    readMoreText: "...",
+                    readLessText: ". menos",
+                    buttonTextStyle: TextStyle(fontSize: 15.sp)),
                 const Divider(),
                 widget.gasto.evidencia.isEmpty
                     ? Text("Lista de Evidencias Vacias",
                         style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold))
+                            fontSize: 14.sp, fontWeight: FontWeight.bold))
                     : Wrap(
-                        children: widget.gasto.evidencia.map(
-                        (e) {
-                          return Icon(Icons.photo, size: 20.sp);
-                        },
-                      ).toList())
+                        children: widget.gasto.evidencia.map((e) {
+                        return IconButton(
+                            icon: Icon(Icons.photo, size: 20.sp),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Column(children: [
+                                        Expanded(
+                                            child: PhotoView.customChild(
+                                                minScale: PhotoViewComputedScale
+                                                    .contained,
+                                                maxScale: PhotoViewComputedScale
+                                                        .contained *
+                                                    2,
+                                                child: Image.memory(e,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        Icon(Icons.image,
+                                                            size: 30.sp),
+                                                    fit: BoxFit.cover))),
+                                        IconButton(
+                                            onPressed: () => Navigation.pop(),
+                                            icon: Icon(Icons.arrow_back_ios,
+                                                size: 20.sp))
+                                      ]));
+                            });
+                      }).toList())
               ]))),
       const Divider(),
-      Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: IconButton.filledTonal(
-              onPressed: () {
-                Dialogs.showMorph(
-                    title: "Guardar cambios",
-                    description:
-                        "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
-                    loadingTitle: "Actualizando",
-                    onAcceptPressed: (context) async {
-                      /* final newModel = gasto.periodo. */
-                    });
-              },
-              icon: const Icon(Icons.save)))
+      if (kDebugMode)
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton.filledTonal(
+                onPressed: () {
+                  Dialogs.showMorph(
+                      title: "Guardar cambios",
+                      description:
+                          "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
+                      loadingTitle: "Actualizando",
+                      onAcceptPressed: (context) async {
+                        /* final newModel = gasto.periodo. */
+                      });
+                },
+                icon: const Icon(Icons.save)))
     ]));
   }
 }

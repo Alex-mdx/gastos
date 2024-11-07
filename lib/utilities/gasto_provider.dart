@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
@@ -64,6 +63,13 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  TextEditingController _notas = TextEditingController();
+  TextEditingController get notas => _notas;
+  set notas(TextEditingController valor) {
+    _notas = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getItems();
@@ -102,24 +108,27 @@ class GastoProvider with ChangeNotifier {
     double monto = 0.0;
     for (var i = 0; i < 7; i++) {
       monto += contarSemana(
-              fechas: listaGastos
-                  .where((element) =>
-                      DateTime.parse(element.fecha!).weekday == i + 1)
-                  .map((e) => DateTime.parse(e.fecha!))
-                  .toList(),
-              dia: i + 1) == 0? 0: generarPago(
-              montos: listaGastos
-                  .where((element) =>
-                      DateTime.tryParse(element.fecha!)?.weekday == i + 1)
-                  .map((e) => e.monto!)
-                  .toList()) /
-          contarSemana(
-              fechas: listaGastos
-                  .where((element) =>
-                      DateTime.parse(element.fecha!).weekday == i + 1)
-                  .map((e) => DateTime.parse(e.fecha!))
-                  .toList(),
-              dia: i + 1);
+                  fechas: listaGastos
+                      .where((element) =>
+                          DateTime.parse(element.fecha!).weekday == i + 1)
+                      .map((e) => DateTime.parse(e.fecha!))
+                      .toList(),
+                  dia: i + 1) ==
+              0
+          ? 0
+          : generarPago(
+                  montos: listaGastos
+                      .where((element) =>
+                          DateTime.tryParse(element.fecha!)?.weekday == i + 1)
+                      .map((e) => e.monto!)
+                      .toList()) /
+              contarSemana(
+                  fechas: listaGastos
+                      .where((element) =>
+                          DateTime.parse(element.fecha!).weekday == i + 1)
+                      .map((e) => DateTime.parse(e.fecha!))
+                      .toList(),
+                  dia: i + 1);
     }
     return monto;
   }

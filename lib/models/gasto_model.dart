@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:gastos/utilities/funcion_parser.dart';
+
 import 'periodo_model.dart';
 
 class GastoModelo {
@@ -69,7 +71,10 @@ class GastoModelo {
       ultimaFecha: json["ultima_fecha"],
       periodo: PeriodoModelo.fromJson(jsonDecode(json["periodo"].toString())),
       gasto: json["gasto"],
-      evidencia: List<Uint8List>.from(json["evidencia"].map((x) => x)),
+      evidencia: json["evidencia"] == null
+          ? []
+          : List<Uint8List>.from(jsonDecode(json["evidencia"])
+              .map((x) => Parser.toUint8List(x.toString()))),
       nota: json["nota"]);
 
   Map<String, dynamic> toJson() => {
@@ -80,10 +85,10 @@ class GastoModelo {
         "dia": dia,
         "mes": mes,
         "peridico": peridico,
-        "ultima_fecha":ultimaFecha,
+        "ultima_fecha": ultimaFecha,
         "periodo": jsonEncode(periodo),
         "gasto": gasto,
-        "evidencia": List<Uint8List>.from(evidencia.map((x) => x)),
+        "evidencia": jsonEncode(evidencia.map((x) => x.toString()).toList()),
         "nota": nota
       };
 }

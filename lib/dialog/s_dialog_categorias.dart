@@ -21,11 +21,13 @@ class DialogCategorias extends StatelessWidget {
           const Text('Ingresar Tipo de Gasto'),
           TextField(
               controller: tipoGasto,
+              textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(hintText: 'Tipo de gasto')),
           const Divider(),
           TextField(
               controller: descripcion,
+              textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                   hintText: 'Descripcion de tipo de gasto')),

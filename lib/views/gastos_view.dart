@@ -43,7 +43,7 @@ class GastosView extends StatelessWidget {
               const Column(
                   children: [Text("Recomendacion de gasto para esta semana")]),
               const Divider(),
-              const Center(child: CardGastoWidget())
+              Center(child: CardGastoWidget(provider: provider))
             ]))),
         floatingActionButton: FloatingActionButton(
             onPressed: () async {
@@ -87,6 +87,10 @@ class GastosView extends StatelessWidget {
                           gasto: null,
                           evidencia: [],
                           nota: null);
+                      //Limpia de variables locales
+                      provider.imagenesActual = [];
+                      provider.notas.clear();
+                      provider.selectFecha = DateTime.now();
                       showToast("Tarjeta de gasto Guardada con exito");
                     });
               } else {

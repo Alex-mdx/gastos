@@ -5,6 +5,7 @@ import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../dialog/s_dialog_historial_pago.dart';
@@ -17,32 +18,38 @@ class HistorialView extends StatefulWidget {
 }
 
 class _HistorialViewState extends State<HistorialView> {
+  final now = DateTime.now();
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
-        appBar: AppBar(title: const Text("Historial")),
+        appBar:
+            AppBar(title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
             view: CalendarView.month,
             showDatePickerButton: true,
             showNavigationArrow: true,
             showTodayButton: true,
+            initialSelectedDate: now,
             viewNavigationMode: ViewNavigationMode.snap,
             dataSource: _getCalendarDataSource(provider: provider),
+            viewHeaderHeight: 2.h,
+            showCurrentTimeIndicator: true,
+            headerHeight: 4.h,
+            allowAppointmentResize: true,
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
                   calendarAppointmentDetails.appointments.first;
+              print("data ${appointment.id}");
               return InkWell(
                   onTap: () async {
                     final modelado = await GastosController.find(
                         int.parse(appointment.id.toString()));
                     if (modelado != null) {
-                      
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DialogHistorialPago(gasto: modelado);
-                            });
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              DialogHistorialPago(gasto: modelado));
                     } else {
                       showToast("Esta venta ya no existe");
                     }
@@ -68,7 +75,7 @@ class _HistorialViewState extends State<HistorialView> {
                       )));
             },
             monthViewSettings: const MonthViewSettings(
-                showAgenda: true, numberOfWeeksInView: 6),
+                showAgenda: true, numberOfWeeksInView: 5),
             timeSlotViewSettings: const TimeSlotViewSettings(
                 minimumAppointmentDuration: Duration(minutes: 60))));
   }

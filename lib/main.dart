@@ -39,10 +39,12 @@ class Main extends StatelessWidget {
   const Main({super.key});
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(builder: (context, orientation, deviceType) {
+    return Sizer(builder: (context, orientation, deviceType) {
       return OKToast(
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
+          duration: const Duration(seconds: 4),
+          textStyle: TextStyle(fontSize: 14.sp, color: Colors.white),
           child: MaterialApp(
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
