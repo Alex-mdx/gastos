@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'theme_color.dart';
 
 const double borderRadius = 10.0;
@@ -28,7 +29,7 @@ ThemeData light = ThemeData(
     iconButtonTheme: IconButtonThemeData(
         style: ButtonStyle(
             iconColor: WidgetStateProperty.all<Color>(LightThemeColors.primary),
-            iconSize: WidgetStateProperty.all<double>(30),
+            iconSize: WidgetStateProperty.all<double>(24.sp),
             splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory)),
     switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all<Color>(LightThemeColors.primary),
@@ -37,12 +38,12 @@ ThemeData light = ThemeData(
     radioTheme: RadioThemeData(
         fillColor: WidgetStateProperty.all<Color>(LightThemeColors.primary)),
     primaryIconTheme: const IconThemeData(color: LightThemeColors.primary),
-    appBarTheme: const AppBarTheme(
+    appBarTheme:  AppBarTheme(
         elevation: 0,
-        actionsIconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: LightThemeColors.primary,
-        iconTheme: IconThemeData(color: Colors.white, size: 30),
-        titleTextStyle: TextStyle(
+        actionsIconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 4, 106, 223),
+        iconTheme: IconThemeData(color: Colors.white, size: 24.sp),
+        titleTextStyle: const TextStyle(
             color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
     scrollbarTheme: const ScrollbarThemeData(
         radius: Radius.circular(24),

@@ -58,7 +58,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       child: Padding(
                           padding: EdgeInsets.all(6.sp),
                           child: AnimatedFlipCounter(
-                              value: (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)) == 0 ? 0 : (widget.provider.generarPago(montos: widget.provider.listaGastos.where((element) => DateTime.tryParse(element.fecha!)?.weekday == index + 1).map((e) => e.monto!).toList())) / (widget.provider.contarSemana(fechas: widget.provider.listaGastos.map((e) => DateTime.parse(e.fecha!)).toList(), dia: index + 1)),
+                              value: widget.provider.promediarDiaSemana(index),
                               duration: Durations.long3,
                               fractionDigits: 1,
                               prefix: "\$",

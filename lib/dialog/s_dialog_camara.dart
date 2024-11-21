@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class _DialogCamaraState extends State<DialogCamara> {
                     final XFile? photo = await picker.pickImage(
                         maxHeight: 854,
                         maxWidth: 480,
-                        imageQuality: 80,
+                        imageQuality: Preferences.calidadFoto.toInt(),
                         source: ImageSource.camera,
                         requestFullMetadata: false);
                     if (photo != null) {
@@ -47,7 +48,7 @@ class _DialogCamaraState extends State<DialogCamara> {
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
                     final List<XFile> images = await picker.pickMultiImage(
-                        imageQuality: 80,
+                        imageQuality: Preferences.calidadFoto.toInt(),
                         maxHeight: 854,
                         maxWidth: 480,
                         limit: 10,

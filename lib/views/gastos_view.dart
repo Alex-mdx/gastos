@@ -5,6 +5,7 @@ import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/widgets/button_promedio_widget.dart';
 import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -26,29 +27,37 @@ class GastosView extends StatelessWidget {
             title: Text('Gastos',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
             actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: IconButton.filled(
+              Column(children: [
+                OverflowBar(spacing: 1.w, children: [
+                  const ButtonPromedioWidget(),
+                  IconButton.filled(
                       onPressed: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       },
-                      icon: const Icon(Icons.settings, color: Colors.white)))
+                      icon: const Icon(Icons.settings, color: Colors.white))
+                ])
+              ])
             ]),
         body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-                child: Column(children: [
-              HistorialSemanalWidget(provider: provider),
-              const Divider(),
-              const Column(
-                  children: [Text("Recomendacion de gasto para esta semana")]),
-              const Divider(),
-              Center(child: CardGastoWidget(provider: provider))
-            ]))),
+            padding: EdgeInsets.all(8.sp),
+            child: Stack(alignment: Alignment.bottomCenter, children: [
+              Column(children: [
+                HistorialSemanalWidget(provider: provider),
+                const Divider(),
+                Column(children: [
+                  Text("Recomendacion de gasto para esta semana",
+                      style: TextStyle(fontSize: 16.sp))
+                ])
+              ]),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CardGastoWidget(provider: provider))
+            ])),
         floatingActionButton: FloatingActionButton(
             onPressed: () async {
               if (provider.gastoActual.monto != null &&
                   provider.gastoActual.monto! > 0.0) {
+                log("${provider.gastoActual.toJson()}");
                 await Dialogs.showMorph(
                     title: "Ingresar gasto",
                     description: "¿Desea ingresar esta tarjeta de gasto?",
@@ -97,7 +106,8 @@ class GastosView extends StatelessWidget {
                 showToast("ingrese un monto mayor a 0");
               }
             },
-            child: const Icon(Icons.savings_rounded)),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
+            child: Icon(Icons.savings_rounded, size: 20.sp)),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat);
   }
 }
