@@ -190,4 +190,33 @@ class GastoProvider with ChangeNotifier {
     }
     return contador;
   }
+
+  List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales) {
+    DateTime ahora = DateTime.now();
+    int diaSemanaActual = ahora.weekday;
+    DateTime inicioSemana = DateTime.parse(convertirFecha(
+        fecha: ahora.subtract(Duration(days: diaSemanaActual - 1))));
+    DateTime finSemana = DateTime(
+        DateTime.parse(convertirFecha(
+                fecha: inicioSemana.add(const Duration(days: 7))))
+            .year,
+        DateTime.parse(convertirFecha(
+                fecha: inicioSemana.add(const Duration(days: 7))))
+            .month,
+        DateTime.parse(convertirFecha(
+                fecha: inicioSemana.add(const Duration(days: 7))))
+            .day,
+        23,
+        59,
+        59);
+    print("inicio:$inicioSemana\nFin:$finSemana");
+    return listaGastos
+        .where((element) =>
+            (DateTime.parse(element.fecha!).isAfter(inicioSemana) ||
+                DateTime.parse(element.fecha!)
+                    .isAtSameMomentAs(inicioSemana)) &&
+            ((DateTime.parse(element.fecha!).isAtSameMomentAs(finSemana) ||
+                (DateTime.parse(element.fecha!).isBefore(finSemana)))))
+        .toList();
+  }
 }
