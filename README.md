@@ -1,6 +1,6 @@
-# gastos
-
-Proyecto personal para el manejo de gastos personales
+# Gastos
+Descripcion
+Proyecto personal para el manejo de gastos personales, usando datos locales y calculo de gastos partiendo de rango de fechas, asi como evidencia fotografica
 
 ## Getting Started
 
