@@ -1,6 +1,6 @@
 # gastos
 
-A new Flutter project.
+Proyecto personal para el manejo de gastos personales
 
 ## Getting Started
 
