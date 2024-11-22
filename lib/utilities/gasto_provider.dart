@@ -2,8 +2,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/periodo_model.dart';
+import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:intl/intl.dart';
 
@@ -64,6 +66,13 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  PresupuestoModel? _presupuesto;
+  PresupuestoModel? get presupuesto => _presupuesto;
+  set presupuesto(PresupuestoModel? valor) {
+    _presupuesto = valor;
+    notifyListeners();
+  }
+
   TextEditingController _notas = TextEditingController();
   TextEditingController get notas => _notas;
   set notas(TextEditingController valor) {
@@ -74,6 +83,7 @@ class GastoProvider with ChangeNotifier {
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getItems();
+    presupuesto = await PresupuestoController.getItem();
   }
 
   ///funciones
@@ -109,16 +119,7 @@ class GastoProvider with ChangeNotifier {
     double monto = 0.0;
     var newGastos = listaGastos;
     if (Preferences.promedio) {
-      DateTime ahora = DateTime.now();
-      int diaSemanaActual = ahora.weekday;
-      DateTime inicioSemana =
-          ahora.subtract(Duration(days: diaSemanaActual - 1));
-      DateTime finSemana = inicioSemana.add(const Duration(days: 7));
-      newGastos = listaGastos
-          .where((element) =>
-              DateTime.parse(element.fecha!).isAfter(inicioSemana) &&
-              DateTime.parse(element.fecha!).isBefore(finSemana))
-          .toList();
+      newGastos = gastosFiltrados(listaGastos);
     }
     for (var i = 0; i < 7; i++) {
       monto += contarSemana(
@@ -150,16 +151,7 @@ class GastoProvider with ChangeNotifier {
   double promediarDiaSemana(int index) {
     var newGastos = listaGastos;
     if (Preferences.promedio) {
-      DateTime ahora = DateTime.now();
-      int diaSemanaActual = ahora.weekday;
-      DateTime inicioSemana =
-          ahora.subtract(Duration(days: diaSemanaActual - 1));
-      DateTime finSemana = inicioSemana.add(const Duration(days: 7));
-      newGastos = listaGastos
-          .where((element) =>
-              DateTime.parse(element.fecha!).isAfter(inicioSemana) &&
-              DateTime.parse(element.fecha!).isBefore(finSemana))
-          .toList();
+      newGastos = gastosFiltrados(listaGastos);
     }
     return contarSemana(
                 fechas: newGastos.map((e) => DateTime.parse(e.fecha!)).toList(),
@@ -175,6 +167,14 @@ class GastoProvider with ChangeNotifier {
             (contarSemana(
                 fechas: newGastos.map((e) => DateTime.parse(e.fecha!)).toList(),
                 dia: index + 1));
+  }
+
+  double sumatoriaDia(DateTime fecha) {
+    return generarPago(
+        montos: listaGastos
+            .where((element) => DateTime.parse(element.fecha!).day == fecha.day)
+            .map((e) => e.monto!)
+            .toList());
   }
 
   int contarSemana({required List<DateTime> fechas, required int dia}) {
@@ -209,7 +209,6 @@ class GastoProvider with ChangeNotifier {
         23,
         59,
         59);
-    print("inicio:$inicioSemana\nFin:$finSemana");
     return listaGastos
         .where((element) =>
             (DateTime.parse(element.fecha!).isAfter(inicioSemana) ||

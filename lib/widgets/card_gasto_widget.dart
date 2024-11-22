@@ -4,18 +4,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
-import 'package:gastos/dialog/s_dialog_foto_gasto.dart';
-import 'package:gastos/dialog/s_dialog_periodo_gasto.dart';
+import 'package:gastos/dialog/dialog_foto_gasto.dart';
+import 'package:gastos/dialog/dialog_periodo_gasto.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
-import '../dialog/s_dialog_camara.dart';
-import '../dialog/s_dialog_categorias.dart';
+import '../dialog/dialog_camara.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../dialog/dialog_categorias.dart';
 import '../models/categoria_model.dart';
 
 class CardGastoWidget extends StatefulWidget {

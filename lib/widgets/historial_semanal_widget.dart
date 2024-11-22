@@ -46,14 +46,13 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                   indicatorStyle: IndicatorStyle.outlined,
                   contentsBuilder: (context, index) => Padding(
                       padding: EdgeInsets.symmetric(horizontal: 1.w),
-                      child: Text(dias[index],
-                          style: TextStyle(
+                      child: AnimatedDefaultTextStyle(style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? 16.sp
                                   : 14.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
-                                  : FontWeight.normal))),
+                                  : FontWeight.normal), duration: const Duration(seconds: 1), child: Text(dias[index]))),
                   oppositeContentsBuilder: (context, index) => Card(
                       child: Padding(
                           padding: EdgeInsets.all(6.sp),
@@ -71,17 +70,22 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                 textAlign: TextAlign.center,
                 style:
                     TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
-        Expanded(
-            flex: 2,
-            child: Text('Gasto Promedio Semanal',
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
-        Expanded(
-            flex: 1,
-            child: Text('%',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))
+        if (widget.provider.presupuesto?.presupuesto != null &&
+            widget.provider.presupuesto?.activo == 1)
+          Expanded(
+              flex: 2,
+              child: Text('Gasto Limite',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
+        if (widget.provider.presupuesto?.presupuesto != null &&
+            widget.provider.presupuesto?.activo == 1)
+          Expanded(
+              flex: 1,
+              child: Text('%',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))
       ]),
       Row(children: [
         Expanded(
@@ -93,24 +97,29 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                 prefix: "\$",
                 textStyle:
                     TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
-        Expanded(
-            flex: 2,
-            child: AnimatedFlipCounter(
-                value: widget.provider.promedioTotalSemana(),
-                duration: Durations.long3,
-                fractionDigits: 2,
-                prefix: "\$",
-                textStyle:
-                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
-        Expanded(
-            flex: 1,
-            child: AnimatedFlipCounter(
-                value: 0,
-                duration: Durations.long3,
-                fractionDigits: 0,
-                suffix: "%",
-                textStyle:
-                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)))
+        if (widget.provider.presupuesto?.presupuesto != null &&
+            widget.provider.presupuesto?.activo == 1)
+          Expanded(
+              flex: 2,
+              child: AnimatedFlipCounter(
+                  value: widget.provider.presupuesto!.presupuesto!,
+                  duration: Durations.long3,
+                  fractionDigits: 2,
+                  prefix: "\$",
+                  textStyle:
+                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
+        if (widget.provider.presupuesto?.presupuesto != null &&
+            widget.provider.presupuesto?.activo == 1)
+          Expanded(
+              flex: 1,
+              child:  AnimatedFlipCounter(
+                  value: (100 * widget.provider.promedioTotalSemana()) /
+                      widget.provider.presupuesto!.presupuesto!,
+                  duration: Durations.long3,
+                  fractionDigits: 0,
+                  suffix: "%",
+                  textStyle:
+                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)))
       ])
     ]);
   }

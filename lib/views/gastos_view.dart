@@ -31,6 +31,7 @@ class GastosView extends StatelessWidget {
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
                   IconButton.filled(
+                      iconSize: 20.sp,
                       onPressed: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       },
@@ -40,15 +41,17 @@ class GastosView extends StatelessWidget {
             ]),
         body: Padding(
             padding: EdgeInsets.all(8.sp),
-            child: Stack(alignment: Alignment.bottomCenter, children: [
-              Column(children: [
-                HistorialSemanalWidget(provider: provider),
-                const Divider(),
-                Column(children: [
-                  Text("Recomendacion de gasto para esta semana",
-                      style: TextStyle(fontSize: 16.sp))
-                ])
-              ]),
+            child: Stack(children: [
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    HistorialSemanalWidget(provider: provider),
+                    const Divider(),
+                    Column(children: [
+                      Text("Recomendacion de gasto para esta semana",
+                          style: TextStyle(fontSize: 16.sp))
+                    ])
+                  ])),
               Align(
                   alignment: Alignment.bottomCenter,
                   child: CardGastoWidget(provider: provider))

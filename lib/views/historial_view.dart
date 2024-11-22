@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../dialog/s_dialog_historial_pago.dart';
+import '../dialog/dialog_historial_pago.dart';
 
 class HistorialView extends StatefulWidget {
   const HistorialView({super.key});
@@ -30,10 +31,39 @@ class _HistorialViewState extends State<HistorialView> {
             showDatePickerButton: true,
             showNavigationArrow: true,
             showTodayButton: true,
+            initialDisplayDate: now.subtract(Duration(days: now.day)),
             initialSelectedDate: now,
+            monthCellBuilder: (context, details) {
+              double montoDay = provider.sumatoriaDia(DateTime(
+                  details.date.year, details.date.month, details.date.day));
+              return Container(
+                  decoration: BoxDecoration(border: Border.all(width: .1)),
+                  child: Column(children: [
+                    Padding(
+                        padding: EdgeInsets.all(4.sp),
+                        child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              details.date.day.toString(),
+                              style: TextStyle(fontSize: 16.sp),
+                            ))),
+                    if (montoDay != 0)
+                      Center(
+                          child: Text(
+                              "\$${provider.convertirNumero(moneda: montoDay)}",
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold)))
+                  ]));
+            },
             viewNavigationMode: ViewNavigationMode.snap,
             dataSource: _getCalendarDataSource(provider: provider),
             viewHeaderHeight: 2.h,
+            firstDayOfWeek: Preferences.primerDia == 0
+                ? 6
+                : Preferences.primerDia == 1
+                    ? 7
+                    : 1,
             showCurrentTimeIndicator: true,
             headerHeight: 4.h,
             allowAppointmentResize: true,
@@ -55,27 +85,32 @@ class _HistorialViewState extends State<HistorialView> {
                     }
                   },
                   child: Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.all(8.sp),
                       decoration: BoxDecoration(
                           color: appointment.color,
                           borderRadius: BorderRadius.circular(borderRadius)),
                       width: calendarAppointmentDetails.bounds.width,
                       height: calendarAppointmentDetails.bounds.height,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${appointment.id}.- ${appointment.subject}"),
-                          Text(
-                              provider.convertirHora(
-                                  fecha: appointment.startTime),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold))
-                        ],
-                      )));
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${appointment.id}.- ${appointment.subject}",
+                                style: TextStyle(fontSize: 16.sp)),
+                            Text(
+                                provider.convertirHora(
+                                    fecha: appointment.startTime),
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold))
+                          ])));
             },
-            monthViewSettings: const MonthViewSettings(
-                showAgenda: true, numberOfWeeksInView: 5),
+            monthViewSettings: MonthViewSettings(
+                appointmentDisplayCount: 5,
+                showTrailingAndLeadingDates: true,
+                agendaItemHeight: 7.h,
+                showAgenda: true,
+                numberOfWeeksInView: 4),
             timeSlotViewSettings: const TimeSlotViewSettings(
                 minimumAppointmentDuration: Duration(minutes: 60))));
   }

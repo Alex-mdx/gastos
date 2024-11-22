@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -18,20 +19,18 @@ class _ButtonPromedioWidgetState extends State<ButtonPromedioWidget> {
   Widget build(BuildContext context) {
     return Consumer<GastoProvider>(builder: (context, provider, child) {
       return ElevatedButton.icon(
-          onPressed: () {
+          onPressed: () async {
             setState(() {
               Preferences.promedio = !Preferences.promedio;
             });
-            setState(() {
-              provider.promedioTotalSemana();
-            });
+            provider.listaGastos = await GastosController.getItems();
           },
           icon: Icon(
               Preferences.promedio
                   ? LineIcons.calendarWithWeekFocus
                   : LineIcons.calendarMinusAlt,
               size: 20.sp),
-          label: Text(!Preferences.promedio ? "Promedio" : "Semana",
+          label: Text(!Preferences.promedio ? Preferences.calculo : "Semanal",
               style: TextStyle(fontSize: 14.sp)));
     });
   }
