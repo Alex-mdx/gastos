@@ -6,6 +6,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.4.3 <4.0.0'
 dependencies:
+  admob_easy: ^1.1.4
   animated_custom_dropdown: ^3.1.1
   animated_flip_counter: ^0.3.4
   animated_read_more_text: ^0.0.6
