@@ -172,7 +172,7 @@ class GastoProvider with ChangeNotifier {
   double sumatoriaDia(DateTime fecha) {
     return generarPago(
         montos: listaGastos
-            .where((element) => DateTime.parse(element.fecha!).day == fecha.day)
+            .where((element) =>DateTime(DateTime.parse(element.fecha!).year,DateTime.parse(element.fecha!).month,DateTime.parse(element.fecha!).day).isAtSameMomentAs(fecha))
             .map((e) => e.monto!)
             .toList());
   }

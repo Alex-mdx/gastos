@@ -52,7 +52,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                   : 14.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
-                                  : FontWeight.normal), duration: const Duration(seconds: 1), child: Text(dias[index]))),
+                                  : FontWeight.normal,color: Colors.black), duration: const Duration(seconds: 1), child: Text(dias[index]))),
                   oppositeContentsBuilder: (context, index) => Card(
                       child: Padding(
                           padding: EdgeInsets.all(6.sp),
