@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -18,10 +19,9 @@ class _MyWidgetState extends State<HomeView> {
     return PopScope(
         canPop: true,
         child: Scaffold(
-            body: PageView(
-                controller: navigator.pageController,
-                children: navigator.pages,
-                onPageChanged: (index) => navigator.index = index),
+            body: Consumer<GastoProvider>(builder: (context, provider, child) {
+              return Paginado(provider: provider);
+            }),
             bottomNavigationBar: BottomNavigationBar(
                 showUnselectedLabels: false,
                 currentIndex: navigator.index,
@@ -35,6 +35,30 @@ class _MyWidgetState extends State<HomeView> {
                   _buildBottomNavigationBarItem(Icons.payments, 'Gastos'),
                   _buildBottomNavigationBarItem(Icons.auto_graph, 'Graficos')
                 ])));
+  }
+}
+
+class Paginado extends StatefulWidget {
+  final GastoProvider provider;
+  const Paginado({super.key, required this.provider});
+
+  @override
+  State<Paginado> createState() => PaginadoState();
+}
+
+class PaginadoState extends State<Paginado> {
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+    final navigator = Provider.of<NavigationProvider>(context);
+    return PageView(
+        controller: navigator.pageController,
+        children: navigator.pages,
+        onPageChanged: (index) => navigator.index = index);
   }
 }
 

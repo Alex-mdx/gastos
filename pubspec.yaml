@@ -6,7 +6,6 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.4.3 <4.0.0'
 dependencies:
-  admob_easy: ^1.1.4
   animated_custom_dropdown: ^3.1.1
   animated_flip_counter: ^0.3.4
   animated_read_more_text: ^0.0.6
@@ -20,6 +19,7 @@ dependencies:
     sdk: flutter
   flutter_spinbox: ^0.13.1
   get: ^4.6.6
+  google_mobile_ads: ^5.2.0
   http: ^1.2.1
   image: ^4.2.0
   image_picker: ^1.1.2

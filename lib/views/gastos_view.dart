@@ -5,6 +5,7 @@ import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/button_promedio_widget.dart';
 import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:sizer/sizer.dart';
 
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
+import '../widgets/addMobile/fullBanner.dart';
 import '../widgets/card_gasto_widget.dart';
 
 class GastosView extends StatelessWidget {
@@ -30,12 +32,20 @@ class GastosView extends StatelessWidget {
               Column(children: [
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
-                  IconButton.filled(
+                  FullBanner(
+                      cabeza: Padding(
+                        padding: EdgeInsets.only(right: 1.w),
+                        child: Icon(Icons.settings, color: Colors.white),
+                      ),
+                      funcion: () {
+                        Navigation.pushNamed(route: AppRoutes.opciones);
+                      })
+                  /* IconButton.filled(
                       iconSize: 20.sp,
                       onPressed: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       },
-                      icon: const Icon(Icons.settings, color: Colors.white))
+                      icon: const Icon(Icons.settings, color: Colors.white)) */
                 ])
               ])
             ]),
@@ -44,14 +54,19 @@ class GastosView extends StatelessWidget {
             child: Stack(children: [
               Align(
                   alignment: Alignment.topCenter,
-                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    HistorialSemanalWidget(provider: provider),
-                    const Divider(),
-                    Column(children: [
-                      Text("Recomendacion de gasto para esta semana",
-                          style: TextStyle(fontSize: 16.sp))
-                    ])
-                  ])),
+                  child: SizedBox(
+                      height: 20.h,
+                      child: SingleChildScrollView(
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: [
+                        HistorialSemanalWidget(provider: provider),
+                        BannerExample(tipo: 0),
+                        /* Column(children: [
+                        const Divider(),
+                          Text("Recomendacion de gasto para esta semana",
+                              style: TextStyle(fontSize: 16.sp))
+                        ]) */
+                      ])))),
               Align(
                   alignment: Alignment.bottomCenter,
                   child: CardGastoWidget(provider: provider))

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -24,6 +25,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
   SystemChrome.setPreferredOrientations(

@@ -23,6 +23,9 @@ class Preferences {
   static bool get tema => _preferences?.getBool('tema') ?? false;
   static set tema(bool value) => _preferences?.setBool('tema', value);
 
+  static String get setting => _preferences?.getString('setting') ?? "0000-00-00 00:00:00";
+  static set setting(String value) => _preferences?.setString('setting', value);
+
   static double get calidadFoto =>
       _preferences?.getDouble('calidad_foto') ?? 80;
   static set calidadFoto(double value) =>

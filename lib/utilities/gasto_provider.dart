@@ -7,6 +7,7 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/preferences.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:intl/intl.dart';
 
 import '../models/categoria_model.dart';
@@ -172,7 +173,11 @@ class GastoProvider with ChangeNotifier {
   double sumatoriaDia(DateTime fecha) {
     return generarPago(
         montos: listaGastos
-            .where((element) =>DateTime(DateTime.parse(element.fecha!).year,DateTime.parse(element.fecha!).month,DateTime.parse(element.fecha!).day).isAtSameMomentAs(fecha))
+            .where((element) => DateTime(
+                    DateTime.parse(element.fecha!).year,
+                    DateTime.parse(element.fecha!).month,
+                    DateTime.parse(element.fecha!).day)
+                .isAtSameMomentAs(fecha))
             .map((e) => e.monto!)
             .toList());
   }
@@ -217,5 +222,42 @@ class GastoProvider with ChangeNotifier {
             ((DateTime.parse(element.fecha!).isAtSameMomentAs(finSemana) ||
                 (DateTime.parse(element.fecha!).isBefore(finSemana)))))
         .toList();
+  }
+
+  double obtenerPorcentajeDia(int index, double monto) {
+    switch (index) {
+      case 1:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.lunes ?? 0));
+      case 2:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.martes ?? 0));
+      case 3:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.miercoles ?? 0));
+      case 4:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.jueves ?? 0));
+      case 5:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.viernes ?? 0));
+      case 6:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.sabado ?? 0));
+      case 7:
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.domingo ?? 0));
+      default:
+        return -1;
+    }
+  }
+
+  Color porcentualColor(double monto) {
+    if (monto == 0) {
+      return LightThemeColors.darkBlue;
+    } else if (monto < 30) {
+      return LightThemeColors.primary;
+    } else if (monto >= 30 && monto < 75) {
+      return LightThemeColors.green;
+    } else if (monto >= 75 && monto < 90) {
+      return LightThemeColors.yellow;
+    } else if (monto >= 90 && monto < 130) {
+      return LightThemeColors.red;
+    } else {
+      return LightThemeColors.purple;
+    }
   }
 }

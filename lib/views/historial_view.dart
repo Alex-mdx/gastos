@@ -3,6 +3,7 @@ import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -40,13 +41,23 @@ class _HistorialViewState extends State<HistorialView> {
                   decoration: BoxDecoration(border: Border.all(width: .1)),
                   child: Column(children: [
                     Padding(
-                        padding: EdgeInsets.all(4.sp),
-                        child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              details.date.day.toString(),
-                              style: TextStyle(fontSize: 16.sp),
-                            ))),
+                        padding: EdgeInsets.all(5.sp),
+                        child: Container(
+                            height: 6.w,
+                            width: 6.w,
+                            decoration: details.date.isAtSameMomentAs(DateTime(
+                                    DateTime.now().year,
+                                    DateTime.now().month,
+                                    DateTime.now().day))
+                                ? BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(borderRadius),
+                                    color: LightThemeColors.darkGrey)
+                                : null,
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(details.date.day.toString(),
+                                    style: TextStyle(fontSize: 16.sp))))),
                     if (montoDay != 0)
                       Center(
                           child: Text(
@@ -133,8 +144,9 @@ AppointmentDataSource _getCalendarDataSource(
         isAllDay: false,
         subject:
             'Gasto: \$${provider.listaGastos[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == provider.listaGastos[i].categoriaId)?.nombre ?? "Sin Categoria"}',
-        color: Colors.blue,
-        notes: "ahdskashdakdh"));
+        color: provider.porcentualColor(provider.obtenerPorcentajeDia(
+            DateTime.parse(provider.listaGastos[i].fecha!).weekday + 1,
+            provider.listaGastos[i].monto!))));
   }
 
   return AppointmentDataSource(appointments);

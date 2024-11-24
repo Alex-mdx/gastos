@@ -34,7 +34,8 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      SizedBox(
+      Container(
+          alignment: Alignment.center,
           width: 100.w,
           height: 15.h,
           child: Timeline.tileBuilder(
@@ -46,22 +47,21 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                   indicatorStyle: IndicatorStyle.outlined,
                   contentsBuilder: (context, index) => Padding(
                       padding: EdgeInsets.symmetric(horizontal: 1.w),
-                      child: AnimatedDefaultTextStyle(style: TextStyle(
+                      child: Text(dias[index],
+                          style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? 16.sp
                                   : 14.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
-                                  : FontWeight.normal,color: Colors.black), duration: const Duration(seconds: 1), child: Text(dias[index]))),
+                                  : FontWeight.normal))),
                   oppositeContentsBuilder: (context, index) => Card(
                       child: Padding(
                           padding: EdgeInsets.all(6.sp),
-                          child: AnimatedFlipCounter(
-                              value: widget.provider.promediarDiaSemana(index),
-                              duration: Durations.long3,
-                              fractionDigits: 1,
-                              prefix: "\$",
-                              textStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))),
+                          child: AnimatedDefaultTextStyle(
+                              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: widget.provider.presupuesto?.activo == 1 ? widget.provider.porcentualColor(widget.provider.obtenerPorcentajeDia(index, widget.provider.promediarDiaSemana(index))) : Colors.black),
+                              duration: Duration(seconds: 2),
+                              child: AnimatedFlipCounter(value: widget.provider.promediarDiaSemana(index), duration: Durations.long3, fractionDigits: 1, prefix: "\$")))),
                   itemCount: dias.length))),
       Row(children: [
         Expanded(
@@ -82,7 +82,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
             widget.provider.presupuesto?.activo == 1)
           Expanded(
               flex: 1,
-              child: Text('%',
+              child: Text('Limite %',
                   textAlign: TextAlign.center,
                   style:
                       TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)))
@@ -112,14 +112,20 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
             widget.provider.presupuesto?.activo == 1)
           Expanded(
               flex: 1,
-              child:  AnimatedFlipCounter(
-                  value: (100 * widget.provider.promedioTotalSemana()) /
-                      widget.provider.presupuesto!.presupuesto!,
-                  duration: Durations.long3,
-                  fractionDigits: 0,
-                  suffix: "%",
-                  textStyle:
-                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)))
+              child: AnimatedDefaultTextStyle(
+                  style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: widget.provider.porcentualColor(
+                          (100 * widget.provider.promedioTotalSemana()) /
+                              widget.provider.presupuesto!.presupuesto!)),
+                  duration: Durations.medium1,
+                  child: AnimatedFlipCounter(
+                      value: (100 * widget.provider.promedioTotalSemana()) /
+                          widget.provider.presupuesto!.presupuesto!,
+                      duration: Durations.long3,
+                      fractionDigits: 0,
+                      suffix: "%")))
       ])
     ]);
   }
