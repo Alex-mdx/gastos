@@ -121,7 +121,7 @@ class _HistorialViewState extends State<HistorialView> {
                 showTrailingAndLeadingDates: true,
                 agendaItemHeight: 7.h,
                 showAgenda: true,
-                numberOfWeeksInView: 4),
+                numberOfWeeksInView: 5),
             timeSlotViewSettings: const TimeSlotViewSettings(
                 minimumAppointmentDuration: Duration(minutes: 60))));
   }

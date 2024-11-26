@@ -1,4 +1,4 @@
-package com.example.gastos
+package com.modx.gastos
 
 import io.flutter.embedding.android.FlutterActivity
 

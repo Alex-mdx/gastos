@@ -11,10 +11,12 @@ dependencies:
   animated_read_more_text: ^0.0.6
   badges: ^3.1.2
   cupertino_icons: ^1.0.6
+  essential_xlsx: ^2.0.0
   excel: ^4.0.6
   flutter:
     sdk: flutter
   flutter_animated_icons: ^1.0.1
+  flutter_excel: ^1.0.1
   flutter_localizations:
     sdk: flutter
   flutter_spinbox: ^0.13.1
