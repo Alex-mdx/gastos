@@ -48,7 +48,7 @@ Si tienes alguna pregunta sobre esta política de privacidad, contáctanos a [al
 
 ## 9. Derechos del usuario
 
-Como usuario de [Nombre de la App], tienes derecho a:
+Como usuario de Gastos Generales, tienes derecho a:
 
 - Acceder a tu información personal.
 - Corregir cualquier información personal inexacta.
