@@ -50,8 +50,8 @@ class PaginadoState extends State<Paginado> {
   @override
   void initState() {
     super.initState();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     final navigator = Provider.of<NavigationProvider>(context);
@@ -64,5 +64,5 @@ class PaginadoState extends State<Paginado> {
 
 BottomNavigationBarItem _buildBottomNavigationBarItem(
     IconData icon, String label) {
-  return BottomNavigationBarItem(icon: Icon(icon, size: 8.w), label: label);
+  return BottomNavigationBarItem(icon: Icon(icon, size: 24.sp), label: label);
 }

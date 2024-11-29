@@ -35,7 +35,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Container(
-          alignment: Alignment.center,
+          alignment: Alignment.topCenter,
           width: 100.w,
           height: 15.h,
           child: Timeline.tileBuilder(

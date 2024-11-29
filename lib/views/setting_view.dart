@@ -7,6 +7,7 @@ import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/setting_presupuesto_widget.dart';
 import 'package:gastos/widgets/setting_primer_dia_widget.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -45,15 +46,32 @@ class _SettingViewState extends State<SettingView> {
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(children: [
-                              ElevatedButton.icon(
-                                  onPressed: () {
-                                    GenerateExcel.backUp(provider);
-                                  },
-                                  label: Text("Compartir Historial",
-                                      style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold)),
-                                  icon: Icon(Icons.share, size: 20.sp)),
+                              OverflowBar(
+                                alignment: MainAxisAlignment.spaceAround,
+                                overflowAlignment: OverflowBarAlignment.center,
+                                children: [
+                                  ElevatedButton.icon(
+                                      onPressed: () {
+                                        GenerateExcel.backUp(provider);
+                                      },
+                                      label: Text("Compartir datos",
+                                          style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold)),
+                                      icon: Icon(LineIcons.fileUpload,
+                                          size: 20.sp)),
+                                  ElevatedButton.icon(
+                                      onPressed: () {
+                                        GenerateExcel.backUp(provider);
+                                      },
+                                      label: Text("Importar datos",
+                                          style: TextStyle(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.bold)),
+                                      icon: Icon(LineIcons.fileImport,
+                                          size: 20.sp))
+                                ],
+                              ),
                               BannerExample(tipo: 0),
                               const SettingCalidadImagen(),
                               const Divider(),

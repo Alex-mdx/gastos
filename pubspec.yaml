@@ -11,7 +11,9 @@ dependencies:
   animated_read_more_text: ^0.0.6
   badges: ^3.1.2
   cupertino_icons: ^1.0.6
+  dropbox_client: ^1.0.0
   excel: ^4.0.6
+  file_picker: ^8.1.4
   flutter:
     sdk: flutter
   flutter_localizations:
