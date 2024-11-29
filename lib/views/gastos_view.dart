@@ -34,9 +34,8 @@ class GastosView extends StatelessWidget {
                   const ButtonPromedioWidget(),
                   FullBanner(
                       cabeza: Padding(
-                        padding: EdgeInsets.only(right: 1.w),
-                        child: Icon(Icons.settings, color: Colors.white),
-                      ),
+                          padding: EdgeInsets.only(right: 1.w),
+                          child: Icon(Icons.settings, color: Colors.white)),
                       funcion: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       })

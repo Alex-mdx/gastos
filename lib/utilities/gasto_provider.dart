@@ -226,19 +226,19 @@ class GastoProvider with ChangeNotifier {
 
   double obtenerPorcentajeDia(int index, double monto) {
     switch (index) {
-      case 1:
+      case 0:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.lunes ?? 0));
-      case 2:
+      case 1:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.martes ?? 0));
-      case 3:
+      case 2:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.miercoles ?? 0));
-      case 4:
+      case 3:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.jueves ?? 0));
-      case 5:
+      case 4:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.viernes ?? 0));
-      case 6:
+      case 5:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.sabado ?? 0));
-      case 7:
+      case 6:
         return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.domingo ?? 0));
       default:
         return -1;

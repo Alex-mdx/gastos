@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:sizer/sizer.dart';
 
 import '../models/presupuesto_model.dart';
@@ -41,6 +43,56 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               Text("Ingrese su limite por dia",
                   style: TextStyle(fontSize: 16.sp)),
+              OverflowBar(
+                  overflowAlignment: OverflowBarAlignment.center,
+                  alignment: MainAxisAlignment.center,
+                  children: [
+                    if (temporal.presupuesto! > 0)
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            var dia = temporal.presupuesto! / 7;
+                            final newModel = temporal.copyWith(
+                                lunes: dia,
+                                martes: dia,
+                                miercoles: dia,
+                                jueves: dia,
+                                viernes: dia,
+                                sabado: dia,
+                                domingo: dia);
+                            setState(() {
+                              widget.provider.presupuesto = newModel;
+                              temporal = newModel;
+                            });
+                          },
+                          label: Text("Particionar presupuesto por dia",
+                              style: TextStyle(fontSize: 15.sp)),
+                          icon: Icon(Icons.calendar_view_month, size: 20.sp)),
+                    IconButton(
+                        iconSize: 20.sp,
+                        onPressed: () {
+                          Dialogs.showMorph(
+                              title: "Limpiar limites por dia",
+                              description:
+                                  "Limpiara los montos limites que ha ingresado por dia",
+                              loadingTitle: "Eliminado",
+                              onAcceptPressed: (context) async {
+                                final newModel = temporal.copyWith(
+                                    lunes: 0,
+                                    martes: 0,
+                                    miercoles: 0,
+                                    jueves: 0,
+                                    viernes: 0,
+                                    sabado: 0,
+                                    domingo: 0);
+                                setState(() {
+                                  widget.provider.presupuesto = newModel;
+                                  temporal = newModel;
+                                });
+                              });
+                        },
+                        icon: Icon(Icons.cleaning_services,
+                            color: LightThemeColors.darkBlue))
+                  ]),
               const Divider(),
               SingleChildScrollView(
                   child: Wrap(runSpacing: 1.h, spacing: 1.w, children: [
@@ -55,8 +107,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.lunes!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -74,8 +127,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.martes!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -93,8 +147,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.miercoles!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -112,8 +167,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.jueves!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -131,8 +187,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.viernes!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -150,8 +207,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.sabado!,
                         textStyle: TextStyle(fontSize: 15.sp),
                         keyboardType: const TextInputType.numberWithOptions(
@@ -169,8 +227,9 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                           });
                           log("${widget.provider.presupuesto?.toJson()}");
                         },
-                        min: 1,
+                        min: 0,
                         max: 1000000,
+                        decimals: 1,
                         value: temporal.domingo!,
                         keyboardType: const TextInputType.numberWithOptions(
                             signed: false),

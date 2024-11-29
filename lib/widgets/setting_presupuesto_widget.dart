@@ -9,6 +9,7 @@ import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:rive_animated_icon/rive_animated_icon.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_animated_icons/icons8.dart';
 import 'package:lottie/lottie.dart';
@@ -59,7 +60,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                       });
                       log("${widget.provider.presupuesto?.toJson()}");
                     },
-                    min: 1,
+                    min: 0,
                     max: 1000000,
                     value: temporal.presupuesto!,
                     keyboardType:
@@ -76,12 +77,11 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                           builder: (context) =>
                               DialogPresupuestoDia(provider: widget.provider));
                     },
-                    icon: const Icon(LineIcons.commentsDollar)))
+                    icon: Icon(LineIcons.commentsDollar,
+                        color:  LightThemeColors.green)))
           ])),
       ElevatedButton.icon(
-          icon: widget.provider.presupuesto?.activo == 1
-              ? Lottie.asset(Icons8.money, height: 4.h, fit: BoxFit.fitHeight)
-              : Icon(LineIcons.wallet, size: 18.sp),
+          icon: Icon(widget.provider.presupuesto?.activo == 1 ?Icons.money_off:LineIcons.wallet, size: 18.sp),
           onPressed: () async {
             widget.provider.presupuesto?.activo == 1
                 ? await Dialogs.showMorph(
