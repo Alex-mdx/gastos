@@ -1,10 +1,10 @@
-# Política de Privacidad de Gastos Generales
+# Política de Privacidad de Control de Gastos
 
 **Fecha de entrada en vigor:** 23 de Noviembre del 2024
 
 ## 1. Introducción
 
-En nuestra aplicación de gastos generales, tu privacidad es de suma importancia para nosotros. Esta política de privacidad tiene como objetivo informarte sobre cómo recopilamos, usamos y protegemos tu información personal. Al utilizar nuestra app, aceptas las prácticas descritas en esta política.
+En nuestra aplicación de Control de Gastos, tu privacidad es de suma importancia para nosotros. Esta política de privacidad tiene como objetivo informarte sobre cómo recopilamos, usamos y protegemos tu información personal. Al utilizar nuestra app, aceptas las prácticas descritas en esta política.
 
 Nuestra aplicación permite a los usuarios ingresar gastos de manera fácil y rápida. Podrás registrar el monto de cada gasto, seleccionar una categoría adecuada, y establecer la fecha en la que se realizó la transacción. Además, tendrás la opción de subir evidencia fotográfica para respaldar tus registros, lo que te ayudará a tener un mejor control de tus finanzas.
 
@@ -14,7 +14,7 @@ Te agradecemos por confiar en nosotros y en nuestra app para gestionar tus gasto
 
 ## 2. Información que recopilamos
 
-Gastos Generales no recopila ningún dato personal tuyo ni de tu dispositivo.
+Control de Gastos no recopila ningún dato personal tuyo ni de tu dispositivo.
 
 ## 3. Información que procesamos
 
@@ -48,7 +48,7 @@ Si tienes alguna pregunta sobre esta política de privacidad, contáctanos a [al
 
 ## 9. Derechos del usuario
 
-Como usuario de Gastos Generales, tienes derecho a:
+Como usuario de Control de Gastos, tienes derecho a:
 
 - Acceder a tu información personal.
 - Corregir cualquier información personal inexacta.
@@ -56,7 +56,7 @@ Como usuario de Gastos Generales, tienes derecho a:
 
 ## 10. Consentimiento
 
-Al usar Gastos Personales, aceptas los términos de esta política de privacidad.
+Al usar la app de Control de Gastos, aceptas los términos de esta política de privacidad.
 
 ## 11. Aclaraciones
 
