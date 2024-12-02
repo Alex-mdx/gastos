@@ -42,6 +42,7 @@ class GastoProvider with ChangeNotifier {
   }
 
   GastoModelo _gastoActual = GastoModelo(
+      id: null,
       categoriaId: null,
       monto: null,
       fecha: null,
@@ -129,7 +130,7 @@ class GastoProvider with ChangeNotifier {
                           DateTime.parse(element.fecha!).weekday == i + 1)
                       .map((e) => DateTime.parse(e.fecha!))
                       .toList(),
-                  dia: i + 1) ==
+                  dia: i) ==
               0
           ? 0
           : generarPago(
@@ -144,7 +145,7 @@ class GastoProvider with ChangeNotifier {
                           DateTime.parse(element.fecha!).weekday == i + 1)
                       .map((e) => DateTime.parse(e.fecha!))
                       .toList(),
-                  dia: i + 1);
+                  dia: i);
     }
     return monto;
   }
@@ -156,7 +157,7 @@ class GastoProvider with ChangeNotifier {
     }
     return contarSemana(
                 fechas: newGastos.map((e) => DateTime.parse(e.fecha!)).toList(),
-                dia: index + 1) ==
+                dia: index) ==
             0
         ? 0 // si no hay datos mete 0
         : (generarPago(
@@ -167,7 +168,7 @@ class GastoProvider with ChangeNotifier {
                     .toList())) /
             (contarSemana(
                 fechas: newGastos.map((e) => DateTime.parse(e.fecha!)).toList(),
-                dia: index + 1));
+                dia: index));
   }
 
   double sumatoriaDia(DateTime fecha) {
@@ -186,7 +187,7 @@ class GastoProvider with ChangeNotifier {
     int contador = 0;
     DateTime? ultimaDate;
     for (var element in fechas) {
-      if (element.weekday == dia) {
+      if (element.weekday == dia + 1) {
         if (ultimaDate == null || element.day != ultimaDate.day) {
           contador++;
           ultimaDate = element;
@@ -227,19 +228,19 @@ class GastoProvider with ChangeNotifier {
   double obtenerPorcentajeDia(int index, double monto) {
     switch (index) {
       case 0:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.lunes ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.lunes ?? 0));
       case 1:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.martes ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.martes ?? 0));
       case 2:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.miercoles ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.miercoles ?? 0));
       case 3:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.jueves ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.jueves ?? 0));
       case 4:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.viernes ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.viernes ?? 0));
       case 5:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.sabado ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.sabado ?? 0));
       case 6:
-        return monto == 0 ? 0 : ((100 * monto) / (presupuesto!.domingo ?? 0));
+        return monto == 0 ? 0 : ((100 * monto) / (presupuesto?.domingo ?? 0));
       default:
         return -1;
     }
@@ -248,13 +249,13 @@ class GastoProvider with ChangeNotifier {
   Color porcentualColor(double monto) {
     if (monto == 0) {
       return LightThemeColors.darkBlue;
-    } else if (monto < 30) {
+    } else if (monto < 25) {
       return LightThemeColors.primary;
-    } else if (monto >= 30 && monto < 75) {
+    } else if (monto >= 25 && monto < 50) {
       return LightThemeColors.green;
-    } else if (monto >= 75 && monto < 90) {
+    } else if (monto >= 50 && monto < 75) {
       return LightThemeColors.yellow;
-    } else if (monto >= 90 && monto < 130) {
+    } else if (monto >= 75 && monto < 100) {
       return LightThemeColors.red;
     } else {
       return LightThemeColors.purple;

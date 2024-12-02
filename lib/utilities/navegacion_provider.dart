@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gastos/widgets/grafico_view.dart';
-
 import '../views/gastos_view.dart';
+import '../views/graficos_view.dart';
 import '../views/historial_view.dart';
 
 class NavigationProvider extends ChangeNotifier {
@@ -30,7 +29,7 @@ class NavigationProvider extends ChangeNotifier {
   final List<Widget> _pages = [
     const HistorialView(),
     const GastosView(),
-    const GraficoView()
+    const GraficosView()
   ];
   List<Widget> get pages => _pages;
 

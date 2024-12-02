@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/models/categoria_model.dart';
@@ -41,7 +43,10 @@ class DialogCategorias extends StatelessWidget {
                       description: '¿Ingresar este tipo de gasto?',
                       loadingTitle: 'Ingresando...',
                       onAcceptPressed: (context) async {
+                        var id = (await CategoriaController.getLastId()) ?? 1;
+                        log("${id+1}");
                         CategoriaModel objeto = CategoriaModel(
+                            id: id + 1,
                             nombre: tipoGasto.text,
                             descripcion: descripcion.text);
                         await CategoriaController.insert(objeto);

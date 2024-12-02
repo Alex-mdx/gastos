@@ -51,7 +51,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                           style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? 16.sp
-                                  : 14.sp,
+                                  : 15.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
                                   : FontWeight.normal))),
@@ -60,7 +60,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                           padding: EdgeInsets.all(6.sp),
                           child: AnimatedDefaultTextStyle(
                               style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: widget.provider.presupuesto?.activo == 1 ? widget.provider.porcentualColor(widget.provider.obtenerPorcentajeDia(index, widget.provider.promediarDiaSemana(index))) : Colors.black),
-                              duration: Duration(seconds: 2),
+                              duration: Duration(seconds: 1),
                               child: AnimatedFlipCounter(value: widget.provider.promediarDiaSemana(index), duration: Durations.long3, fractionDigits: 1, prefix: "\$")))),
                   itemCount: dias.length))),
       Row(children: [

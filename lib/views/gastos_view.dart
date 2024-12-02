@@ -15,7 +15,7 @@ import 'package:sizer/sizer.dart';
 
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
-import '../widgets/addMobile/fullBanner.dart';
+import '../widgets/addMobile/full_banner.dart';
 import '../widgets/card_gasto_widget.dart';
 
 class GastosView extends StatelessWidget {
@@ -82,7 +82,10 @@ class GastosView extends StatelessWidget {
                     onAcceptPressed: (context) async {
                       final now = DateTime.now();
                       //?La tabla de gasto es para notificar si dicha tarjeta es modificable
+                      var id = (await GastosController.getLastId()) ?? 1;
+                      log("${id + 1}");
                       final finalTemp = provider.gastoActual.copyWith(
+                          id: id + 1,
                           gasto: 1,
                           ultimaFecha: provider.selectProxima == null
                               ? null
@@ -98,6 +101,7 @@ class GastosView extends StatelessWidget {
                       provider.listaGastos = await GastosController.getItems();
                       provider.selectProxima = provider.selectProxima;
                       provider.gastoActual = GastoModelo(
+                          id: null,
                           categoriaId: null,
                           monto: null,
                           fecha: null,

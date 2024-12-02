@@ -81,13 +81,13 @@ class _HistorialViewState extends State<HistorialView> {
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
                   calendarAppointmentDetails.appointments.first;
-              print("data ${appointment.id}");
               return InkWell(
                   onTap: () async {
                     final modelado = await GastosController.find(
                         int.parse(appointment.id.toString()));
                     if (modelado != null) {
                       showDialog(
+                          // ignore: use_build_context_synchronously
                           context: context,
                           builder: (context) =>
                               DialogHistorialPago(gasto: modelado));
@@ -96,7 +96,7 @@ class _HistorialViewState extends State<HistorialView> {
                     }
                   },
                   child: Container(
-                      padding: EdgeInsets.all(8.sp),
+                      padding: EdgeInsets.all(6.sp),
                       decoration: BoxDecoration(
                           color: appointment.color,
                           borderRadius: BorderRadius.circular(borderRadius)),
@@ -117,7 +117,7 @@ class _HistorialViewState extends State<HistorialView> {
                           ])));
             },
             monthViewSettings: MonthViewSettings(
-                appointmentDisplayCount: 5,
+                appointmentDisplayCount: 10,
                 showTrailingAndLeadingDates: true,
                 agendaItemHeight: 7.h,
                 showAgenda: true,
@@ -144,10 +144,11 @@ AppointmentDataSource _getCalendarDataSource(
         isAllDay: false,
         subject:
             'Gasto: \$${provider.listaGastos[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == provider.listaGastos[i].categoriaId)?.nombre ?? "Sin Categoria"}',
-        color: provider.porcentualColor(provider.obtenerPorcentajeDia(
-            DateTime.parse(provider.listaGastos[i].fecha!).weekday + 1,
-            provider.listaGastos[i].monto!))));
+        color: provider.presupuesto?.activo == 0 || provider.presupuesto == null
+            ? LightThemeColors.primary
+            : provider.porcentualColor(provider.obtenerPorcentajeDia(
+                DateTime.parse(provider.listaGastos[i].fecha!).weekday - 1,
+                provider.listaGastos[i].monto!))));
   }
-
   return AppointmentDataSource(appointments);
 }

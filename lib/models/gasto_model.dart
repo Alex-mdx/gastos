@@ -20,7 +20,7 @@ class GastoModelo {
   String? nota;
 
   GastoModelo(
-      {this.id,
+      {required this.id,
       required this.categoriaId,
       required this.monto,
       required this.fecha,

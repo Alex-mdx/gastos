@@ -1,14 +1,22 @@
+import 'dart:developer';
+
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/categoria_controller.dart';
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/generate_excel.dart';
 import 'package:gastos/utilities/preferences.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/setting_presupuesto_widget.dart';
 import 'package:gastos/widgets/setting_primer_dia_widget.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:rive_animated_icon/rive_animated_icon.dart';
 import 'package:sizer/sizer.dart';
 
 import '../widgets/setting_calidad_imagen.dart';
@@ -32,13 +40,32 @@ class _SettingViewState extends State<SettingView> {
         canPop: true,
         onPopInvokedWithResult: (didPop, result) async {
           if (provider.presupuesto?.activo == 1) {
-            print("actualizo");
+            log("actualizo");
             await PresupuestoController.insert(provider.presupuesto!);
           }
           provider.presupuesto = await PresupuestoController.getItem();
         },
         child: Scaffold(
-            appBar: AppBar(title: const Text("Opciones")),
+            appBar: AppBar(
+                title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
+                actions: [
+                  OverflowBar(children: [
+                    if (kDebugMode)
+                      IconButton.filled(
+                          iconSize: 24.sp,
+                          onPressed: () {},
+                          icon: Stack(alignment: Alignment.center, children: [
+                            Icon(LineIcons.dropbox, color: Colors.white),
+                            RiveAnimatedIcon(
+                                riveIcon: RiveIcon.reload2,
+                                strokeWidth: 10,
+                                loopAnimation: true,
+                                color: LightThemeColors.primary,
+                                height: 24.sp,
+                                width: 24.sp)
+                          ]))
+                  ])
+                ]),
             body: SizedBox(
                 height: 80.h,
                 child: SafeArea(
@@ -52,9 +79,17 @@ class _SettingViewState extends State<SettingView> {
                                 children: [
                                   ElevatedButton.icon(
                                       onPressed: () {
-                                        GenerateExcel.backUp(provider);
+                                        Dialogs.showMorph(
+                                            title: "Exportacion de datos",
+                                            description:
+                                                "Se generara un respaldo de sus gastos a un archivo XLSX\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Por el momento solo respalda los gatos ingresados y las categorias",
+                                            loadingTitle: "Exportando",
+                                            onAcceptPressed: (context) async {
+                                              await GenerateExcel.backUp(
+                                                  provider);
+                                            });
                                       },
-                                      label: Text("Compartir datos",
+                                      label: Text("Exportacion datos",
                                           style: TextStyle(
                                               fontSize: 16.sp,
                                               fontWeight: FontWeight.bold)),
@@ -62,7 +97,23 @@ class _SettingViewState extends State<SettingView> {
                                           size: 20.sp)),
                                   ElevatedButton.icon(
                                       onPressed: () {
-                                        GenerateExcel.backUp(provider);
+                                        Dialogs.showMorph(
+                                            title: "Importacion de datos",
+                                            description:
+                                                "Ingrese un archivo de tipo XLSX para la importacion de sus datos\nNOTA: El archivo XSLX que seleccione debio ser generado desde la app de Control de Gastos, en caso de que haya sido manipulada y/o creado por programas externos podria corromper la importacion",
+                                            loadingTitle: "Importando",
+                                            loadingDescription:
+                                                "Es proceso podria tardar unos minutos en funcion a la cantidad de datos almacenados",
+                                            onAcceptPressed: (context) async {
+                                              await GenerateExcel.read(
+                                                  provider);
+                                              provider.listaGastos =
+                                                  await GastosController
+                                                      .getItems();
+                                              provider.listaCategoria =
+                                                  await CategoriaController
+                                                      .getItems();
+                                            });
                                       },
                                       label: Text("Importar datos",
                                           style: TextStyle(

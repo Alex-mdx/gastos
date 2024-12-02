@@ -1,8 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'dart:developer';
+
+import 'package:oktoast/oktoast.dart';
 
 class FullBanner extends StatefulWidget {
   final Widget cabeza;
@@ -19,11 +20,12 @@ class _FullbannerState extends State<FullBanner> {
   @override
   void initState() {
     super.initState();
+    loadAd();
   }
 
   /// Loads an interstitial ad.
   Future<void> loadAd() async {
-    InterstitialAd.load(
+    await InterstitialAd.load(
         adUnitId: adUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
@@ -36,12 +38,10 @@ class _FullbannerState extends State<FullBanner> {
                 onAdImpression: (ad) {},
                 // Called when the ad failed to show full screen content.
                 onAdFailedToShowFullScreenContent: (ad, err) {
-                  widget.funcion();
                   ad.dispose();
                 },
                 // Called when the ad dismissed full screen content.
                 onAdDismissedFullScreenContent: (ad) {
-                  widget.funcion();
                   Preferences.setting = DateTime.now().toString();
                   ad.dispose();
                 },
@@ -67,9 +67,16 @@ class _FullbannerState extends State<FullBanner> {
           if (DateTime.parse(Preferences.setting)
               .add(Duration(minutes: 60))
               .isBefore(DateTime.now())) {
-            await loadAd();
+            await loadAd().timeout(
+              Duration(seconds: 3),
+              onTimeout: () {
+                widget.funcion();
+                showToast("No pudo cargar el anuncio");
+              },
+            );
             if (_interstitialAd != null) {
-              _interstitialAd!.show();
+              await _interstitialAd!.show();
+              widget.funcion();
             }
           } else {
             widget.funcion();

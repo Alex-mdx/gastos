@@ -83,7 +83,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               listItemBuilder: (context, item, isSelected, onItemSelect) =>
                                   ListTile(
                                       dense: true,
-                                      title: Text(item.nombre,
+                                      title: Text("${item.id}. ${item.nombre}",
                                           style: TextStyle(
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.bold)),
@@ -117,14 +117,12 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               overlayHeight: 40.h,
                               onChanged: (value) {
                                 if (value != null) {
-                                  print("$value");
+                                  log("$value");
                                   final modelTemp = widget.provider.gastoActual
                                       .copyWith(categoriaId: value.id);
                                   widget.provider.gastoActual = modelTemp;
                                   log("${widget.provider.gastoActual.toJson()}");
                                 }
-
-                                log('changing value to: $value');
                               })),
                       IconButton.filled(
                           onPressed: () {

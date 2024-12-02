@@ -108,7 +108,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                                             stackTrace) =>
                                                         Icon(Icons.image,
                                                             size: 30.sp),
-                                                    fit: BoxFit.cover))),
+                                                    fit: BoxFit.contain))),
                                         IconButton(
                                             onPressed: () => Navigation.pop(),
                                             icon: Icon(Icons.arrow_back_ios,
@@ -132,7 +132,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         /* final newModel = gasto.periodo. */
                       });
                 },
-                icon: const Icon(Icons.save)))
+                icon: Icon(Icons.save, size: 24.sp)))
     ]));
   }
 }

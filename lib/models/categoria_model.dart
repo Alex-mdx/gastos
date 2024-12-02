@@ -4,7 +4,7 @@ class CategoriaModel {
   String descripcion;
 
   CategoriaModel(
-      {this.id, required this.nombre, required this.descripcion});
+      {required this.id, required this.nombre, required this.descripcion});
 
   CategoriaModel copyWith({int? id, String? nombre, String? descripcion}) =>
       CategoriaModel(

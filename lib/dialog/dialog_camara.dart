@@ -35,7 +35,6 @@ class _DialogCamaraState extends State<DialogCamara> {
                       setState(() {
                         provider.imagenesActual.add(data);
                       });
-                      print(data.lengthInBytes);
                       Navigation.pop();
                     }
                     final modelTemp = provider.gastoActual

@@ -6,7 +6,7 @@ class LightThemeColors {
 
   static const green = Color.fromARGB(255, 1, 207, 53);
   static const red = Color.fromARGB(255, 231, 20, 38);
-  static const yellow = Color.fromARGB(255, 235, 231, 4);
+  static const yellow = Color.fromARGB(255, 235, 210, 4);
   static const purple = Color.fromARGB(255, 106, 20, 218);
 
   static const background = Color.fromARGB(255, 238, 241, 245);

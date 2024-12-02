@@ -6,7 +6,7 @@ String nombreDB = "categoria";
 class CategoriaController {
   static Future<void> createTables(sql.Database database) async {
     await database.execute("""CREATE TABLE $nombreDB(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER,
           nombre TEXT,
           descripcion TEXT
       )""");
@@ -23,6 +23,15 @@ class CategoriaController {
     final db = await database();
     await db.insert(nombreDB, cate.toJson(),
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
+  }
+
+  static Future<int?> getLastId() async {
+    final db = await database();
+    final data = (await db.query(nombreDB,limit: 1,orderBy: 'id DESC'))
+        .firstOrNull;
+    CategoriaModel? modelo = data == null ? null : CategoriaModel.fromJson(data);
+    
+    return modelo?.id;
   }
 
   static Future<List<CategoriaModel>> getItems() async {

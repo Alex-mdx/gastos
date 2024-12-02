@@ -75,10 +75,14 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                               DialogPresupuestoDia(provider: widget.provider));
                     },
                     icon: Icon(LineIcons.commentsDollar,
-                        color:  LightThemeColors.green)))
+                        color: LightThemeColors.green)))
           ])),
       ElevatedButton.icon(
-          icon: Icon(widget.provider.presupuesto?.activo == 1 ?Icons.money_off:LineIcons.wallet, size: 18.sp),
+          icon: Icon(
+              widget.provider.presupuesto?.activo == 1
+                  ? Icons.money_off
+                  : LineIcons.wallet,
+              size: 18.sp),
           onPressed: () async {
             widget.provider.presupuesto?.activo == 1
                 ? await Dialogs.showMorph(
