@@ -1,16 +1,13 @@
-# Gastos
+# Control de gastos
 Descripcion
-Proyecto personal para el manejo de gastos personales, usando datos locales y calculo de gastos partiendo de rango de fechas, asi como evidencia fotografica
+Proyecto personal para el manejo de gastos personales, usando datos locales y calculo de gastos partiendo de rango de fechas, presupuesto por semana y/o por dia, asi como evidencia fotografica y uso de calendario para la mejor visualizacion de estos mismos
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ChangeLog
+### version 0.1.0
+  - Lanzamiento de app
+### version 0.1.1
+  - Correcion de la palabra "galleria" a Galeria ಠ~ಠ
+  - Implementacion de boton tutorial en la pestaña de configuraciones
+  - Eliminacion del anuncio en pantalla completa al entrar en configuraciones
+  - Anuncio implementado en los botones de importacion y exportacion de datos
+  - Implementacion del boton "Eliminar datos", usando verificacion local del dispositivo

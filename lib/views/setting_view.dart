@@ -15,6 +15,7 @@ import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/setting_presupuesto_widget.dart';
 import 'package:gastos/widgets/setting_primer_dia_widget.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:rive_animated_icon/rive_animated_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -50,9 +51,14 @@ class _SettingViewState extends State<SettingView> {
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(children: [
+                    ElevatedButton.icon(
+                        onPressed: () {},
+                        label:
+                            Text("Tutorial", style: TextStyle(fontSize: 14.sp)),
+                        icon: Icon(LineIcons.youtube, size: 20.sp)),
                     if (kDebugMode)
                       IconButton.filled(
-                          iconSize: 24.sp,
+                          iconSize: 20.sp,
                           onPressed: () {},
                           icon: Stack(alignment: Alignment.center, children: [
                             Icon(LineIcons.dropbox, color: Colors.white),
@@ -61,8 +67,8 @@ class _SettingViewState extends State<SettingView> {
                                 strokeWidth: 10,
                                 loopAnimation: true,
                                 color: LightThemeColors.primary,
-                                height: 24.sp,
-                                width: 24.sp)
+                                height: 22.sp,
+                                width: 22.sp)
                           ]))
                   ])
                 ]),
@@ -74,55 +80,86 @@ class _SettingViewState extends State<SettingView> {
                             padding: const EdgeInsets.all(8.0),
                             child: Column(children: [
                               OverflowBar(
-                                alignment: MainAxisAlignment.spaceAround,
-                                overflowAlignment: OverflowBarAlignment.center,
-                                children: [
-                                  ElevatedButton.icon(
-                                      onPressed: () {
-                                        Dialogs.showMorph(
-                                            title: "Exportacion de datos",
-                                            description:
-                                                "Se generara un respaldo de sus gastos a un archivo XLSX\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Por el momento solo respalda los gatos ingresados y las categorias",
-                                            loadingTitle: "Exportando",
-                                            onAcceptPressed: (context) async {
-                                              await GenerateExcel.backUp(
-                                                  provider);
-                                            });
-                                      },
-                                      label: Text("Exportacion datos",
-                                          style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold)),
-                                      icon: Icon(LineIcons.fileUpload,
-                                          size: 20.sp)),
-                                  ElevatedButton.icon(
-                                      onPressed: () {
-                                        Dialogs.showMorph(
-                                            title: "Importacion de datos",
-                                            description:
-                                                "Ingrese un archivo de tipo XLSX para la importacion de sus datos\nNOTA: El archivo XSLX que seleccione debio ser generado desde la app de Control de Gastos, en caso de que haya sido manipulada y/o creado por programas externos podria corromper la importacion",
-                                            loadingTitle: "Importando",
-                                            loadingDescription:
-                                                "Es proceso podria tardar unos minutos en funcion a la cantidad de datos almacenados",
-                                            onAcceptPressed: (context) async {
-                                              await GenerateExcel.read(
-                                                  provider);
-                                              provider.listaGastos =
-                                                  await GastosController
-                                                      .getItems();
-                                              provider.listaCategoria =
-                                                  await CategoriaController
-                                                      .getItems();
-                                            });
-                                      },
-                                      label: Text("Importar datos",
-                                          style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold)),
-                                      icon: Icon(LineIcons.fileImport,
-                                          size: 20.sp))
-                                ],
-                              ),
+                                  overflowSpacing: 1.h,
+                                  alignment: MainAxisAlignment.spaceAround,
+                                  overflowAlignment:
+                                      OverflowBarAlignment.center,
+                                  children: [
+                                    ElevatedButton.icon(
+                                        onPressed: () {
+                                          Dialogs.showMorph(
+                                              title: "Exportacion de datos",
+                                              description:
+                                                  "Se generara un respaldo de sus gastos a un archivo XLSX\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Por el momento solo respalda los gatos ingresados y las categorias",
+                                              loadingTitle: "Exportando",
+                                              onAcceptPressed: (context) async {
+                                                await GenerateExcel.backUp(
+                                                    provider);
+                                              });
+                                        },
+                                        label: Text("Exportacion datos",
+                                            style: TextStyle(
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.bold)),
+                                        icon: Icon(LineIcons.fileUpload,
+                                            size: 20.sp)),
+                                    ElevatedButton.icon(
+                                        onPressed: () {
+                                          Dialogs.showMorph(
+                                              title: "Importacion de datos",
+                                              description:
+                                                  "Ingrese un archivo de tipo XLSX para la importacion de sus datos\nNOTA: El archivo XSLX que seleccione debio ser generado desde la app de Control de Gastos, en caso de que haya sido manipulada y/o creado por programas externos podria corromper la importacion",
+                                              loadingTitle: "Importando",
+                                              loadingDescription:
+                                                  "Es proceso podria tardar unos minutos en funcion a la cantidad de datos almacenados",
+                                              onAcceptPressed: (context) async {
+                                                await GenerateExcel.read(
+                                                    provider);
+                                                provider.listaGastos =
+                                                    await GastosController
+                                                        .getItems();
+                                                provider.listaCategoria =
+                                                    await CategoriaController
+                                                        .getItems();
+                                              });
+                                        },
+                                        label: Text("Importar datos",
+                                            style: TextStyle(
+                                                fontSize: 16.sp,
+                                                fontWeight: FontWeight.bold)),
+                                        icon: Icon(LineIcons.fileImport,
+                                            size: 20.sp)),
+                                    ElevatedButton.icon(
+                                        onPressed: () async {
+                                          final List<BiometricType> availableBiometrics =
+    await auth.getAvailableBiometrics();
+
+if (availableBiometrics.isNotEmpty) {
+  // Some biometrics are enrolled.
+}
+
+if (availableBiometrics.contains(BiometricType.strong) ||
+    availableBiometrics.contains(BiometricType.face)) {
+  // Specific types of biometrics are available.
+  // Use checks like this with caution!
+}
+                                          Dialogs.showMorph(
+                                              title: "Eliminar datos",
+                                              description:
+                                                  "¿Esta seguro de eliminar sus datos?\nEliminará sus categorias, y sus gastos de forma PERMANENTE",
+                                              loadingTitle: "Exportando",
+                                              onAcceptPressed: (context) async {
+                                                await GenerateExcel.backUp(
+                                                    provider);
+                                              });
+                                        },
+                                        label: Text("Eliminar datos",
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.bold)),
+                                        icon:
+                                            Icon(LineIcons.trash, size: 18.sp))
+                                  ]),
                               BannerExample(tipo: 0),
                               const SettingCalidadImagen(),
                               const Divider(),

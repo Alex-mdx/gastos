@@ -35,7 +35,8 @@ class GastosView extends StatelessWidget {
                   FullBanner(
                       cabeza: Padding(
                           padding: EdgeInsets.only(right: 1.w),
-                          child: Icon(Icons.settings, color: Colors.white)),
+                          child: Icon(Icons.settings,
+                              size: 22.sp, color: Colors.white)),
                       funcion: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       })
