@@ -4,6 +4,7 @@ import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class DialogCamara extends StatefulWidget {
   const DialogCamara({super.key});
@@ -20,7 +21,8 @@ class _DialogCamaraState extends State<DialogCamara> {
         child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              const Text('Ingresar evidencia'),
+              Text('Ingresar destino de evidencia',
+                  style: TextStyle(fontSize: 16.sp)),
               ElevatedButton.icon(
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
@@ -41,8 +43,8 @@ class _DialogCamaraState extends State<DialogCamara> {
                         .copyWith(evidencia: provider.imagenesActual);
                     provider.gastoActual = modelTemp;
                   },
-                  label: const Text('Camara'),
-                  icon: const Icon(Icons.camera_alt)),
+                  label: Text('Camara', style: TextStyle(fontSize: 16.sp)),
+                  icon: Icon(Icons.camera_alt, size: 20.sp)),
               ElevatedButton.icon(
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
@@ -63,8 +65,8 @@ class _DialogCamaraState extends State<DialogCamara> {
                         .copyWith(evidencia: provider.imagenesActual);
                     provider.gastoActual = modelTemp;
                   },
-                  label: const Text('galleria'),
-                  icon: const Icon(Icons.image_search))
+                  label: Text('Galeria', style: TextStyle(fontSize: 16.sp)),
+                  icon: Icon(Icons.image_search, size: 20.sp))
             ])));
   }
 }

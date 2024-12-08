@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:gastos/dialog/dialog_historial_pago.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 import '../models/gasto_model.dart';
@@ -45,6 +49,35 @@ class GastosController {
     return modelo;
   }
 
+  static Future<List<GastoModelo>> obteneRango() async {
+    final db = await database();
+    List<GastoModelo> modelo = [];
+    final data = (await db.query(nombreDB));
+    for (var element in data) {
+      modelo.add(GastoModelo.fromJson(element));
+    }
+    return modelo;
+  }
+
+  static Future<List<GastoModelo>> obtenerFechasEnRangoMes(
+      DateTime fechaInicio) async {
+    final db = await database();
+    List<GastoModelo> modelo = [];
+
+    var newIni = DateTime(fechaInicio.year, fechaInicio.month, 1);
+    var newFin = newIni.add(fechaInicio.month.days);
+    log("$newIni - $newFin");
+    final resultados = await db.query(
+      nombreDB,
+      where: 'fecha BETWEEN ? AND ?',
+      whereArgs: [newIni.toString(), newFin.toString()],
+    );
+    for (var element in resultados) {
+      modelo.add(GastoModelo.fromJson(element));
+    }
+    return modelo;
+  }
+
   static Future<GastoModelo?> find(int id) async {
     final db = await database();
 
@@ -56,15 +89,16 @@ class GastosController {
 
   static Future<void> updateItem(GastoModelo gasto) async {
     final db = await database();
-    await db.update(nombreDB, gasto.toJson(), where: "id = ?", whereArgs: [gasto.id]);
+    await db.update(nombreDB, gasto.toJson(),
+        where: "id = ?", whereArgs: [gasto.id]);
   }
 
   static Future<int?> getLastId() async {
     final db = await database();
-    final data = (await db.query(nombreDB,limit: 1,orderBy: 'id DESC'))
-        .firstOrNull;
+    final data =
+        (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
     GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
-    
+
     return modelo?.id;
   }
 

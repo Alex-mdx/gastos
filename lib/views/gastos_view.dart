@@ -1,21 +1,12 @@
-import 'dart:developer';
-
-import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/button_promedio_widget.dart';
 import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../models/gasto_model.dart';
-import '../models/periodo_model.dart';
-import '../widgets/addMobile/full_banner.dart';
 import '../widgets/card_gasto_widget.dart';
 
 class GastosView extends StatelessWidget {
@@ -32,20 +23,12 @@ class GastosView extends StatelessWidget {
               Column(children: [
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
-                  FullBanner(
-                      cabeza: Padding(
-                          padding: EdgeInsets.only(right: 1.w),
-                          child: Icon(Icons.settings,
-                              size: 22.sp, color: Colors.white)),
-                      funcion: () {
-                        Navigation.pushNamed(route: AppRoutes.opciones);
-                      })
-                  /* IconButton.filled(
-                      iconSize: 20.sp,
+                  IconButton(
                       onPressed: () {
                         Navigation.pushNamed(route: AppRoutes.opciones);
                       },
-                      icon: const Icon(Icons.settings, color: Colors.white)) */
+                      icon: Icon(Icons.settings,
+                          size: 24.sp, color: Colors.white))
                 ])
               ])
             ]),
@@ -70,66 +53,6 @@ class GastosView extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomCenter,
                   child: CardGastoWidget(provider: provider))
-            ])),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              if (provider.gastoActual.monto != null &&
-                  provider.gastoActual.monto! > 0.0) {
-                log("${provider.gastoActual.toJson()}");
-                await Dialogs.showMorph(
-                    title: "Ingresar gasto",
-                    description: "¿Desea ingresar esta tarjeta de gasto?",
-                    loadingTitle: "Ingresando...",
-                    onAcceptPressed: (context) async {
-                      final now = DateTime.now();
-                      //?La tabla de gasto es para notificar si dicha tarjeta es modificable
-                      var id = (await GastosController.getLastId()) ?? 1;
-                      log("${id + 1}");
-                      final finalTemp = provider.gastoActual.copyWith(
-                          id: id + 1,
-                          gasto: 1,
-                          ultimaFecha: provider.selectProxima == null
-                              ? null
-                              : provider.convertirFecha(
-                                  fecha: provider.selectProxima!),
-                          fecha: provider.gastoActual.fecha ??
-                              provider.convertirFechaHora(fecha: now),
-                          dia: provider.gastoActual.dia ?? (now.day).toString(),
-                          mes: provider.gastoActual.mes ??
-                              (now.month).toString());
-                      log("${finalTemp.toJson()}");
-                      await GastosController.insert(finalTemp);
-                      provider.listaGastos = await GastosController.getItems();
-                      provider.selectProxima = provider.selectProxima;
-                      provider.gastoActual = GastoModelo(
-                          id: null,
-                          categoriaId: null,
-                          monto: null,
-                          fecha: null,
-                          dia: null,
-                          mes: null,
-                          peridico: null,
-                          ultimaFecha: null,
-                          periodo: PeriodoModelo(
-                              year: null,
-                              mes: null,
-                              dia: null,
-                              modificable: null),
-                          gasto: null,
-                          evidencia: [],
-                          nota: null);
-                      //Limpia de variables locales
-                      provider.imagenesActual = [];
-                      provider.notas.clear();
-                      provider.selectFecha = DateTime.now();
-                      showToast("Tarjeta de gasto Guardada con exito");
-                    });
-              } else {
-                showToast("ingrese un monto mayor a 0");
-              }
-            },
-            child: Icon(Icons.savings_rounded, size: 20.sp)),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterFloat);
+            ])));
   }
 }

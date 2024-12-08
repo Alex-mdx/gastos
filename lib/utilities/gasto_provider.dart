@@ -171,6 +171,18 @@ class GastoProvider with ChangeNotifier {
                 dia: index));
   }
 
+  double sumatoriaDiaCalendario(DateTime fecha, List<GastoModelo> gasto){
+    return generarPago(
+        montos: gasto
+            .where((element) => DateTime(
+                    DateTime.parse(element.fecha!).year,
+                    DateTime.parse(element.fecha!).month,
+                    DateTime.parse(element.fecha!).day)
+                .isAtSameMomentAs(fecha))
+            .map((e) => e.monto!)
+            .toList());
+  }
+
   double sumatoriaDia(DateTime fecha) {
     return generarPago(
         montos: listaGastos

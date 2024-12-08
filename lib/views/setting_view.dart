@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
+import 'package:gastos/utilities/auth.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/generate_excel.dart';
 import 'package:gastos/utilities/preferences.dart';
@@ -15,7 +16,6 @@ import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/setting_presupuesto_widget.dart';
 import 'package:gastos/widgets/setting_primer_dia_widget.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:rive_animated_icon/rive_animated_icon.dart';
 import 'package:sizer/sizer.dart';
@@ -80,7 +80,7 @@ class _SettingViewState extends State<SettingView> {
                             padding: const EdgeInsets.all(8.0),
                             child: Column(children: [
                               OverflowBar(
-                                  overflowSpacing: 1.h,
+                                  overflowSpacing: .5.h,
                                   alignment: MainAxisAlignment.spaceAround,
                                   overflowAlignment:
                                       OverflowBarAlignment.center,
@@ -131,26 +131,27 @@ class _SettingViewState extends State<SettingView> {
                                             size: 20.sp)),
                                     ElevatedButton.icon(
                                         onPressed: () async {
-                                          final List<BiometricType> availableBiometrics =
-    await auth.getAvailableBiometrics();
-
-if (availableBiometrics.isNotEmpty) {
-  // Some biometrics are enrolled.
-}
-
-if (availableBiometrics.contains(BiometricType.strong) ||
-    availableBiometrics.contains(BiometricType.face)) {
-  // Specific types of biometrics are available.
-  // Use checks like this with caution!
-}
                                           Dialogs.showMorph(
-                                              title: "Eliminar datos",
+                                              title: 'Eliminar datos',
                                               description:
-                                                  "¿Esta seguro de eliminar sus datos?\nEliminará sus categorias, y sus gastos de forma PERMANENTE",
-                                              loadingTitle: "Exportando",
+                                                  "¿Esta seguro de eliminar sus datos?\nSe pedira acceso a sus datos biometricos para asegurar su identidad",
+                                              loadingTitle: "Validando",
                                               onAcceptPressed: (context) async {
-                                                await GenerateExcel.backUp(
-                                                    provider);
+                                                final result =
+                                                    await Auth.obtener();
+                                                if (result) {
+                                                  await GastosController
+                                                      .deleteAll();
+
+                                                  await CategoriaController
+                                                      .deleteAll();
+                                                  await PresupuestoController
+                                                      .deleteAll();
+                                                  provider.listaGastos.clear();
+                                                  provider.listaCategoria
+                                                      .clear();
+                                                  provider.presupuesto = null;
+                                                }
                                               });
                                         },
                                         label: Text("Eliminar datos",

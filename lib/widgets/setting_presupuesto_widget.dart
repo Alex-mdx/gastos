@@ -58,6 +58,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                       log("${widget.provider.presupuesto?.toJson()}");
                     },
                     min: 0,
+                    textStyle: TextStyle(fontSize: 15.sp),
                     max: 1000000,
                     value: temporal.presupuesto!,
                     keyboardType:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
@@ -11,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../dialog/dialog_historial_pago.dart';
+import '../models/gasto_model.dart';
 
 class HistorialView extends StatefulWidget {
   const HistorialView({super.key});
@@ -20,7 +23,23 @@ class HistorialView extends StatefulWidget {
 }
 
 class _HistorialViewState extends State<HistorialView> {
+  @override
+  void initState() {
+    super.initState();
+    calendar.displayDate = now.subtract(Duration(days: now.day - 1));
+    calendar.selectedDate = now;
+  }
+
   final now = DateTime.now();
+  CalendarController calendar = CalendarController();
+  List<GastoModelo> lista = [];
+
+  Future<List<GastoModelo>> obtenerFechas() async {
+    lista =
+        await GastosController.obtenerFechasEnRangoMes(calendar.displayDate!);
+    return lista;
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
@@ -30,13 +49,16 @@ class _HistorialViewState extends State<HistorialView> {
         body: SfCalendar(
             view: CalendarView.month,
             showDatePickerButton: true,
+            onViewChanged: (viewChangedDetails) {
+              log("$calendar");
+            },
             showNavigationArrow: true,
             showTodayButton: true,
-            initialDisplayDate: now.subtract(Duration(days: now.day)),
-            initialSelectedDate: now,
             monthCellBuilder: (context, details) {
-              double montoDay = provider.sumatoriaDia(DateTime(
-                  details.date.year, details.date.month, details.date.day));
+              double montoDay = provider.sumatoriaDiaCalendario(
+                  DateTime(
+                      details.date.year, details.date.month, details.date.day),
+                  lista);
               return Container(
                   decoration: BoxDecoration(border: Border.all(width: .1)),
                   child: Column(children: [
@@ -52,7 +74,7 @@ class _HistorialViewState extends State<HistorialView> {
                                 ? BoxDecoration(
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
-                                    color: LightThemeColors.darkGrey)
+                                    color: LightThemeColors.grey)
                                 : null,
                             child: Align(
                                 alignment: Alignment.topCenter,
@@ -68,8 +90,31 @@ class _HistorialViewState extends State<HistorialView> {
                   ]));
             },
             viewNavigationMode: ViewNavigationMode.snap,
-            dataSource: _getCalendarDataSource(provider: provider),
+            dataSource:
+                _getCalendarDataSource(provider: provider, lista: lista),
             viewHeaderHeight: 2.h,
+            controller: calendar,
+            loadMoreWidgetBuilder: (context, loadMoreAppointments) {
+              return FutureBuilder(
+                  future: obtenerFechas(),
+                  builder: (context, snapShot) {
+                    print(snapShot);
+                    if (!snapShot.hasData) {
+                      return Container(
+                          height: calendar.view == CalendarView.schedule
+                              ? 50
+                              : double.infinity,
+                          width: double.infinity,
+                          color: Colors.white38,
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation(Colors.deepPurple)));
+                    } else {
+                      return Visibility(visible: false, child: Text("test"));
+                    }
+                  });
+            },
             firstDayOfWeek: Preferences.primerDia == 0
                 ? 6
                 : Preferences.primerDia == 1
@@ -107,6 +152,8 @@ class _HistorialViewState extends State<HistorialView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("${appointment.id}.- ${appointment.subject}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontSize: 16.sp)),
                             Text(
                                 provider.convertirHora(
@@ -134,21 +181,23 @@ class AppointmentDataSource extends CalendarDataSource {
 }
 
 AppointmentDataSource _getCalendarDataSource(
-    {required GastoProvider provider}) {
+    {required GastoProvider provider, required List<GastoModelo> lista}) {
   List<Appointment> appointments = <Appointment>[];
-  for (var i = 0; i < provider.listaGastos.length; i++) {
+
+  for (var i = 0; i < lista.length; i++) {
     appointments.add(Appointment(
-        id: provider.listaGastos[i].id,
-        startTime: DateTime.parse(provider.listaGastos[i].fecha!),
-        endTime: DateTime.parse(provider.listaGastos[i].fecha!),
+        id: lista[i].id,
+        startTime: DateTime.parse(lista[i].fecha!),
+        endTime: DateTime.parse(lista[i].fecha!),
         isAllDay: false,
         subject:
-            'Gasto: \$${provider.listaGastos[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == provider.listaGastos[i].categoriaId)?.nombre ?? "Sin Categoria"}',
+            'Gasto: \$${lista[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == lista[i].categoriaId)?.nombre ?? "Sin Categoria"}',
         color: provider.presupuesto?.activo == 0 || provider.presupuesto == null
             ? LightThemeColors.primary
             : provider.porcentualColor(provider.obtenerPorcentajeDia(
-                DateTime.parse(provider.listaGastos[i].fecha!).weekday - 1,
-                provider.listaGastos[i].monto!))));
+                DateTime.parse(lista[i].fecha!).weekday - 1,
+                lista[i].monto!))));
   }
+
   return AppointmentDataSource(appointments);
 }

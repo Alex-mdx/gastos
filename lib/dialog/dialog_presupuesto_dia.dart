@@ -24,14 +24,14 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
     super.initState();
     temporal = PresupuestoModel(
         activo: widget.provider.presupuesto?.activo ?? 0,
-        presupuesto: widget.provider.presupuesto?.presupuesto ?? 1,
-        lunes: widget.provider.presupuesto?.lunes ?? 1,
-        martes: widget.provider.presupuesto?.martes ?? 1,
-        miercoles: widget.provider.presupuesto?.miercoles ?? 1,
-        jueves: widget.provider.presupuesto?.jueves ?? 1,
-        viernes: widget.provider.presupuesto?.viernes ?? 1,
-        sabado: widget.provider.presupuesto?.sabado ?? 1,
-        domingo: widget.provider.presupuesto?.domingo ?? 1,
+        presupuesto: widget.provider.presupuesto?.presupuesto ?? 0,
+        lunes: widget.provider.presupuesto?.lunes ?? 0,
+        martes: widget.provider.presupuesto?.martes ?? 0,
+        miercoles: widget.provider.presupuesto?.miercoles ?? 0,
+        jueves: widget.provider.presupuesto?.jueves ?? 0,
+        viernes: widget.provider.presupuesto?.viernes ?? 0,
+        sabado: widget.provider.presupuesto?.sabado ?? 0,
+        domingo: widget.provider.presupuesto?.domingo ?? 0,
         periodo: widget.provider.presupuesto?.periodo);
   }
 
@@ -95,148 +95,155 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                   ]),
               const Divider(),
               SingleChildScrollView(
-                  child: Wrap(runSpacing: 1.h, spacing: 1.w, children: [
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(lunes: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.lunes!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration:
-                            const InputDecoration(labelText: "Limite Lunes"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(martes: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.martes!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration:
-                            const InputDecoration(labelText: "Limite Martes"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(miercoles: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.miercoles!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration: const InputDecoration(
-                            labelText: "Limite Miercoles"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(jueves: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.jueves!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration:
-                            const InputDecoration(labelText: "Limite Jueves"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(viernes: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.viernes!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration: const InputDecoration(
-                            labelText: "Limite Viernes"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(sabado: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.sabado!,
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        decoration:
-                            const InputDecoration(labelText: "Limite Sabado"))),
-                SizedBox(
-                    width: 36.w,
-                    child: SpinBox(
-                        onChanged: (value) {
-                          final newModel = temporal.copyWith(domingo: value);
-                          setState(() {
-                            widget.provider.presupuesto = newModel;
-                            temporal = newModel;
-                          });
-                          log("${widget.provider.presupuesto?.toJson()}");
-                        },
-                        min: 0,
-                        max: 1000000,
-                        decimals: 1,
-                        value: temporal.domingo!,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false),
-                        textStyle: TextStyle(fontSize: 15.sp),
-                        decoration:
-                            const InputDecoration(labelText: "Limite Domingo")))
-              ]))
+                  child: Wrap(
+                      alignment: WrapAlignment.spaceAround,
+                      runSpacing: 1.h,
+                      spacing: 1.w,
+                      children: [
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel = temporal.copyWith(lunes: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.lunes!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Lunes"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel = temporal.copyWith(martes: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.martes!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Martes"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel =
+                                  temporal.copyWith(miercoles: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.miercoles!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Miercoles"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel = temporal.copyWith(jueves: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.jueves!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Jueves"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel =
+                                  temporal.copyWith(viernes: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.viernes!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Viernes"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel = temporal.copyWith(sabado: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.sabado!,
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Sabado"))),
+                    SizedBox(
+                        width: 40.w,
+                        child: SpinBox(
+                            onChanged: (value) {
+                              final newModel =
+                                  temporal.copyWith(domingo: value);
+                              setState(() {
+                                widget.provider.presupuesto = newModel;
+                                temporal = newModel;
+                              });
+                              log("${widget.provider.presupuesto?.toJson()}");
+                            },
+                            min: 0,
+                            max: 1000000,
+                            decimals: 1,
+                            value: temporal.domingo!,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false),
+                            textStyle: TextStyle(fontSize: 15.sp),
+                            decoration: const InputDecoration(
+                                labelText: "Limite Domingo")))
+                  ]))
             ])));
   }
 }
