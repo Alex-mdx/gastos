@@ -23,14 +23,18 @@ class _ButtonPromedioWidgetState extends State<ButtonPromedioWidget> {
             setState(() {
               Preferences.promedio = !Preferences.promedio;
             });
-            provider.listaGastos = await GastosController.getItems();
+            provider.listaGastos = await GastosController.getConfigurado();
           },
           icon: Icon(
               Preferences.promedio
                   ? LineIcons.calendarWithWeekFocus
                   : LineIcons.calendarMinusAlt,
               size: 20.sp),
-          label: Text(!Preferences.promedio ? Preferences.calculo : "Semanal",
+          label: Text(
+              !Preferences.promedio
+                  ? "Promedio\n-${Preferences.calculo}-"
+                  : "Semanal",
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14.sp)));
     });
   }

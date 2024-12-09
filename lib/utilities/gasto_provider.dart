@@ -84,7 +84,7 @@ class GastoProvider with ChangeNotifier {
 
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
-    listaGastos = await GastosController.getItems();
+    listaGastos = await GastosController.getConfigurado();
     presupuesto = await PresupuestoController.getItem();
   }
 

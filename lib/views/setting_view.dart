@@ -1,20 +1,19 @@
 import 'dart:developer';
-
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
+import 'package:gastos/dialog/dialog_youtube.dart';
 import 'package:gastos/utilities/auth.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/generate_excel.dart';
-import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/setting_presupuesto_widget.dart';
 import 'package:gastos/widgets/setting_primer_dia_widget.dart';
+import 'package:gastos/widgets/settings_rango.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:rive_animated_icon/rive_animated_icon.dart';
@@ -30,10 +29,6 @@ class SettingView extends StatefulWidget {
 }
 
 class _SettingViewState extends State<SettingView> {
-  List<String> rangos = ["Mensual", "Trimestral", "Semestral", "Anual"];
-  SingleSelectController<String> controller =
-      SingleSelectController(Preferences.calculo);
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
@@ -51,11 +46,16 @@ class _SettingViewState extends State<SettingView> {
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(children: [
-                    ElevatedButton.icon(
-                        onPressed: () {},
-                        label:
-                            Text("Tutorial", style: TextStyle(fontSize: 14.sp)),
-                        icon: Icon(LineIcons.youtube, size: 20.sp)),
+                    if (kDebugMode)
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => DialogYoutube(link: "d"));
+                          },
+                          label: Text("Tutorial",
+                              style: TextStyle(fontSize: 14.sp)),
+                          icon: Icon(LineIcons.youtube, size: 20.sp)),
                     if (kDebugMode)
                       IconButton.filled(
                           iconSize: 20.sp,
@@ -117,7 +117,7 @@ class _SettingViewState extends State<SettingView> {
                                                     provider);
                                                 provider.listaGastos =
                                                     await GastosController
-                                                        .getItems();
+                                                        .getConfigurado();
                                                 provider.listaCategoria =
                                                     await CategoriaController
                                                         .getItems();
@@ -164,49 +164,12 @@ class _SettingViewState extends State<SettingView> {
                               BannerExample(tipo: 0),
                               const SettingCalidadImagen(),
                               const Divider(),
+                              const SettingsRango(),
+                              const Divider(),
                               const SettingPrimerDiaWidget(),
                               const Divider(),
-                              /* Text("Rango de fecha maximo de calculo",
-                              style: TextStyle(
-                                  fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                          CustomDropdown(
-                              controller: controller,
-                              decoration: CustomDropdownDecoration(
-                                  prefixIcon: Icon(LineIcons.calendarPlusAlt,
-                                      color: LightThemeColors.green, size: 22.sp),
-                                  closedSuffixIcon: controller.value != null
-                                      ? IconButton(
-                                          iconSize: 22.sp,
-                                          onPressed: () => setState(() {
-                                                controller.clear();
-                                              }),
-                                          icon: Icon(Icons.close_rounded,
-                                              size: 20.sp))
-                                      : null),
-                              headerBuilder: (context, selectedItem, enabled) =>
-                                  Text(selectedItem,
-                                      style: TextStyle(
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.bold)),
-                              hintText: 'Seleccione rango de calculo de gasto',
-                              items: rangos,
-                              listItemBuilder:
-                                  (context, item, isSelected, onItemSelect) => Text(
-                                      item,
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.bold)),
-                              overlayHeight: 40.h,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  print("$value");
-                                }
-                  
-                                log('changing value to: $value');
-                              }), */
-
-                              SettingPresupuestoWidget(provider: provider),
-                              BannerExample(tipo: 0)
+                              BannerExample(tipo: 0),
+                              SettingPresupuestoWidget(provider: provider)
                             ]))))),
             floatingActionButton: BannerExample(tipo: 1)));
   }

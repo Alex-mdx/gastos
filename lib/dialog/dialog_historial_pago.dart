@@ -52,7 +52,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                       onAcceptPressed: (context) async {
                         await GastosController.deleteItem(widget.gasto.id!);
                         provider.listaGastos =
-                            await GastosController.getItems();
+                            await GastosController.getConfigurado();
                         Navigation.pop();
                       });
                 },

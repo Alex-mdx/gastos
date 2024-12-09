@@ -23,21 +23,29 @@ class HistorialView extends StatefulWidget {
 }
 
 class _HistorialViewState extends State<HistorialView> {
+  DateTime first = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime last = DateTime(DateTime.now().year, DateTime.now().month, 30);
   @override
   void initState() {
     super.initState();
-    calendar.displayDate = now.subtract(Duration(days: now.day - 1));
-    calendar.selectedDate = now;
   }
 
   final now = DateTime.now();
-  CalendarController calendar = CalendarController();
+
   List<GastoModelo> lista = [];
 
   Future<List<GastoModelo>> obtenerFechas() async {
-    lista =
-        await GastosController.obtenerFechasEnRangoMes(calendar.displayDate!);
-    return lista;
+    var data = await GastosController.obtenerFechasEnRangoMes(first, last);
+    setState(() {
+      lista = data;
+    });
+
+    return data;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -48,12 +56,26 @@ class _HistorialViewState extends State<HistorialView> {
             AppBar(title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
             view: CalendarView.month,
-            showDatePickerButton: true,
             onViewChanged: (viewChangedDetails) {
-              log("$calendar");
+              first = viewChangedDetails.visibleDates.first;
+              last = DateTime(
+                  viewChangedDetails.visibleDates.last.year,
+                  viewChangedDetails.visibleDates.last.month,
+                  viewChangedDetails.visibleDates.last.day,
+                  23,
+                  59,
+                  59);
+              log("$first - $last");
             },
+            initialDisplayDate:
+                DateTime(DateTime.now().year, DateTime.now().month, 1),
+            showDatePickerButton: true,
+            allowViewNavigation: true,
+            showWeekNumber: false,
             showNavigationArrow: true,
             showTodayButton: true,
+            showCurrentTimeIndicator: true,
+            allowAppointmentResize: true,
             monthCellBuilder: (context, details) {
               double montoDay = provider.sumatoriaDiaCalendario(
                   DateTime(
@@ -93,7 +115,6 @@ class _HistorialViewState extends State<HistorialView> {
             dataSource:
                 _getCalendarDataSource(provider: provider, lista: lista),
             viewHeaderHeight: 2.h,
-            controller: calendar,
             loadMoreWidgetBuilder: (context, loadMoreAppointments) {
               return FutureBuilder(
                   future: obtenerFechas(),
@@ -101,15 +122,11 @@ class _HistorialViewState extends State<HistorialView> {
                     print(snapShot);
                     if (!snapShot.hasData) {
                       return Container(
-                          height: calendar.view == CalendarView.schedule
-                              ? 50
-                              : double.infinity,
+                          height: double.infinity,
                           width: double.infinity,
-                          color: Colors.white38,
+                          color: LightThemeColors.grey,
                           alignment: Alignment.center,
-                          child: CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation(Colors.deepPurple)));
+                          child: CircularProgressIndicator());
                     } else {
                       return Visibility(visible: false, child: Text("test"));
                     }
@@ -120,9 +137,7 @@ class _HistorialViewState extends State<HistorialView> {
                 : Preferences.primerDia == 1
                     ? 7
                     : 1,
-            showCurrentTimeIndicator: true,
             headerHeight: 4.h,
-            allowAppointmentResize: true,
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
                   calendarAppointmentDetails.appointments.first;
@@ -183,7 +198,6 @@ class AppointmentDataSource extends CalendarDataSource {
 AppointmentDataSource _getCalendarDataSource(
     {required GastoProvider provider, required List<GastoModelo> lista}) {
   List<Appointment> appointments = <Appointment>[];
-
   for (var i = 0; i < lista.length; i++) {
     appointments.add(Appointment(
         id: lista[i].id,
@@ -198,6 +212,5 @@ AppointmentDataSource _getCalendarDataSource(
                 DateTime.parse(lista[i].fecha!).weekday - 1,
                 lista[i].monto!))));
   }
-
   return AppointmentDataSource(appointments);
 }

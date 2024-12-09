@@ -178,7 +178,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     Icon(LineIcons.wavyMoneyBill,
                                         color: Colors.white, size: 22.sp),
                                     Icon(Icons.add,
-                                        size: 18.sp,
+                                        size: 20.sp,
                                         color: LightThemeColors.green)
                                   ]))
                         ]),
@@ -316,7 +316,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           log("${finalTemp.toJson()}");
                           await GastosController.insert(finalTemp);
                           widget.provider.listaGastos =
-                              await GastosController.getItems();
+                              await GastosController.getConfigurado();
                           widget.provider.selectProxima =
                               widget.provider.selectProxima;
                           widget.provider.gastoActual = GastoModelo(

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:gastos/dialog/dialog_historial_pago.dart';
+import 'package:gastos/utilities/preferences.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
@@ -39,7 +40,7 @@ class GastosController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<List<GastoModelo>> getItems() async {
+  /* static Future<List<GastoModelo>> getItems() async {
     final db = await database();
     List<GastoModelo> modelo = [];
     final data = (await db.query(nombreDB));
@@ -47,31 +48,48 @@ class GastosController {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
-  }
+  } */
 
-  static Future<List<GastoModelo>> obteneRango() async {
+  static Future<List<GastoModelo>> getConfigurado() async {
     final db = await database();
+    int tipo = 0;
+    
     List<GastoModelo> modelo = [];
-    final data = (await db.query(nombreDB));
-    for (var element in data) {
+    switch (Preferences.calculo) {
+      case "Mensual":
+      tipo = 31;
+        break;
+      case "Bimestral":
+      tipo = 61;
+        break;
+      case "Trimestral":
+      tipo = 92;
+        break;
+      case "Semestral":
+      tipo = 182;
+        break;
+      case "Anual":
+      tipo = 365;
+        break;
+      default:
+        tipo = 31;
+    }
+    final resultados = await db.query(nombreDB,
+        where: 'fecha BETWEEN ? AND ?',
+        whereArgs: [(DateTime.now().subtract(Duration(days: tipo))).toString(),(DateTime.now()).toString(), ]);
+    for (var element in resultados) {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
   }
 
   static Future<List<GastoModelo>> obtenerFechasEnRangoMes(
-      DateTime fechaInicio) async {
+      DateTime fechaInicio, DateTime fechaFinal) async {
     final db = await database();
     List<GastoModelo> modelo = [];
-
-    var newIni = DateTime(fechaInicio.year, fechaInicio.month, 1);
-    var newFin = newIni.add(fechaInicio.month.days);
-    log("$newIni - $newFin");
-    final resultados = await db.query(
-      nombreDB,
-      where: 'fecha BETWEEN ? AND ?',
-      whereArgs: [newIni.toString(), newFin.toString()],
-    );
+    final resultados = await db.query(nombreDB,
+        where: 'fecha BETWEEN ? AND ?',
+        whereArgs: [fechaInicio.toString(), fechaFinal.toString()]);
     for (var element in resultados) {
       modelo.add(GastoModelo.fromJson(element));
     }

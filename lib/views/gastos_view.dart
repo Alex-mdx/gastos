@@ -24,9 +24,8 @@ class GastosView extends StatelessWidget {
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
                   IconButton(
-                      onPressed: () {
-                        Navigation.pushNamed(route: AppRoutes.opciones);
-                      },
+                      onPressed: () async =>
+                          await Navigation.pushNamed(route: AppRoutes.opciones),
                       icon: Icon(Icons.settings,
                           size: 24.sp, color: Colors.white))
                 ])
