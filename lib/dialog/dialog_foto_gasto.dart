@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:flutter/material.dart';
@@ -41,11 +42,13 @@ class DialogFotoGasto extends StatelessWidget {
   IconButton iconEvidencia(
       BuildContext context, Uint8List e, GastoProvider provider) {
     return IconButton(
-        icon: Image.memory(e,
-            fit: BoxFit.cover,
-            height: 24.sp,
-            width: 24.sp,
-            filterQuality: FilterQuality.low),
+        icon: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: Image.memory(e,
+                fit: BoxFit.cover,
+                height: 26.sp,
+                width: 26.sp,
+                filterQuality: FilterQuality.low)),
         onPressed: () {
           showDialog(
               context: context,
@@ -106,7 +109,7 @@ class DialogFotoGasto extends StatelessWidget {
                                                         index] = bytes;
                                                     Navigation.popTwice();
                                                     showToast(
-                                                  "Salga y vuelva a entrar para que se efectuen los cambios");
+                                                        "Salga y vuelva a entrar para que se efectuen los cambios");
                                                   });
                                             }))));
                               },
