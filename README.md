@@ -11,6 +11,7 @@ Proyecto personal para el manejo de gastos personales, usando datos locales y ca
   - Corrección de diseño y optimización en la tarjeta de gastos.
   - Corrección de visualización de gastos en el historial.
   - Implementacion de edicion de foto de evidencia.
+  - Implementacion de vista de cambio de gasto actual en funcion al gasto limite al tocar el **limite %**.
   - Implementacion del botón "Eliminar datos", usando autentificacion biometrica local del dispositivo.
   - Optimización en la obtención de datos en el historial de gastos.
   - **Opción habilitada**: Rango máximo para calculo de gasto.
