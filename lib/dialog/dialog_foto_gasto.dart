@@ -104,10 +104,10 @@ class DialogFotoGasto extends StatelessWidget {
                                                             element == e);
                                                     provider.imagenesActual[
                                                         index] = bytes;
-                                                  });
-                                              Navigation.popTwice();
-                                              showToast(
+                                                    Navigation.popTwice();
+                                                    showToast(
                                                   "Salga y vuelva a entrar para que se efectuen los cambios");
+                                                  });
                                             }))));
                               },
                               icon: Icon(Icons.edit))
