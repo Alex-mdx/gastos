@@ -25,7 +25,7 @@ class MyHttpOverrides extends HttpOverrides {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
   SystemChrome.setPreferredOrientations(

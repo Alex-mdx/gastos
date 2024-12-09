@@ -17,3 +17,7 @@ Proyecto personal para el manejo de gastos personales, usando datos locales y ca
   - **Opción habilitada**: Rango máximo para calculo de gasto.
   - Optimizacion en la obtención de datos de gastos para su análisis.
   - Eliminación del anuncio en pantalla completa al entrar en configuraciones
+
+### Version 0.1.2
+  - Corrección al instalar la app, que no se encontraba en los archivos del telefono.
+  - Corrección al momento de editar su imagen.
