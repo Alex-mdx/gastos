@@ -28,6 +28,7 @@ class _HistorialViewState extends State<HistorialView> {
   @override
   void initState() {
     super.initState();
+    obtenerFechas();
   }
 
   final now = DateTime.now();
@@ -56,7 +57,7 @@ class _HistorialViewState extends State<HistorialView> {
             AppBar(title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
             view: CalendarView.month,
-            onViewChanged: (viewChangedDetails) {
+            onViewChanged: (viewChangedDetails) async {
               first = viewChangedDetails.visibleDates.first;
               last = DateTime(
                   viewChangedDetails.visibleDates.last.year,
@@ -65,8 +66,14 @@ class _HistorialViewState extends State<HistorialView> {
                   23,
                   59,
                   59);
+              var data =
+                  await GastosController.obtenerFechasEnRangoMes(first, last);
+              setState(() {
+                lista = data;
+              });
               log("$first - $last");
             },
+            initialSelectedDate: DateTime.now(),
             initialDisplayDate:
                 DateTime(DateTime.now().year, DateTime.now().month, 1),
             showDatePickerButton: true,
@@ -115,23 +122,6 @@ class _HistorialViewState extends State<HistorialView> {
             dataSource:
                 _getCalendarDataSource(provider: provider, lista: lista),
             viewHeaderHeight: 2.h,
-            loadMoreWidgetBuilder: (context, loadMoreAppointments) {
-              return FutureBuilder(
-                  future: obtenerFechas(),
-                  builder: (context, snapShot) {
-                    print(snapShot);
-                    if (!snapShot.hasData) {
-                      return Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          color: LightThemeColors.grey,
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator());
-                    } else {
-                      return Visibility(visible: false, child: Text("test"));
-                    }
-                  });
-            },
             firstDayOfWeek: Preferences.primerDia == 0
                 ? 6
                 : Preferences.primerDia == 1

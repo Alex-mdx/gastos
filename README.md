@@ -21,3 +21,7 @@ Proyecto personal para el manejo de gastos personales, usando datos locales y ca
 ### Version 0.1.2
   - Corrección al instalar la app, que no se encontraba en los archivos del telefono.
   - Corrección al momento de editar su imagen.
+
+### Version 0.1.3
+  - Mejora al navegar por el calendario
+  - Corrección al momento de editar su imagen (la rueda de carga no desaparecia)

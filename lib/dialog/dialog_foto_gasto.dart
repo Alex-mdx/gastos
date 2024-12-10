@@ -94,7 +94,7 @@ class DialogFotoGasto extends StatelessWidget {
                                                     onImageEditingComplete:
                                                         (Uint8List
                                                             bytes) async {
-                                              await Dialogs.showMorph(
+                                              Dialogs.showMorph(
                                                   title: "Guardar imagen",
                                                   description:
                                                       "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
