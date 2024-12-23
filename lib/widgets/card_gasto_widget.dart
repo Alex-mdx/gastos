@@ -154,7 +154,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                                     });
                                               },
                                               icon: Icon(Icons.delete, size: 18.sp, color: LightThemeColors.red))),
-                                  overlayHeight: 40.h,
+                                  overlayHeight: 50.h,
                                   onChanged: (value) {
                                     if (value != null) {
                                       log("$value");
@@ -178,8 +178,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     Icon(LineIcons.wavyMoneyBill,
                                         color: Colors.white, size: 22.sp),
                                     Icon(Icons.add,
-                                        size: 20.sp,
-                                        color: LightThemeColors.green)
+                                        size: 22.sp, color: Colors.white)
                                   ]))
                         ]),
                     OverflowBar(
@@ -193,22 +192,25 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     builder: (context) => const DialogCamara());
                               },
                               icon: Icon(Icons.add_photo_alternate,
-                                  size: 22.sp, color: LightThemeColors.green)),
+                                  size: 22.sp, color: Colors.white)),
                           SizedBox(
                               width: 45.w,
                               child: SpinBox(
                                   min: .5,
                                   max: 10000,
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      signed: false),
                                   value: widget.provider.gastoActual.monto ?? 0,
                                   decimals: 1,
                                   textStyle: TextStyle(fontSize: 16.sp),
                                   incrementIcon:
-                                      Icon(LineIcons.plusCircle, size: 24.sp),
+                                      Icon(LineIcons.plusCircle, size: 22.sp),
                                   decrementIcon:
-                                      Icon(LineIcons.minusCircle, size: 24.sp),
+                                      Icon(LineIcons.minusCircle, size: 22.sp),
                                   decoration: InputDecoration(
                                       icon: Icon(Icons.attach_money,
-                                          size: 22.sp)),
+                                          size: 20.sp,
+                                          color: LightThemeColors.green)),
                                   direction: Axis.vertical,
                                   onSubmitted: (p0) {
                                     final tempModel = widget
@@ -250,7 +252,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                 label: Text('Gasto Cronologico',
                                     style: TextStyle(fontSize: 15.sp)),
                                 icon: const Icon(Icons.calendar_month))), */
-                    const Divider(),
                     SizedBox(
                         height: 7.h,
                         child: TextField(
@@ -262,7 +263,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             autofocus: false,
                             expands: true,
                             maxLines: null,
-                            style: TextStyle(fontSize: 14.sp),
+                            style: TextStyle(fontSize: 15.sp),
                             controller: widget.provider.notas,
                             keyboardType: TextInputType.text,
                             onChanged: (value) {

@@ -37,7 +37,7 @@ class GastosView extends StatelessWidget {
               Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
-                      height: 25.h,
+                      height: 28.h,
                       child: SingleChildScrollView(
                           child:
                               Column(mainAxisSize: MainAxisSize.min, children: [

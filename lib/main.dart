@@ -46,7 +46,7 @@ class Main extends StatelessWidget {
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
           duration: const Duration(seconds: 4),
-          textStyle: TextStyle(fontSize: 14.sp, color: Colors.white),
+          textStyle: TextStyle(fontSize: 15.sp, color: Colors.white),
           child: MaterialApp(
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
