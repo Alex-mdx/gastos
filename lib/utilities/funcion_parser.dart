@@ -3,9 +3,23 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 
 class Parser {
+  static int? toInt(var variableBool) {
+    if (variableBool != null) {
+      int parseo = variableBool == true
+          ? 1
+          : variableBool == false
+              ? 0
+              : variableBool;
+      return parseo;
+    }
+    return null;
+  }
 
   static Uint8List? toUint8List(String? byte8list) {
-    if (byte8list != null) {
+    if (byte8list != null &&
+        byte8list != "null" &&
+        byte8list != "" &&
+        byte8list != "[]") {
       byte8list = byte8list.replaceAll("[", "").replaceAll("]", "");
 
       List<String> stringValues = byte8list.split(", ");

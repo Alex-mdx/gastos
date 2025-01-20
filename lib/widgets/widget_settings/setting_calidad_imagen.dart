@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../utilities/preferences.dart';
-import '../utilities/services/dialog_services.dart';
-import '../utilities/theme/theme_color.dart';
+import '../../utilities/preferences.dart';
+import '../../utilities/services/dialog_services.dart';
+import '../../utilities/theme/theme_color.dart';
 
 class SettingCalidadImagen extends StatefulWidget {
   const SettingCalidadImagen({super.key});

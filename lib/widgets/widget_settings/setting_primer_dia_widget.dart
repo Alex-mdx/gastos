@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../utilities/preferences.dart';
-import '../utilities/theme/theme_app.dart';
-import '../utilities/theme/theme_color.dart';
+import '../../utilities/preferences.dart';
+import '../../utilities/theme/theme_app.dart';
+import '../../utilities/theme/theme_color.dart';
 
 class SettingPrimerDiaWidget extends StatefulWidget {
   const SettingPrimerDiaWidget({super.key});

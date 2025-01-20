@@ -3,11 +3,11 @@ import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/button_promedio_widget.dart';
-import 'package:gastos/widgets/historial_semanal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../widgets/card_gasto_widget.dart';
+import '../widgets/widget_settings/historial_semanal_widget.dart';
 
 class GastosView extends StatelessWidget {
   const GastosView({super.key});

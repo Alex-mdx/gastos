@@ -27,8 +27,8 @@ class _DialogCamaraState extends State<DialogCamara> {
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
                     final XFile? photo = await picker.pickImage(
-                        maxHeight: 854,
-                        maxWidth: 480,
+                        maxHeight: 1280,
+                        maxWidth: 720,
                         imageQuality: Preferences.calidadFoto.toInt(),
                         source: ImageSource.camera,
                         requestFullMetadata: false);
@@ -50,8 +50,8 @@ class _DialogCamaraState extends State<DialogCamara> {
                     final ImagePicker picker = ImagePicker();
                     final List<XFile> images = await picker.pickMultiImage(
                         imageQuality: Preferences.calidadFoto.toInt(),
-                        maxHeight: 854,
-                        maxWidth: 480,
+                        maxHeight: 1280,
+                        maxWidth: 720,
                         limit: 10,
                         requestFullMetadata: false);
                     if (images.isNotEmpty) {

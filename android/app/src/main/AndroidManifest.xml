@@ -34,8 +34,9 @@
             <intent-filter>
                 <data android:scheme="db-lzox3hgfaiaiiim" />
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="myapp" android:host="redirect" />
             </intent-filter>
             
         </activity>
@@ -45,20 +46,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9048977034983785~4469402703"/>
-        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
-        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-            </intent-filter>
-            <service
-                android:name="com.dexterous.flutterlocalnotifications.ForegroundService"        
-                android:exported="false"
-                android:stopWithTask="false"
-                android:foregroundServiceType="dataSync">
-        </receiver>
     </application>
     <queries>
     <package android:name="com.dropbox.android" />

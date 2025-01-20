@@ -7,11 +7,12 @@ import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'package:badges/badges.dart' as bd;
 import '../dialog/dialog_historial_pago.dart';
 import '../models/gasto_model.dart';
 
@@ -131,42 +132,11 @@ class _HistorialViewState extends State<HistorialView> {
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
                   calendarAppointmentDetails.appointments.first;
-              return InkWell(
-                  onTap: () async {
-                    final modelado = await GastosController.find(
-                        int.parse(appointment.id.toString()));
-                    if (modelado != null) {
-                      showDialog(
-                          // ignore: use_build_context_synchronously
-                          context: context,
-                          builder: (context) =>
-                              DialogHistorialPago(gasto: modelado));
-                    } else {
-                      showToast("Esta venta ya no existe");
-                    }
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(6.sp),
-                      decoration: BoxDecoration(
-                          color: appointment.color,
-                          borderRadius: BorderRadius.circular(borderRadius)),
-                      width: calendarAppointmentDetails.bounds.width,
-                      height: calendarAppointmentDetails.bounds.height,
-                      child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("${appointment.id}.- ${appointment.subject}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 16.sp)),
-                            Text(
-                                provider.convertirHora(
-                                    fecha: appointment.startTime),
-                                style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold))
-                          ])));
+              return historial(
+                  provider: provider,
+                  appointment: appointment,
+                  calendar: calendarAppointmentDetails,
+                  context: context);
             },
             monthViewSettings: MonthViewSettings(
                 appointmentDisplayCount: 10,
@@ -194,6 +164,7 @@ AppointmentDataSource _getCalendarDataSource(
         startTime: DateTime.parse(lista[i].fecha!),
         endTime: DateTime.parse(lista[i].fecha!),
         isAllDay: false,
+        notes: lista[i].evidencia.length.toString(),
         subject:
             'Gasto: \$${lista[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == lista[i].categoriaId)?.nombre ?? "Sin Categoria"}',
         color: provider.presupuesto?.activo == 0 || provider.presupuesto == null
@@ -203,4 +174,51 @@ AppointmentDataSource _getCalendarDataSource(
                 lista[i].monto!))));
   }
   return AppointmentDataSource(appointments);
+}
+
+Widget historial(
+    {required GastoProvider provider,
+    required Appointment appointment,
+    required CalendarAppointmentDetails calendar,
+    required BuildContext context}) {
+  return bd.Badge(
+      badgeAnimation: bd.BadgeAnimation.fade(),
+      badgeStyle: bd.BadgeStyle(badgeColor: LightThemeColors.darkBlue),
+      badgeContent:
+          Icon(LineIcons.imageFile, size: 18.sp, color: LightThemeColors.green),
+      position: bd.BadgePosition.topEnd(end: -3, top: -3),
+      showBadge: int.tryParse(appointment.notes ?? "0") != 0,
+      child: InkWell(
+          onTap: () async {
+            final modelado = await GastosController.find(
+                int.parse(appointment.id.toString()));
+            if (modelado != null) {
+              showDialog(
+                  // ignore: use_build_context_synchronously
+                  context: context,
+                  builder: (context) => DialogHistorialPago(gasto: modelado));
+            } else {
+              showToast("Esta venta ya no existe");
+            }
+          },
+          child: Container(
+              padding: EdgeInsets.all(6.sp),
+              decoration: BoxDecoration(
+                  color: appointment.color,
+                  borderRadius: BorderRadius.circular(borderRadius)),
+              width: calendar.bounds.width,
+              height: calendar.bounds.height,
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        "${appointment.id}.- ${appointment.subject} - ${appointment.notes}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16.sp)),
+                    Text(provider.convertirHora(fecha: appointment.startTime),
+                        style: TextStyle(
+                            fontSize: 16.sp, fontWeight: FontWeight.bold))
+                  ]))));
 }

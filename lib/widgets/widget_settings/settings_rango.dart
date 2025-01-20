@@ -6,8 +6,8 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-import '../utilities/preferences.dart';
-import '../utilities/theme/theme_color.dart';
+import '../../utilities/preferences.dart';
+import '../../utilities/theme/theme_color.dart';
 
 class SettingsRango extends StatefulWidget {
   const SettingsRango({super.key});

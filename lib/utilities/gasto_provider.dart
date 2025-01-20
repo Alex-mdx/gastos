@@ -2,8 +2,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:gastos/controllers/metodo_gasto_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
+import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/preferences.dart';
@@ -82,10 +84,19 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<MetodoPagoModel> _metodo = [];
+  List<MetodoPagoModel> get metodo => _metodo;
+  set metodo(List<MetodoPagoModel> valor) {
+    _metodo = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getConfigurado();
     presupuesto = await PresupuestoController.getItem();
+    await MetodoGastoController.generarObtencion();
+    metodo = await MetodoGastoController.getItems();
   }
 
   ///funciones
@@ -124,14 +135,14 @@ class GastoProvider with ChangeNotifier {
       newGastos = gastosFiltrados(listaGastos);
     }
     for (var i = 0; i < 7; i++) {
-      monto += contarSemana(
-                  fechas: newGastos
-                      .where((element) =>
-                          DateTime.parse(element.fecha!).weekday == i + 1)
-                      .map((e) => DateTime.parse(e.fecha!))
-                      .toList(),
-                  dia: i) ==
-              0
+      var sumatoria = contarSemana(
+          fechas: newGastos
+              .where(
+                  (element) => DateTime.parse(element.fecha!).weekday == i + 1)
+              .map((e) => DateTime.parse(e.fecha!))
+              .toList(),
+          dia: i);
+      monto += sumatoria == 0
           ? 0
           : generarPago(
                   montos: newGastos
@@ -139,13 +150,7 @@ class GastoProvider with ChangeNotifier {
                           DateTime.tryParse(element.fecha!)?.weekday == i + 1)
                       .map((e) => e.monto!)
                       .toList()) /
-              contarSemana(
-                  fechas: newGastos
-                      .where((element) =>
-                          DateTime.parse(element.fecha!).weekday == i + 1)
-                      .map((e) => DateTime.parse(e.fecha!))
-                      .toList(),
-                  dia: i);
+              sumatoria;
     }
     return monto;
   }
@@ -171,7 +176,7 @@ class GastoProvider with ChangeNotifier {
                 dia: index));
   }
 
-  double sumatoriaDiaCalendario(DateTime fecha, List<GastoModelo> gasto){
+  double sumatoriaDiaCalendario(DateTime fecha, List<GastoModelo> gasto) {
     return generarPago(
         montos: gasto
             .where((element) => DateTime(

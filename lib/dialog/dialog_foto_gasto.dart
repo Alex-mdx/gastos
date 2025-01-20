@@ -64,22 +64,19 @@ class DialogFotoGasto extends StatelessWidget {
                         children: [
                           IconButton(
                               iconSize: 24.sp,
-                              onPressed: () {
-                                Dialogs.showMorph(
-                                    title: "Eliminar",
-                                    description:
-                                        '¿Desea eliminar esta foto seleccionada?',
-                                    loadingTitle: 'Eliminando',
-                                    onAcceptPressed: (context) async {
-                                      provider.imagenesActual.remove(e);
-                                      final tempModel = provider.gastoActual
-                                          .copyWith(
-                                              evidencia:
-                                                  provider.imagenesActual);
-                                      provider.gastoActual = tempModel;
-                                      Navigation.pop();
-                                    });
-                              },
+                              onPressed: () => Dialogs.showMorph(
+                                  title: "Eliminar",
+                                  description:
+                                      '¿Desea eliminar esta foto seleccionada?',
+                                  loadingTitle: 'Eliminando',
+                                  onAcceptPressed: (context) async {
+                                    provider.imagenesActual.remove(e);
+                                    final tempModel = provider.gastoActual
+                                        .copyWith(
+                                            evidencia: provider.imagenesActual);
+                                    provider.gastoActual = tempModel;
+                                    Navigation.pop();
+                                  }),
                               icon:
                                   const Icon(Icons.delete, color: Colors.red)),
                           IconButton(
@@ -88,30 +85,31 @@ class DialogFotoGasto extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProImageEditor.memory(e, callbacks:
-                                                ProImageEditorCallbacks(
-                                                    onImageEditingComplete:
-                                                        (Uint8List
-                                                            bytes) async {
-                                              Dialogs.showMorph(
-                                                  title: "Guardar imagen",
-                                                  description:
-                                                      "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
-                                                  loadingTitle: "Guardando",
-                                                  onAcceptPressed:
-                                                      (context) async {
-                                                    int index = provider
-                                                        .imagenesActual
-                                                        .indexWhere((element) =>
-                                                            element == e);
-                                                    provider.imagenesActual[
-                                                        index] = bytes;
-                                                    Navigation.popTwice();
-                                                    showToast(
-                                                        "Salga y vuelva a entrar para que se efectuen los cambios");
-                                                  });
-                                            }))));
+                                        builder: (context) => ProImageEditor.memory(
+                                            e,
+                                            callbacks: ProImageEditorCallbacks(
+                                                onImageEditingComplete: (Uint8List
+                                                        bytes) async =>
+                                                    Dialogs.showMorph(
+                                                        title: "Guardar imagen",
+                                                        description:
+                                                            "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
+                                                        loadingTitle:
+                                                            "Guardando",
+                                                        onAcceptPressed:
+                                                            (context) async {
+                                                          int index = provider
+                                                              .imagenesActual
+                                                              .indexWhere(
+                                                                  (element) =>
+                                                                      element ==
+                                                                      e);
+                                                          provider.imagenesActual[
+                                                              index] = bytes;
+                                                          Navigation.popTwice();
+                                                          showToast(
+                                                              "Salga y vuelva a entrar para que se efectuen los cambios");
+                                                        })))));
                               },
                               icon: Icon(Icons.edit))
                         ])
