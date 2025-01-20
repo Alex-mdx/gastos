@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/dialog/dialog_foto_gasto.dart';
+import 'package:gastos/dialog/dialog_metodo_pago.dart';
+import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
+import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
@@ -31,6 +34,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
   DateTime now = DateTime.now();
   SingleSelectController<CategoriaModel> controller =
       SingleSelectController(null);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +86,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.sp)))),
-                    const Divider(),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -94,10 +100,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   decoration: CustomDropdownDecoration(
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
                                           color: LightThemeColors.green,
-                                          size: 22.sp),
+                                          size: 20.sp),
                                       closedSuffixIcon: controller.value != null
                                           ? IconButton(
-                                              iconSize: 22.sp,
+                                              iconSize: 20.sp,
                                               onPressed: () => setState(() {
                                                     controller.clear();
                                                   }),
@@ -172,14 +178,13 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     builder: (context) => const Dialog(
                                         child: DialogCategorias()));
                               },
-                              icon: Stack(
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Icon(LineIcons.wavyMoneyBill,
-                                        color: Colors.white, size: 22.sp),
-                                    Icon(Icons.add,
-                                        size: 22.sp, color: Colors.white)
-                                  ]))
+                              icon:
+                                  Stack(alignment: Alignment.center, children: [
+                                Icon(LineIcons.wavyMoneyBill,
+                                    color: Colors.white, size: 20.sp),
+                                Icon(Icons.add,
+                                    size: 22.sp, color: Colors.white)
+                              ]))
                         ]),
                     OverflowBar(
                         overflowAlignment: OverflowBarAlignment.center,
@@ -239,6 +244,14 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   icon: Icon(LineIcons.imageFile,
                                       size: 22.sp, color: Colors.white)))
                         ]),
+                    TextButton(
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => DialogMetodoPago(tipo: true)),
+                        child: Text(
+                            "Metodo de pago: ${widget.provider.metodoSelect?.nombre ?? "Sin metodo valido"}",
+                            style: TextStyle(
+                                fontSize: 15.sp, fontWeight: FontWeight.bold))),
                     /* if (kDebugMode)
                         Align(
                             alignment: Alignment.centerRight,
@@ -295,11 +308,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         onAcceptPressed: (context) async {
                           final now = DateTime.now();
                           //?La tabla de gasto es para notificar si dicha tarjeta es modificable
-                          var id = (await GastosController.getLastId()) ?? 1;
-                          log("${id + 1}");
                           final finalTemp = widget.provider.gastoActual
                               .copyWith(
-                                  id: id + 1,
+                                  id: (await GastosController.getLastId()),
+                                  metodoPagoId:
+                                      widget.provider.metodoSelect!.id,
                                   gasto: 1,
                                   ultimaFecha: widget.provider.selectProxima ==
                                           null
@@ -324,6 +337,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               id: null,
                               monto: null,
                               categoriaId: finalTemp.categoriaId,
+                              metodoPagoId: finalTemp.metodoPagoId,
                               fecha: null,
                               dia: null,
                               mes: null,

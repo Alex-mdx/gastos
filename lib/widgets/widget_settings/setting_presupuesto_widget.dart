@@ -67,7 +67,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                         labelText: "Monto limite para esta semana"))),
             Expanded(
                 flex: 1,
-                child: IconButton(
+                child: IconButton.filled(
                     iconSize: 24.sp,
                     onPressed: () {
                       showDialog(
@@ -83,7 +83,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
               widget.provider.presupuesto?.activo == 1
                   ? Icons.money_off
                   : LineIcons.wallet,
-              size: 18.sp),
+              size: 20.sp),
           onPressed: () async {
             widget.provider.presupuesto?.activo == 1
                 ? await Dialogs.showMorph(

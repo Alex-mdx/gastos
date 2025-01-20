@@ -8,6 +8,7 @@ import 'periodo_model.dart';
 class GastoModelo {
   int? id;
   int? categoriaId;
+  int? metodoPagoId;
   double? monto;
   String? fecha;
   String? dia;
@@ -22,6 +23,7 @@ class GastoModelo {
   GastoModelo(
       {required this.id,
       required this.categoriaId,
+      required this.metodoPagoId,
       required this.monto,
       required this.fecha,
       required this.dia,
@@ -36,6 +38,7 @@ class GastoModelo {
   GastoModelo copyWith(
           {int? id,
           int? categoriaId,
+          int? metodoPagoId,
           double? monto,
           String? fecha,
           String? dia,
@@ -49,6 +52,7 @@ class GastoModelo {
       GastoModelo(
           id: id ?? this.id,
           categoriaId: categoriaId ?? this.categoriaId,
+          metodoPagoId: metodoPagoId ?? this.metodoPagoId,
           monto: monto ?? this.monto,
           fecha: fecha ?? this.fecha,
           dia: dia ?? this.dia,
@@ -63,6 +67,7 @@ class GastoModelo {
   factory GastoModelo.fromJson(Map<String, dynamic> json) => GastoModelo(
       id: json["id"],
       categoriaId: json["categoria_id"],
+      metodoPagoId:json["metodo_pago_id"] ?? 1,
       monto: double.parse(json["monto"]),
       fecha: json["fecha"],
       dia: json["dia"],
@@ -80,6 +85,7 @@ class GastoModelo {
   Map<String, dynamic> toJson() => {
         "id": id,
         "categoria_id": categoriaId,
+        "metodo_pago_id": metodoPagoId ?? 1,
         "monto": monto,
         "fecha": fecha,
         "dia": dia,

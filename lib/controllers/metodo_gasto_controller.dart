@@ -48,14 +48,22 @@ class MetodoGastoController {
     final db = await database();
     await SqlGenerator.existColumna(
         add: "defecto", database: database, nombreDB: nombreDB);
-    await db.update(nombreDB, metodo.toJson(),where: "id = ?",whereArgs: [metodo.id]);
+    await db.update(nombreDB, metodo.toJson(),
+        where: "id = ?", whereArgs: [metodo.id]);
   }
 
   static Future<void> delete(MetodoPagoModel metodo) async {
     final db = await database();
     await SqlGenerator.existColumna(
         add: "defecto", database: database, nombreDB: nombreDB);
-    await db.insert(nombreDB, metodo.toJson());
+    await db.delete(nombreDB, where: "id = ?", whereArgs: [metodo.id]);
+  }
+
+  static Future<int> lastId() async {
+    final db = await database();
+    final data =
+        (await db.query(nombreDB, orderBy: "id DESC", limit: 1)).firstOrNull;
+    return data == null ? 1 : ((MetodoPagoModel.fromJson(data)).id) + 1;
   }
 
   static Future<void> deleteAll() async {

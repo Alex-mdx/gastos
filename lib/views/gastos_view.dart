@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../widgets/card_gasto_widget.dart';
-import '../widgets/widget_settings/historial_semanal_widget.dart';
+import '../widgets/historial_semanal_widget.dart';
 
 class GastosView extends StatelessWidget {
   const GastosView({super.key});

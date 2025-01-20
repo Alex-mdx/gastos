@@ -120,15 +120,14 @@ class GastosController {
         where: "id = ?", whereArgs: [gasto.id]);
   }
 
-  static Future<int?> getLastId() async {
+  static Future<int> getLastId() async {
     final db = await database();
     await SqlGenerator.existColumna(
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
     final data =
         (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
-    GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
 
-    return modelo?.id;
+    return data == null ? 1 : (GastoModelo.fromJson(data).id)! + 1;
   }
 
   static Future<void> deleteItem(int id) async {

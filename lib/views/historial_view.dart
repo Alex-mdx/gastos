@@ -212,8 +212,7 @@ Widget historial(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                        "${appointment.id}.- ${appointment.subject} - ${appointment.notes}",
+                    Text("${appointment.id}.- ${appointment.subject}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 16.sp)),

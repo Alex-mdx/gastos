@@ -10,6 +10,7 @@ import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../models/categoria_model.dart';
@@ -46,6 +47,7 @@ class GastoProvider with ChangeNotifier {
   GastoModelo _gastoActual = GastoModelo(
       id: null,
       categoriaId: null,
+      metodoPagoId: null,
       monto: null,
       fecha: null,
       dia: null,
@@ -91,12 +93,20 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  MetodoPagoModel? _metodoSelect;
+  MetodoPagoModel? get metodoSelect => _metodoSelect;
+  set metodoSelect(MetodoPagoModel? valor) {
+    _metodoSelect = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getConfigurado();
     presupuesto = await PresupuestoController.getItem();
     await MetodoGastoController.generarObtencion();
     metodo = await MetodoGastoController.getItems();
+    metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
   }
 
   ///funciones

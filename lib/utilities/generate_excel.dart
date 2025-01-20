@@ -81,25 +81,26 @@ class GenerateExcel {
                   GastoModelo gasto = GastoModelo(
                       id: int.tryParse(row[0]!.value.toString()),
                       categoriaId: int.tryParse(row[1]!.value.toString()),
-                      monto: double.parse(row[2]!.value.toString()),
-                      fecha: row[3]!.value.toString(),
-                      dia: row[4]!.value.toString(),
-                      mes: row[5]!.value.toString(),
-                      peridico: int.tryParse(row[6]!.value.toString()),
-                      ultimaFecha: row[7]!.value.toString() == "null"
+                      metodoPagoId: int.tryParse(row[2]!.value.toString()),
+                      monto: double.parse(row[3]!.value.toString()),
+                      fecha: row[4]!.value.toString(),
+                      dia: row[5]!.value.toString(),
+                      mes: row[6]!.value.toString(),
+                      peridico: int.tryParse(row[7]!.value.toString()),
+                      ultimaFecha: row[8]!.value.toString() == "null"
                           ? null
-                          : row[7]!.value.toString(),
+                          : row[8]!.value.toString(),
                       periodo: PeriodoModelo.fromJson(
-                          jsonDecode(row[8]!.value.toString())),
-                      gasto: int.tryParse(row[9]!.value.toString()),
-                      evidencia: row[10]!.value.toString() == "null"
+                          jsonDecode(row[9]!.value.toString())),
+                      gasto: int.tryParse(row[10]!.value.toString()),
+                      evidencia: row[11]!.value.toString() == "null"
                           ? []
                           : List<Uint8List>.from(
-                              jsonDecode(row[10]!.value.toString()).map((x) =>
+                              jsonDecode(row[11]!.value.toString()).map((x) =>
                                   parseo.Parser.toUint8List(x.toString()))),
-                      nota: row[11]!.value.toString() == "null"
+                      nota: row[12]!.value.toString() == "null"
                           ? null
-                          : row[11]!.value.toString());
+                          : row[12]!.value.toString());
                   log("${gasto.toJson()}");
                   await GastosController.insert(gasto);
                 }

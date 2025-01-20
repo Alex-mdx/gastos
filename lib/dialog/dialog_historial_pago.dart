@@ -70,11 +70,11 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                          "Monto: \$${provider.convertirNumero(moneda: widget.gasto.monto!)}",
-                          style: TextStyle(fontSize: 16.sp)),
+                          "${provider.metodo.firstWhereOrNull((element) => element.id == widget.gasto.metodoPagoId)?.nombre}: \$${provider.convertirNumero(moneda: widget.gasto.monto!)}",
+                          style: TextStyle(fontSize: 15.sp)),
                       Text(
                           "Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == widget.gasto.categoriaId)?.nombre ?? "Desconocido"}",
-                          style: TextStyle(fontSize: 16.sp))
+                          style: TextStyle(fontSize: 15.sp))
                     ]),
                 AnimatedReadMoreText(
                     "Notas: ${widget.gasto.nota ?? "Sin notas"}",
@@ -117,22 +117,21 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                             });
                       }).toList())
               ]))),
-      const Divider(),
-      if (kDebugMode)
-        Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton.filledTonal(
-                onPressed: () {
-                  Dialogs.showMorph(
-                      title: "Guardar cambios",
-                      description:
-                          "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
-                      loadingTitle: "Actualizando",
-                      onAcceptPressed: (context) async {
-                        /* final newModel = gasto.periodo. */
-                      });
-                },
-                icon: Icon(Icons.save, size: 24.sp)))
+      if (kDebugMode) const Divider(),
+      Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton.filledTonal(
+              onPressed: () {
+                Dialogs.showMorph(
+                    title: "Guardar cambios",
+                    description:
+                        "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
+                    loadingTitle: "Actualizando",
+                    onAcceptPressed: (context) async {
+                      /* final newModel = gasto.periodo. */
+                    });
+              },
+              icon: Icon(Icons.save, size: 24.sp)))
     ]));
   }
 }
