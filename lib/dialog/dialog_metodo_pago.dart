@@ -7,6 +7,7 @@ import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 
 class DialogMetodoPago extends StatelessWidget {
   final bool tipo;
@@ -50,9 +51,18 @@ class DialogMetodoPago extends StatelessWidget {
                                     : metodo.defecto == 1
                                         ? LightThemeColors.green
                                         : LightThemeColors.darkBlue),
-                            title: Text(metodo.nombre,
-                                style: TextStyle(
-                                    fontSize: 14.sp,
+                            title: SubstringHighlight(
+                                text: "${metodo.nombre} - Color",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 4,
+                                term: "Color",
+                                textStyle: TextStyle(
+                                    fontSize: (14).sp,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                                textStyleHighlight: TextStyle(
+                                    color: metodo.color,
+                                    fontSize: (14).sp,
                                     fontWeight: FontWeight.bold)),
                             subtitle: Text(
                                 "\$${metodo.cambio} - ${metodo.denominacion}",

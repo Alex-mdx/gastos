@@ -30,15 +30,19 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>   
+        </activity>
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <data android:scheme="db-lzox3hgfaiaiiim" />
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="myapp" android:host="redirect" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            
         </activity>
         <meta-data
             android:name="flutterEmbedding"
@@ -48,7 +52,6 @@
             android:value="ca-app-pub-9048977034983785~4469402703"/>
     </application>
     <queries>
-    <package android:name="com.dropbox.android" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

@@ -11,6 +11,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:badges/badges.dart' as bd;
 import '../dialog/dialog_historial_pago.dart';
@@ -164,7 +165,8 @@ AppointmentDataSource _getCalendarDataSource(
         startTime: DateTime.parse(lista[i].fecha!),
         endTime: DateTime.parse(lista[i].fecha!),
         isAllDay: false,
-        notes: lista[i].evidencia.length.toString(),
+        location: lista[i].evidencia.length.toString(),
+        notes: lista[i].metodoPagoId.toString(),
         subject:
             'Gasto: \$${lista[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == lista[i].categoriaId)?.nombre ?? "Sin Categoria"}',
         color: provider.presupuesto?.activo == 0 || provider.presupuesto == null
@@ -187,7 +189,7 @@ Widget historial(
       badgeContent:
           Icon(LineIcons.imageFile, size: 18.sp, color: LightThemeColors.green),
       position: bd.BadgePosition.topEnd(end: -3, top: -3),
-      showBadge: int.tryParse(appointment.notes ?? "0") != 0,
+      showBadge: int.tryParse(appointment.location ?? "0") != 0,
       child: InkWell(
           onTap: () async {
             final modelado = await GastosController.find(
@@ -216,8 +218,27 @@ Widget historial(
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 16.sp)),
-                    Text(provider.convertirHora(fecha: appointment.startTime),
-                        style: TextStyle(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold))
+                    SubstringHighlight(
+                        text:
+                            "${provider.convertirHora(fecha: appointment.startTime)} - Metodo de pago: ${provider.metodo.firstWhereOrNull((element) => element.id == int.parse(appointment.notes!))?.nombre ?? "Desconocido"}",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 4,
+                        term: provider.metodo
+                                .firstWhereOrNull((element) =>
+                                    element.id == int.parse(appointment.notes!))
+                                ?.nombre ??
+                            "Desconocido",
+                        textStyle: TextStyle(
+                            fontSize: (16).sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        textStyleHighlight: TextStyle(
+                            background: Paint(),
+                            color: provider.metodo
+                                .firstWhereOrNull((element) =>
+                                    element.id == int.parse(appointment.notes!))
+                                ?.color,
+                            fontSize: (16).sp,
+                            fontWeight: FontWeight.bold)),
                   ]))));
 }

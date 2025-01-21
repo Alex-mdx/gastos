@@ -1,5 +1,6 @@
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/sql_generator.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 String nombreDB = "metodo_pago";
@@ -12,7 +13,8 @@ class MetodoGastoController {
       cambio INTEGER,
       denominacion TEXT,
       status INTEGER,
-      defecto INTEGER
+      defecto INTEGER,
+      color INTEGER
       )""");
   }
 
@@ -30,7 +32,7 @@ class MetodoGastoController {
         cambio: 1.0,
         denominacion: "MXN",
         status: 0,
-        defecto: 1);
+        defecto: 1,color: LightThemeColors.primary);
     final result = await find(metodo);
     if (result == null) {
       await insert(metodo);

@@ -27,7 +27,12 @@ class Preferences {
   static set setting(String value) => _preferences?.setString('setting', value);
 
   static double get calidadFoto =>
-      _preferences?.getDouble('calidad_foto') ?? 80;
+      _preferences?.getDouble('calidad_foto') ?? 75;
   static set calidadFoto(double value) =>
       _preferences?.setDouble('calidad_foto', value);
+
+  static String get tokenDropbox =>
+      _preferences?.getString('tokenDropbox') ?? "";
+  static set tokenDropbox(String value) =>
+      _preferences?.setString('tokenDropbox', value);
 }

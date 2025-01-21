@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
+import 'package:gastos/dialog/dialog_dropbox.dart';
 import 'package:gastos/dialog/dialog_youtube.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
@@ -11,8 +12,8 @@ import 'package:gastos/widgets/widget_settings/setting_primer_dia_widget.dart';
 import 'package:gastos/widgets/widget_settings/settings_rango.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:rive_animated_icon/rive_animated_icon.dart';
 import 'package:sizer/sizer.dart';
+import '../utilities/preferences.dart';
 import '../widgets/widget_settings/setting_backup.dart';
 import '../widgets/widget_settings/setting_calidad_imagen.dart';
 import '../widgets/widget_settings/setting_presupuesto_widget.dart';
@@ -54,17 +55,22 @@ class _SettingViewState extends State<SettingView> {
                           icon: Icon(LineIcons.youtube, size: 20.sp)),
                     if (kDebugMode)
                       IconButton.filled(
-                          iconSize: 20.sp,
-                          onPressed: () {},
+                          iconSize: 24.sp,
+                          onPressed: () async => showDialog(
+                              context: context,
+                              builder: (context) => DialogDropbox()),
                           icon: Stack(alignment: Alignment.center, children: [
-                            Icon(LineIcons.dropbox, color: Colors.white),
-                            RiveAnimatedIcon(
+                            Icon(LineIcons.dropbox,
+                                color: Preferences.tokenDropbox == ""
+                                    ? LightThemeColors.red
+                                    : LightThemeColors.green),
+                            /* RiveAnimatedIcon(
                                 riveIcon: RiveIcon.reload2,
                                 strokeWidth: 10,
                                 loopAnimation: true,
-                                color: LightThemeColors.primary,
-                                height: 22.sp,
-                                width: 22.sp)
+                                color: Colors.white,
+                                height: 26.sp,
+                                width: 24.sp) */
                           ]))
                   ])
                 ]),

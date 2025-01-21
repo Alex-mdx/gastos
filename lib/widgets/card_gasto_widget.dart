@@ -5,11 +5,9 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/dialog/dialog_foto_gasto.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
-import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
-import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
@@ -51,8 +49,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
                     Center(
                         child: TextButton.icon(
-                            style: ButtonStyle(
-                                elevation: WidgetStatePropertyAll(1)),
                             onPressed: () async {
                               widget
                                   .provider.selectFecha = (await showDatePicker(
@@ -65,18 +61,25 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                           const Duration(days: 365 * 15)),
                                       lastDate: now)) ??
                                   now;
-                              final modelTemp = widget.provider.gastoActual
-                                  .copyWith(
-                                      fecha: widget.provider.convertirFechaHora(
-                                          fecha: widget.provider.selectFecha ??
-                                              now),
-                                      dia: (widget.provider.selectFecha?.day ??
-                                              now.day)
-                                          .toString(),
-                                      mes:
-                                          (widget.provider.selectFecha?.month ??
-                                                  now.month)
-                                              .toString());
+                              final modelTemp = widget.provider.gastoActual.copyWith(
+                                  fecha: widget.provider.convertirFechaHora(
+                                      fecha: widget.provider.selectFecha?.copyWith(
+                                              year: widget
+                                                  .provider.selectFecha?.year,
+                                              month: widget
+                                                  .provider.selectFecha?.month,
+                                              day: widget
+                                                  .provider.selectFecha?.day,
+                                              hour: now.hour,
+                                              minute: now.minute,
+                                              second: now.second) ??
+                                          now),
+                                  dia: (widget.provider.selectFecha?.day ??
+                                          now.day)
+                                      .toString(),
+                                  mes: (widget.provider.selectFecha?.month ??
+                                          now.month)
+                                      .toString());
                               widget.provider.gastoActual = modelTemp;
                             },
                             icon: Icon(Icons.edit_calendar, size: 22.sp),
@@ -235,12 +238,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               badgeContent: Text(
                                   "${widget.provider.imagenesActual.length}"),
                               child: IconButton.filled(
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            const DialogFotoGasto());
-                                  },
+                                  onPressed: () => showDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          const DialogFotoGasto()),
                                   icon: Icon(LineIcons.imageFile,
                                       size: 22.sp, color: Colors.white)))
                         ]),

@@ -25,3 +25,12 @@ Proyecto personal para el manejo de gastos personales, usando datos locales y ca
 ### Version 0.1.3
   - Mejora al navegar por el calendario
   - Corrección al momento de editar su imagen (la rueda de carga no desaparecia)
+  
+### Version 0.1.4
+  - Corrección de fecha de ingreso (ahora obtendra la hora de hoy a pesar de que la fecha sea diferente a esta)
+  - Mejora de interfaz grafica en colorizado y orden para la tarjeta de cobro
+  - Mejora en las notas de gasto
+  - Mejora en la calidad de guardado de imagen
+  - Mejora en la visualizacion del historial de gastos
+  - Implementacion de un nuevo tipo de visualizacion de de cobros
+  - Implementacion de **Metodo de pago**

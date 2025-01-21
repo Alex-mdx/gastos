@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -50,6 +51,16 @@ class PaginadoState extends State<Paginado> {
   @override
   void initState() {
     super.initState();
+    InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          widget.provider.internet = true;
+          break;
+        case InternetStatus.disconnected:
+          widget.provider.internet = false;
+          break;
+      }
+    });
   }
 
   @override

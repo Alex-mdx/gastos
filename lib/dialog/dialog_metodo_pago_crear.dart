@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:gastos/controllers/metodo_gasto_controller.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -21,6 +23,7 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
   TextEditingController nombre = TextEditingController();
   TextEditingController cambio = TextEditingController(text: "0");
   TextEditingController denominacion = TextEditingController();
+  Color coloreado = LightThemeColors.primary;
   bool press = true;
   @override
   void initState() {
@@ -65,6 +68,26 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
                     label: Text("Denominacion",
                         style: TextStyle(fontSize: 16.sp)))),
             Divider(),
+            TextButton.icon(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                Text('Elige un color',
+                                    style: TextStyle(fontSize: 14.sp)),
+                                SingleChildScrollView(
+                                    child: ColorPicker(
+                                        pickerColor: coloreado,
+                                        onColorChanged: (value) =>
+                                            coloreado = value))
+                              ]))).whenComplete(() => setState(() {}));
+                },
+                label: Text("Seleccione un color",
+                    style: TextStyle(fontSize: 15.sp)),
+                icon: Icon(Icons.color_lens, color: coloreado, size: 24.sp)),
             Consumer<GastoProvider>(
                 builder: (context, provider, child) => ElevatedButton(
                     onPressed: () async {
@@ -83,6 +106,7 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
                               cambio: double.parse(cambio.text),
                               denominacion: denominacion.text,
                               status: 1,
+                              color: coloreado,
                               defecto: 0);
                           print(await MetodoGastoController.lastId());
                           final result =

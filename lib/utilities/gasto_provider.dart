@@ -12,6 +12,7 @@ import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../models/categoria_model.dart';
 
@@ -100,6 +101,13 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _internet = false;
+  bool get internet => _internet;
+  set internet(bool valor) {
+    _internet = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getConfigurado();
@@ -107,6 +115,10 @@ class GastoProvider with ChangeNotifier {
     await MetodoGastoController.generarObtencion();
     metodo = await MetodoGastoController.getItems();
     metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
+    if (Preferences.tokenDropbox != "") {
+    } else {
+      showToast("msg");
+    }
   }
 
   ///funciones
