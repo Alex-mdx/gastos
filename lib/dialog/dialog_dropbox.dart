@@ -57,7 +57,11 @@ class _DialogDropboxState extends State<DialogDropbox> {
                     print("resultado: $result");
 
                     final url = await Dropbox.listFolder('');
-                    print("url : $url");
+                    print("re : $url");
+
+                    final urls =
+                        await Dropbox.getTemporaryLink('/checador.png');
+                    print("re : $urls");
                   },
                   child: Text("Sincronizar",
                       style: TextStyle(
