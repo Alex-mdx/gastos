@@ -20,7 +20,8 @@ class GastosController {
       periodo TEXT,
       gasto INTEGER,
       evidencia TEXT,
-      nota TEXT
+      nota TEXT,
+      metodo_pago_id INTEGER
       )""");
   }
 
@@ -39,15 +40,17 @@ class GastosController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  /* static Future<List<GastoModelo>> getItems() async {
+  static Future<List<GastoModelo>> getItemsOnlyEvidencia() async {
     final db = await database();
     List<GastoModelo> modelo = [];
-    final data = (await db.query(nombreDB));
+    final data = (await db.query(nombreDB,
+        where: 'evidencia IS NOT NULL AND evidencia != ? AND evidencia != ?',
+        whereArgs: ['', '[]']));
     for (var element in data) {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
-  } */
+  }
 
   static Future<List<GastoModelo>> getConfigurado() async {
     final db = await database();

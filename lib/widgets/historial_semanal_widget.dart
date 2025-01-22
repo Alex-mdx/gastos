@@ -30,7 +30,6 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   @override
   void initState() {
     super.initState();
-    widget.provider.obtenerDato();
   }
 
   @override

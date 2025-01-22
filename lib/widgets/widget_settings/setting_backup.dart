@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/metodo_gasto_controller.dart';
+import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -23,16 +28,20 @@ class BackupManual extends StatelessWidget {
         overflowAlignment: OverflowBarAlignment.center,
         children: [
           ElevatedButton.icon(
-              onPressed: () =>
-                Dialogs.showMorph(
-                    title: "Exportacion de datos",
-                    description:
-                        "Se generara un respaldo de sus gastos a un archivo XLSX\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Por el momento solo respalda los gatos ingresados y las categorias",
-                    loadingTitle: "Exportando",
-                    onAcceptPressed: (context) async {
-                      await GenerateExcel.backUp(provider);
-                    })
-              ,
+              onPressed: () => Dialogs.showMorph(
+                  title: "Exportacion de datos",
+                  description:
+                      "Se generara un respaldo de sus gastos en formato ZIP\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Se comprimiran sus evidencias fotograficas, el proceso podria tardar en funcion a la cantidad de evidencias",
+                  loadingTitle: "Exportando",
+                  onAcceptPressed: (context) async {
+                    /* await GenerateExcel.backUp(provider);
+                    await GenerateExcel.compartir(); */
+                    await ImageGen.generarImagen();
+
+                    var imagenes = await ImageGen.obtenerImagenesEvidencia();
+                    var file = await GenerateExcel.toZip(imagenes);
+                    await GenerateExcel.compartidoGlobal(file!);
+                  }),
               label: Text("Exportacion datos",
                   style:
                       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
@@ -52,6 +61,10 @@ class BackupManual extends StatelessWidget {
                           await GastosController.getConfigurado();
                       provider.listaCategoria =
                           await CategoriaController.getItems();
+                      provider.metodo = await MetodoGastoController.getItems();
+                      log("${provider.metodo.map((e) => e.toJson()).toList()}");
+                      provider.metodoSelect = provider.metodo
+                          .firstWhereOrNull((element) => element.id == 1);
                     });
               },
               label: Text("Importar datos",
@@ -71,8 +84,16 @@ class BackupManual extends StatelessWidget {
                         await GastosController.deleteAll();
                         await CategoriaController.deleteAll();
                         await PresupuestoController.deleteAll();
+                        await MetodoGastoController.deleteAll();
                         provider.listaGastos.clear();
                         provider.listaCategoria.clear();
+                        provider.metodo.clear();
+                        await MetodoGastoController.generarObtencion();
+                        provider.metodo =
+                            await MetodoGastoController.getItems();
+                        provider.metodoSelect = provider.metodo
+                            .firstWhereOrNull(
+                                (element) => element.defecto == 1);
                         provider.presupuesto = null;
                       }
                     });

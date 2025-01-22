@@ -32,5 +32,6 @@ Proyecto personal para el manejo de gastos personales, usando datos locales y ca
   - Mejora en las notas de gasto
   - Mejora en la calidad de guardado de imagen
   - Mejora en la visualizacion del historial de gastos
+  - Mejora en el respaldo manual, ahora se guardan los metodos de pago y los presupuestos creados
   - Implementacion de un nuevo tipo de visualizacion de de cobros
   - Implementacion de **Metodo de pago**

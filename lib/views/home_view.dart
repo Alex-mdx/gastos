@@ -51,6 +51,7 @@ class PaginadoState extends State<Paginado> {
   @override
   void initState() {
     super.initState();
+    widget.provider.obtenerDato();
     InternetConnection().onStatusChange.listen((InternetStatus status) {
       switch (status) {
         case InternetStatus.connected:

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/dropbox_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
@@ -17,6 +18,7 @@ class DialogDropbox extends StatefulWidget {
 
 class _DialogDropboxState extends State<DialogDropbox> {
   bool send = true;
+  String proceso = "Sin proceso";
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -31,20 +33,12 @@ class _DialogDropboxState extends State<DialogDropbox> {
               icon:
                   Icon(Icons.login, size: 20.sp, color: LightThemeColors.green),
               onPressed: () async {
-                var token = await Dropbox.getAccessToken();
-                if (token != null) {
-                  print(token);
-                  setState(() {
-                    Preferences.tokenDropbox = token;
-                  });
-                  await Dropbox.authorizeWithAccessToken(
-                      Preferences.tokenDropbox);
-                  showToast("Acceso a dropbox correcto");
-                } else {
-                  Preferences.tokenDropbox = "";
+                var tipo = await DropboxGen.verificarLogeo();
+                if (!tipo) {
                   await Dropbox.authorize();
-                  showToast("No se pudo acceder a su cuenta de dropbox");
+                  await DropboxGen.verificarLogeo();
                 }
+                setState(() {});
               },
               label: Text("Iniciar sesion", style: TextStyle(fontSize: 15.sp))),
         if (Preferences.tokenDropbox != "")
@@ -52,23 +46,48 @@ class _DialogDropboxState extends State<DialogDropbox> {
             children: [
               ElevatedButton(
                   onPressed: () async {
-                    final result =
-                        await Dropbox.getAccountName(); // list root folder
-                    print("resultado: $result");
-
-                    final url = await Dropbox.listFolder('');
-                    print("re : $url");
-
-                    final urls =
-                        await Dropbox.getTemporaryLink('/checador.png');
-                    print("re : $urls");
+                    if (send) {
+                      setState(() {
+                        send = false;
+                        proceso = "En proceso";
+                      });
+                      final result = await Dropbox.getAccountName();
+                      setState(() {
+                        proceso = "Bienvenido a dropbox $result";
+                      });
+                      final url = await Dropbox.listFolder('');
+                      setState(() {
+                        proceso = "Se ingreso a su carpeta de respaldo $url";
+                      });
+                      final urls =
+                          await Dropbox.getTemporaryLink('/gasto.xlsx');
+                      print(urls);
+                      setState(() {
+                        proceso = "url: $urls";
+                      });
+                      if (urls!.contains("not_found")) {
+                        showToast("No se encontro ningun archivo de respaldo");
+                      } else {
+                        showToast("viva la vida");
+                      }
+                      setState(() {
+                        send = true;
+                        proceso = "Sin proceso";
+                      });
+                    }
                   },
-                  child: Text("Sincronizar",
-                      style: TextStyle(
-                          fontSize: 15.sp,
-                          color: LightThemeColors.darkBlue,
-                          fontWeight: FontWeight.bold))),
-              Text("Proceso:"),
+                  child: proceso == "Sin proceso"
+                      ? Text("Sincronizar",
+                          style: TextStyle(
+                              fontSize: 15.sp,
+                              color: LightThemeColors.darkBlue,
+                              fontWeight: FontWeight.bold))
+                      : CircularProgressIndicator()),
+              Text(proceso,
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  style:
+                      TextStyle(fontSize: 14.sp, fontStyle: FontStyle.italic)),
               ElevatedButton.icon(
                   style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(

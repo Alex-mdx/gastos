@@ -7,9 +7,9 @@ class MetodoPagoModel {
   String nombre;
   double cambio;
   String denominacion;
-  Color color;
   int status;
   int defecto;
+  Color color;
 
   MetodoPagoModel(
       {required this.id,
@@ -17,8 +17,8 @@ class MetodoPagoModel {
       required this.cambio,
       required this.denominacion,
       required this.status,
-      required this.color,
-      required this.defecto});
+      required this.defecto,
+      required this.color});
 
   MetodoPagoModel copyWith(
           {int? id,

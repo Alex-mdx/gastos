@@ -8,7 +8,6 @@ import 'periodo_model.dart';
 class GastoModelo {
   int? id;
   int? categoriaId;
-  int? metodoPagoId;
   double? monto;
   String? fecha;
   String? dia;
@@ -19,11 +18,11 @@ class GastoModelo {
   int? gasto;
   List<Uint8List> evidencia;
   String? nota;
+  int? metodoPagoId;
 
   GastoModelo(
       {required this.id,
       required this.categoriaId,
-      required this.metodoPagoId,
       required this.monto,
       required this.fecha,
       required this.dia,
@@ -33,12 +32,12 @@ class GastoModelo {
       required this.periodo,
       required this.gasto,
       required this.evidencia,
-      required this.nota});
+      required this.nota,
+      required this.metodoPagoId});
 
   GastoModelo copyWith(
           {int? id,
           int? categoriaId,
-          int? metodoPagoId,
           double? monto,
           String? fecha,
           String? dia,
@@ -48,11 +47,11 @@ class GastoModelo {
           PeriodoModelo? periodo,
           int? gasto,
           List<Uint8List>? evidencia,
-          String? nota}) =>
+          String? nota,
+          int? metodoPagoId}) =>
       GastoModelo(
           id: id ?? this.id,
           categoriaId: categoriaId ?? this.categoriaId,
-          metodoPagoId: metodoPagoId ?? this.metodoPagoId,
           monto: monto ?? this.monto,
           fecha: fecha ?? this.fecha,
           dia: dia ?? this.dia,
@@ -62,12 +61,12 @@ class GastoModelo {
           periodo: periodo ?? this.periodo,
           gasto: gasto ?? this.gasto,
           evidencia: evidencia ?? this.evidencia,
-          nota: nota ?? this.nota);
+          nota: nota ?? this.nota,
+          metodoPagoId: metodoPagoId ?? this.metodoPagoId);
 
   factory GastoModelo.fromJson(Map<String, dynamic> json) => GastoModelo(
       id: json["id"],
       categoriaId: json["categoria_id"],
-      metodoPagoId:json["metodo_pago_id"] ?? 1,
       monto: double.parse(json["monto"]),
       fecha: json["fecha"],
       dia: json["dia"],
@@ -80,12 +79,12 @@ class GastoModelo {
           ? []
           : List<Uint8List>.from(jsonDecode(json["evidencia"])
               .map((x) => Parser.toUint8List(x.toString()))),
-      nota: json["nota"]);
+      nota: json["nota"],
+      metodoPagoId: json["metodo_pago_id"] ?? 1);
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "categoria_id": categoriaId,
-        "metodo_pago_id": metodoPagoId ?? 1,
         "monto": monto,
         "fecha": fecha,
         "dia": dia,
@@ -95,6 +94,7 @@ class GastoModelo {
         "periodo": jsonEncode(periodo),
         "gasto": gasto,
         "evidencia": jsonEncode(evidencia.map((x) => x.toString()).toList()),
-        "nota": nota
+        "nota": nota,
+        "metodo_pago_id": metodoPagoId ?? 1
       };
 }

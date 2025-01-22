@@ -2,13 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:archive/archive.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:gastos/controllers/metodo_gasto_controller.dart';
 import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/models/gasto_model.dart';
+import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -44,13 +49,43 @@ class GenerateExcel {
           .toList());
     }
 
+    Sheet sheet3 = excel['MetodoPago'];
+    sheet3.appendRow(provider.metodo.first
+        .toJson()
+        .keys
+        .map((e) => TextCellValue(e.toString()))
+        .toList());
+    for (var element in provider.metodo) {
+      sheet3.appendRow(element
+          .toJson()
+          .values
+          .map((i) => TextCellValue(i.toString()))
+          .toList());
+    }
     final direccion = await getDownloadsDirectory();
-    showToast("Dato generado");
+    showToast("Guardando respaldo generado");
     log("$direccion");
     String rutaArchivo = '${direccion?.path}/gasto.xlsx';
-
     File archivo = File(rutaArchivo);
     await archivo.writeAsBytes(excel.encode()!);
+    return true;
+  }
+
+  static Future<bool> compartir() async {
+    final direccion = await getDownloadsDirectory();
+    log("$direccion");
+    String rutaArchivo = '${direccion?.path}/gasto.xlsx';
+    final result = await Share.shareXFiles([XFile(rutaArchivo)]);
+    if (result.status == ShareResultStatus.success) {
+      showToast("Se compartio con exito el documento");
+    } else {
+      showToast("Hubo un problema al compartir");
+    }
+    return true;
+  }
+
+  static Future<bool> compartidoGlobal(File file) async {
+    String rutaArchivo = file.path;
     final result = await Share.shareXFiles([XFile(rutaArchivo)]);
     if (result.status == ShareResultStatus.success) {
       showToast("Se compartio con exito el documento");
@@ -70,37 +105,66 @@ class GenerateExcel {
       var bytes = File(pick.files.first.path!).readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
       for (var table in excel.tables.keys) {
+        List<Data?> row = [];
+        var maximo = 0;
         switch (table) {
           case "Gastos":
             if (excel.tables[table]!.rows.length > 1) {
               await GastosController.deleteAll();
-
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                var row = excel.tables[table]!.rows[i];
+                row = excel.tables[table]!.rows[i];
+                maximo = row.length;
+                //! 12 = ?
+                print(row.length - 1);
                 if (i != 0) {
                   GastoModelo gasto = GastoModelo(
-                      id: int.tryParse(row[0]!.value.toString()),
-                      categoriaId: int.tryParse(row[1]!.value.toString()),
-                      metodoPagoId: int.tryParse(row[2]!.value.toString()),
-                      monto: double.parse(row[3]!.value.toString()),
-                      fecha: row[4]!.value.toString(),
-                      dia: row[5]!.value.toString(),
-                      mes: row[6]!.value.toString(),
-                      peridico: int.tryParse(row[7]!.value.toString()),
-                      ultimaFecha: row[8]!.value.toString() == "null"
-                          ? null
-                          : row[8]!.value.toString(),
-                      periodo: PeriodoModelo.fromJson(
-                          jsonDecode(row[9]!.value.toString())),
-                      gasto: int.tryParse(row[10]!.value.toString()),
-                      evidencia: row[11]!.value.toString() == "null"
-                          ? []
-                          : List<Uint8List>.from(
-                              jsonDecode(row[11]!.value.toString()).map((x) =>
-                                  parseo.Parser.toUint8List(x.toString()))),
-                      nota: row[12]!.value.toString() == "null"
-                          ? null
-                          : row[12]!.value.toString());
+                      id: 0 < maximo
+                          ? int.tryParse(row[0]!.value.toString())
+                          : null,
+                      categoriaId: 1 < maximo
+                          ? int.tryParse(row[1]!.value.toString())
+                          : null,
+                      monto: 2 < maximo
+                          ? double.parse(row[2]!.value.toString())
+                          : null,
+                      fecha: 3 < maximo ? row[3]!.value.toString() : null,
+                      dia: 4 < maximo ? row[4]!.value.toString() : null,
+                      mes: 5 < maximo ? row[5]!.value.toString() : null,
+                      peridico: 6 < maximo
+                          ? int.tryParse(row[6]!.value.toString())
+                          : null,
+                      ultimaFecha: 7 < maximo
+                          ? row[7]!.value.toString() == "null"
+                              ? null
+                              : row[7]!.value.toString()
+                          : null,
+                      periodo: 8 < maximo
+                          ? PeriodoModelo.fromJson(
+                              jsonDecode(row[8]!.value.toString()))
+                          : PeriodoModelo(
+                              year: null,
+                              mes: null,
+                              dia: null,
+                              modificable: null),
+                      gasto: 9 < maximo
+                          ? int.tryParse(row[9]!.value.toString())
+                          : null,
+                      evidencia: 10 < maximo
+                          ? row[10]!.value.toString() == "null"
+                              ? []
+                              : List<Uint8List>.from(jsonDecode(
+                                      row[10]!.value.toString())
+                                  .map((x) =>
+                                      parseo.Parser.toUint8List(x.toString())))
+                          : [],
+                      nota: 11 < maximo
+                          ? row[11]!.value.toString() == "null"
+                              ? null
+                              : row[11]!.value.toString()
+                          : null,
+                      metodoPagoId: 12 < maximo
+                          ? int.tryParse(row[12]!.value.toString())
+                          : null);
                   log("${gasto.toJson()}");
                   await GastosController.insert(gasto);
                 }
@@ -115,14 +179,51 @@ class GenerateExcel {
             if (excel.tables[table]!.rows.length > 1) {
               await CategoriaController.deleteAll();
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                var row = excel.tables[table]!.rows[i];
+                row = excel.tables[table]!.rows[i];
+                maximo = row.length;
                 if (i != 0) {
                   CategoriaModel cateogoria = CategoriaModel(
-                      id: int.tryParse(row[0]!.value.toString()),
-                      nombre: row[1]!.value.toString(),
-                      descripcion: row[2]!.value.toString());
+                      id: 0 < maximo
+                          ? int.tryParse(row[0]!.value.toString())
+                          : null,
+                      nombre: 0 < maximo ? row[1]!.value.toString() : "",
+                      descripcion: 0 < maximo ? row[2]!.value.toString() : "");
                   log("${cateogoria.toJson()}");
                   await CategoriaController.insert(cateogoria);
+                }
+              }
+            } else {
+              showToast(
+                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
+            }
+            break;
+
+          case "MetodoPago":
+            if (excel.tables[table]!.rows.length > 1) {
+              await MetodoGastoController.deleteAll();
+              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                row = excel.tables[table]!.rows[i];
+                maximo = row.length;
+                if (i != 0) {
+                  MetodoPagoModel metodoGasto = MetodoPagoModel(
+                      id: 0 < maximo
+                          ? int.tryParse(row[0]!.value.toString())!
+                          : 1,
+                      nombre: 1 < maximo ? row[1]!.value.toString() : "",
+                      cambio: 2 < maximo
+                          ? double.parse(row[2]!.value.toString())
+                          : 1,
+                      denominacion:
+                          3 < maximo ? row[3]!.value.toString() : "MXN",
+                      status:
+                          4 < maximo ? int.parse(row[4]!.value.toString()) : 0,
+                      defecto:
+                          5 < maximo ? int.parse(row[5]!.value.toString()) : 1,
+                      color: 6 < maximo
+                          ? Color(int.parse(row[6]!.value.toString()))
+                          : LightThemeColors.primary);
+                  log("${metodoGasto.toJson()}");
+                  await MetodoGastoController.insert(metodoGasto);
                 }
               }
             } else {
@@ -139,5 +240,25 @@ class GenerateExcel {
     }
     showToast("Importacion finalizada");
     return true;
+  }
+
+  static Future<File?> toZip(List<File> archivos) async {
+    // Crea un archivo ZIP vacío
+    final archive = Archive();
+
+    for (var imagePath in archivos) {
+      final imageBytes = await imagePath.readAsBytes();
+      archive
+          .addFile(ArchiveFile(imagePath.path, imageBytes.length, imageBytes));
+    }
+    // Comprime el archivo ZIP
+    final zipEncoder = ZipEncoder();
+    final zipFileBytes = zipEncoder.encode(archive);
+    final direccion = await getDownloadsDirectory();
+    // Guarda el archivo ZIP en el sistema de archivos
+    final outputFile = File("${direccion!.path}/evidencia.zip");
+    await outputFile.writeAsBytes(zipFileBytes!);
+    showToast("Archivo Zip de evidencia creado");
+    return outputFile;
   }
 }

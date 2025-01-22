@@ -8,11 +8,11 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
+import 'package:gastos/utilities/dropbox_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 
 import '../models/categoria_model.dart';
 
@@ -115,10 +115,7 @@ class GastoProvider with ChangeNotifier {
     await MetodoGastoController.generarObtencion();
     metodo = await MetodoGastoController.getItems();
     metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
-    if (Preferences.tokenDropbox != "") {
-    } else {
-      showToast("msg");
-    }
+    DropboxGen.verificarLogeo();
   }
 
   ///funciones

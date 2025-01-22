@@ -7,21 +7,6 @@ import 'package:oktoast/oktoast.dart';
 class Auth {
   static Future<bool> obtener() async {
     final LocalAuthentication auth = LocalAuthentication();
-    final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
-    final bool canAuthenticate =
-        canAuthenticateWithBiometrics || await auth.isDeviceSupported();
-    final List<BiometricType> availableBiometrics =
-        await auth.getAvailableBiometrics();
-    if (availableBiometrics.isNotEmpty) {
-      showToast(
-          "Por favor, autentica tu acceso con tu método de seguridad biométrica para proteger tu información\nIngresa algun Pin, Contraseña, Huella Dacticar, etc.");
-      return false;
-    }
-    if (!canAuthenticate) {
-      showToast("Su dispositivo no soporta la autentificacion biometrica");
-      return false;
-    }
-
     try {
       final bool didAuthenticate = await auth.authenticate(
           localizedReason:
@@ -30,7 +15,7 @@ class Auth {
     } on PlatformException catch (e) {
       if (e.code == auth_error.notAvailable) {
         showToast(
-            "El dispositivo no tiene soporte de hardware para datos biométricos");
+            "El dispositivo no tiene soporte de hardware para la validacion biometrica");
         return false;
       } else if (e.code == auth_error.notEnrolled) {
         showToast(
