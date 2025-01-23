@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:archive/archive.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -17,71 +15,64 @@ import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:gastos/utilities/funcion_parser.dart' as parseo;
 import '../models/periodo_model.dart';
 
 class GenerateExcel {
-  static Future<bool> backUp(GastoProvider provider) async {
-    var excel = Excel.createExcel();
-    Sheet sheet1 = excel['Gastos'];
-    sheet1.appendRow(provider.listaGastos.first
-        .toJson()
-        .keys
-        .map((e) => TextCellValue(e.toString()))
-        .toList());
-    for (var element in provider.listaGastos) {
-      log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
-      sheet1.appendRow(
-          element.toJson().values.map((i) => TextCellValue("$i")).toList());
-    }
-
-    Sheet sheet2 = excel['Categorias'];
-    sheet2.appendRow(provider.listaCategoria.first
-        .toJson()
-        .keys
-        .map((e) => TextCellValue(e.toString()))
-        .toList());
-    for (var element in provider.listaCategoria) {
-      sheet2.appendRow(element
+  static Future<File?> backUp(GastoProvider provider) async {
+    try {
+      showToast("Generando csv de gastos");
+      var excel = Excel.createExcel();
+      Sheet sheet1 = excel['Gastos'];
+      sheet1.appendRow(provider.listaGastos.first
           .toJson()
-          .values
-          .map((i) => TextCellValue(i.toString()))
+          .keys
+          .map((e) => TextCellValue(e.toString()))
           .toList());
-    }
+      for (var element in provider.listaGastos) {
+        log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
+        sheet1.appendRow(
+            element.toJson().values.map((i) => TextCellValue("$i")).toList());
+      }
 
-    Sheet sheet3 = excel['MetodoPago'];
-    sheet3.appendRow(provider.metodo.first
-        .toJson()
-        .keys
-        .map((e) => TextCellValue(e.toString()))
-        .toList());
-    for (var element in provider.metodo) {
-      sheet3.appendRow(element
+      Sheet sheet2 = excel['Categorias'];
+      sheet2.appendRow(provider.listaCategoria.first
           .toJson()
-          .values
-          .map((i) => TextCellValue(i.toString()))
+          .keys
+          .map((e) => TextCellValue(e.toString()))
           .toList());
-    }
-    final direccion = await getDownloadsDirectory();
-    showToast("Guardando respaldo generado");
-    log("$direccion");
-    String rutaArchivo = '${direccion?.path}/gasto.xlsx';
-    File archivo = File(rutaArchivo);
-    await archivo.writeAsBytes(excel.encode()!);
-    return true;
-  }
+      for (var element in provider.listaCategoria) {
+        sheet2.appendRow(element
+            .toJson()
+            .values
+            .map((i) => TextCellValue(i.toString()))
+            .toList());
+      }
 
-  static Future<bool> compartir() async {
-    final direccion = await getDownloadsDirectory();
-    log("$direccion");
-    String rutaArchivo = '${direccion?.path}/gasto.xlsx';
-    final result = await Share.shareXFiles([XFile(rutaArchivo)]);
-    if (result.status == ShareResultStatus.success) {
-      showToast("Se compartio con exito el documento");
-    } else {
-      showToast("Hubo un problema al compartir");
+      Sheet sheet3 = excel['MetodoPago'];
+      sheet3.appendRow(provider.metodo.first
+          .toJson()
+          .keys
+          .map((e) => TextCellValue(e.toString()))
+          .toList());
+      for (var element in provider.metodo) {
+        sheet3.appendRow(element
+            .toJson()
+            .values
+            .map((i) => TextCellValue(i.toString()))
+            .toList());
+      }
+      final direccion = await getDownloadsDirectory();
+      showToast("Guardando respaldo generado");
+      log("$direccion");
+      String rutaArchivo = '${direccion?.path}/gasto.xlsx';
+      File archivo = File(rutaArchivo);
+      await archivo.writeAsBytes(excel.encode()!);
+      return archivo;
+    } catch (e) {
+      print(e);
+      showToast("Error al generar resplado de datos csv\n$e");
+      return null;
     }
-    return true;
   }
 
   static Future<bool> compartidoGlobal(File file) async {
@@ -95,14 +86,24 @@ class GenerateExcel {
     return true;
   }
 
-  static Future<bool> read(GastoProvider provider) async {
+  static Future<File?> importarGlobal() async {
     FilePickerResult? pick = await FilePicker.platform.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         dialogTitle: "Ingrese los datos de sus gastos",
-        allowedExtensions: ['xlsx']);
+        allowedExtensions: ['xlsx', 'zip']);
     if (pick != null) {
-      var bytes = File(pick.files.first.path!).readAsBytesSync();
+      var file = File(pick.files.first.path!);
+      return file;
+    } else {
+      showToast("No se optuvo ningun dato");
+      return null;
+    }
+  }
+
+  static Future<bool> read(File? csv) async {
+    if (csv != null) {
+      var bytes = csv.readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
       for (var table in excel.tables.keys) {
         List<Data?> row = [];
@@ -115,7 +116,6 @@ class GenerateExcel {
                 row = excel.tables[table]!.rows[i];
                 maximo = row.length;
                 //! 12 = ?
-                print(row.length - 1);
                 if (i != 0) {
                   GastoModelo gasto = GastoModelo(
                       id: 0 < maximo
@@ -152,10 +152,10 @@ class GenerateExcel {
                       evidencia: 10 < maximo
                           ? row[10]!.value.toString() == "null"
                               ? []
-                              : List<Uint8List>.from(jsonDecode(
+                              : List<String>.from(jsonDecode(
                                       row[10]!.value.toString())
                                   .map((x) =>
-                                      parseo.Parser.toUint8List(x.toString())))
+                                      x.toString()))
                           : [],
                       nota: 11 < maximo
                           ? row[11]!.value.toString() == "null"
@@ -235,30 +235,11 @@ class GenerateExcel {
             showToast("hoja $table no permitida");
         }
       }
+      showToast("Importacion finalizada");
     } else {
-      showToast("No se selecciono ningun archivo");
+      showToast("No se encontro ningun archivo");
     }
-    showToast("Importacion finalizada");
+
     return true;
-  }
-
-  static Future<File?> toZip(List<File> archivos) async {
-    // Crea un archivo ZIP vacío
-    final archive = Archive();
-
-    for (var imagePath in archivos) {
-      final imageBytes = await imagePath.readAsBytes();
-      archive
-          .addFile(ArchiveFile(imagePath.path, imageBytes.length, imageBytes));
-    }
-    // Comprime el archivo ZIP
-    final zipEncoder = ZipEncoder();
-    final zipFileBytes = zipEncoder.encode(archive);
-    final direccion = await getDownloadsDirectory();
-    // Guarda el archivo ZIP en el sistema de archivos
-    final outputFile = File("${direccion!.path}/evidencia.zip");
-    await outputFile.writeAsBytes(zipFileBytes!);
-    showToast("Archivo Zip de evidencia creado");
-    return outputFile;
   }
 }

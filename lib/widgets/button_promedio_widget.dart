@@ -29,7 +29,7 @@ class _ButtonPromedioWidgetState extends State<ButtonPromedioWidget> {
               Preferences.promedio
                   ? LineIcons.calendarWithWeekFocus
                   : LineIcons.calendarMinusAlt,
-              size: 20.sp),
+              size: 18.sp),
           label: Text(
               !Preferences.promedio
                   ? "Promedio\n-${Preferences.calculo}-"

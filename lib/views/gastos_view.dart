@@ -1,11 +1,14 @@
 import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/button_promedio_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import '../dialog/dialog_galeria.dart';
 import '../widgets/card_gasto_widget.dart';
 import '../widgets/historial_semanal_widget.dart';
 
@@ -24,10 +27,17 @@ class GastosView extends StatelessWidget {
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
                   IconButton(
+                      iconSize: 22.sp,
+                      onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) => DialogGaleria()),
+                      icon: Icon(LineIcons.photoVideo,
+                          color: LightThemeColors.grey)),
+                  IconButton(
+                      iconSize: 22.sp,
                       onPressed: () async =>
                           await Navigation.pushNamed(route: AppRoutes.opciones),
-                      icon: Icon(Icons.settings,
-                          size: 24.sp, color: Colors.white))
+                      icon: Icon(Icons.settings, color: LightThemeColors.grey))
                 ])
               ])
             ]),

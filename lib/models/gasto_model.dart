@@ -1,8 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:gastos/utilities/funcion_parser.dart';
-
 import 'periodo_model.dart';
 
 class GastoModelo {
@@ -16,7 +12,7 @@ class GastoModelo {
   String? ultimaFecha;
   PeriodoModelo periodo;
   int? gasto;
-  List<Uint8List> evidencia;
+  List<String> evidencia;
   String? nota;
   int? metodoPagoId;
 
@@ -46,7 +42,7 @@ class GastoModelo {
           String? ultimaFecha,
           PeriodoModelo? periodo,
           int? gasto,
-          List<Uint8List>? evidencia,
+          List<String>? evidencia,
           String? nota,
           int? metodoPagoId}) =>
       GastoModelo(
@@ -77,8 +73,8 @@ class GastoModelo {
       gasto: json["gasto"],
       evidencia: json["evidencia"] == null
           ? []
-          : List<Uint8List>.from(jsonDecode(json["evidencia"])
-              .map((x) => Parser.toUint8List(x.toString()))),
+          : List<String>.from(jsonDecode(json["evidencia"])
+              .map((x) => x.toString())),
       nota: json["nota"],
       metodoPagoId: json["metodo_pago_id"] ?? 1);
 
@@ -93,7 +89,7 @@ class GastoModelo {
         "ultima_fecha": ultimaFecha,
         "periodo": jsonEncode(periodo),
         "gasto": gasto,
-        "evidencia": jsonEncode(evidencia.map((x) => x.toString()).toList()),
+        "evidencia": evidencia.map((x) => x.toString()).toList(),
         "nota": nota,
         "metodo_pago_id": metodoPagoId ?? 1
       };

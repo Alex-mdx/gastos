@@ -1,27 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
-
-import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ImageGen {
-  static Future<void> generarImagen() async {
-    try {
-      var nuevo = await GastosController.getItemsOnlyEvidencia();
-      log("${nuevo.length}");
-      final direccion = await getDownloadsDirectory();
-      for (var element in nuevo) {
-        for (var imageBytes in element.evidencia) {
-          final filePath = "${direccion!.path}/gasto_${element.id}.jpg";
-          final file = File(filePath);
-          await file.writeAsBytes(imageBytes);
-        }
-      }
-    } catch (e) {
-      print("Error al guardar la imagen: $e");
-    }
-  }
-
   static Future<List<File>> obtenerImagenesEvidencia() async {
     List<File> gasto = [];
     final directory = await getDownloadsDirectory();
@@ -34,4 +15,45 @@ class ImageGen {
     return gasto;
   }
 
+  static Future<void> limpiar() async {
+    // Obtener la carpeta de descargas
+    showToast("eliminando evidencias");
+    final direccion = await getDownloadsDirectory();
+    if (direccion != null && await direccion.exists()) {
+      // Listar todos los archivos en la carpeta
+      final archivos = direccion.listSync();
+      for (var archivo in archivos) {
+        // Verificar si es un archivo y no una carpeta
+        if (archivo is File) {
+          try {
+            // Eliminar el archivo
+            await archivo.delete();
+            print('Archivo eliminado: ${archivo.path}');
+          } catch (e) {
+            print('Error al eliminar el archivo: ${archivo.path}, error: $e');
+          }
+        }
+      }
+    } else {
+      print('No se pudo encontrar la carpeta de descargas.');
+    }
+  }
+
+  static Future<File?> find(String nombre) async {
+    // Obtener el directorio de descargas
+    final directory = await getDownloadsDirectory();
+    // Listar todos los elementos dentro del directorio
+    final elementos = directory!.listSync();
+
+    // Buscar el archivo por nombre
+    for (var elemento in elementos) {
+      if (elemento is File && elemento.path.endsWith(nombre)) {
+        print('Archivo encontrado: ${elemento.path}');
+        return elemento; // Retornar el archivo encontrado
+      }
+    }
+
+    print('Archivo no encontrado.');
+    return null; // Retornar null si no se encuentra el archivo
+  }
 }

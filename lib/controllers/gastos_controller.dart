@@ -1,4 +1,10 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:gastos/utilities/funcion_parser.dart' as pr;
 import 'package:gastos/utilities/preferences.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 import '../models/gasto_model.dart';
@@ -50,6 +56,35 @@ class GastosController {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
+  }
+
+  static Future<void> base64tojpeg() async {
+    try {
+      var nuevo = await getItemsOnlyEvidencia();
+      log("${nuevo.length}");
+      final direccion = await getDownloadsDirectory();
+      showToast("Generando imagenes desde las evidencias");
+      for (var element in nuevo) {
+        List<String> evidencia = [];
+        for (var i = 0; i < element.evidencia.length; i++) {
+          var bytes = pr.Parser.toUint8List(element.evidencia[i]);
+          if (bytes != null) {
+            final filePath =
+                "${direccion!.path}/gasto_${i + 1}_${element.id}.jpg";
+            evidencia.add("gasto_${i + 1}_${element.id}.jpg");
+            final file = File(filePath);
+            await file.writeAsBytes(bytes);
+          } else {
+            print("mal parseo: ${element.evidencia[i]}");
+          }
+        }
+        var newModel = element.copyWith(evidencia: evidencia);
+        await updateItem(newModel);
+      }
+      showToast("Evidencias guardadas en el dispositivo");
+    } catch (e) {
+      print("Error al guardar la imagen: $e");
+    }
   }
 
   static Future<List<GastoModelo>> getConfigurado() async {
