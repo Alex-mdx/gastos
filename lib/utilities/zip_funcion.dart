@@ -52,7 +52,7 @@ class ZipFuncion {
     final zipFileBytes = zipEncoder.encode(archive);
     final direccion = await getDownloadsDirectory();
     // Guarda el archivo ZIP en el sistema de archivos
-    final outputFile = File("${direccion!.path}/evidencia.zip");
+    final outputFile = File("${direccion!.path}/respaldo_CG.zip");
     await outputFile.writeAsBytes(zipFileBytes!);
     showToast("Archivo Zip de evidencia creado");
     return outputFile;
