@@ -73,7 +73,7 @@ class GastoModelo {
       gasto: json["gasto"],
       evidencia: json["evidencia"] == null
           ? []
-          : List<String>.from(jsonDecode(json["evidencia"])
+          : List<String>.from((jsonDecode(json["evidencia"]))
               .map((x) => x.toString())),
       nota: json["nota"],
       metodoPagoId: json["metodo_pago_id"] ?? 1);
@@ -89,7 +89,7 @@ class GastoModelo {
         "ultima_fecha": ultimaFecha,
         "periodo": jsonEncode(periodo),
         "gasto": gasto,
-        "evidencia": evidencia.map((x) => x.toString()).toList(),
+        "evidencia": jsonEncode(evidencia.map((x) => x.toString()).toList()),
         "nota": nota,
         "metodo_pago_id": metodoPagoId ?? 1
       };

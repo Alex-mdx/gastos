@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
 class ImageGen {
   static Future<List<File>> obtenerImagenesEvidencia() async {
@@ -57,13 +56,14 @@ class ImageGen {
     return null; // Retornar null si no se encuentra el archivo
   }
 
-  static Future<File?> generar({required Uint8List archivo, required String name}) async {
-  final directory = await getDownloadsDirectory();
-  // Crea un archivo en la ruta especificada
-  final file = File("${directory!.path}/$name");
-  // Escribe los datos del Uint8List en el archivo
-  await file.writeAsBytes(archivo);
-
-  return file;
-}
+  static Future<File?> generar(
+      {required Uint8List archivo, required String name}) async {
+    final directory = await getDownloadsDirectory();
+    // Crea un archivo en la ruta especificada
+    final file = File("${directory!.path}/$name.jpeg");
+    // Escribe los datos del Uint8List en el archivo
+    await file.writeAsBytes(archivo);
+    print("archivo generado ${file.path}");
+    return file;
+  }
 }

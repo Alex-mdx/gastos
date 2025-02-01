@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
@@ -91,7 +92,8 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         children: widget.gasto.evidencia.map((e) {
                         return IconButton(
                             icon: Icon(Icons.photo, size: 20.sp),
-                            onPressed: () {
+                            onPressed: () async {
+                              var file = await ImageGen.find(e);
                               showDialog(
                                   context: context,
                                   builder: (context) => Column(children: [
@@ -102,13 +104,16 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                                 maxScale: PhotoViewComputedScale
                                                         .contained *
                                                     2,
-                                                child: Image.memory(e,
-                                                    errorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        Icon(Icons.image,
-                                                            size: 30.sp),
-                                                    fit: BoxFit.contain))),
+                                                child: file == null
+                                                    ? Icon(Icons.image,
+                                                        size: 30.sp)
+                                                    : Image.file(file,
+                                                        errorBuilder: (context,
+                                                                error,
+                                                                stackTrace) =>
+                                                            Icon(Icons.image,
+                                                                size: 30.sp),
+                                                        fit: BoxFit.contain))),
                                         IconButton(
                                             onPressed: () => Navigation.pop(),
                                             icon: Icon(Icons.arrow_back_ios,

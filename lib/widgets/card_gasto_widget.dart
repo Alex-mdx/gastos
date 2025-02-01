@@ -6,6 +6,7 @@ import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/dialog/dialog_foto_gasto.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
@@ -233,10 +234,16 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     widget.provider.gastoActual = tempModel;
                                   })),
                           badges.Badge(
+                              badgeStyle: badges.BadgeStyle(
+                                  badgeColor: LightThemeColors.primary),
                               showBadge:
                                   widget.provider.imagenesActual.isNotEmpty,
                               badgeContent: Text(
-                                  "${widget.provider.imagenesActual.length}"),
+                                  "${widget.provider.imagenesActual.length}",
+                                  style: TextStyle(
+                                      color: LightThemeColors.second,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold)),
                               child: IconButton.filled(
                                   onPressed: () => showDialog(
                                       context: context,
@@ -308,6 +315,17 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         loadingTitle: "Ingresando...",
                         onAcceptPressed: (context) async {
                           final now = DateTime.now();
+                          var id = (await GastosController.getLastId());
+                          //generar files en biblioteca
+                          List<String> names = [];
+                          for (var i = 0;
+                              i < widget.provider.imagenesActual.length;
+                              i++) {
+                            await ImageGen.generar(
+                                archivo: widget.provider.imagenesActual[i],
+                                name: "gasto_${id}_$i");
+                            names.add("gasto_${id}_$i");
+                          }
                           //?La tabla de gasto es para notificar si dicha tarjeta es modificable
                           final finalTemp = widget.provider.gastoActual
                               .copyWith(
@@ -327,7 +345,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   dia: widget.provider.gastoActual.dia ??
                                       (now.day).toString(),
                                   mes: widget.provider.gastoActual.mes ??
-                                      (now.month).toString());
+                                      (now.month).toString(),
+                                  evidencia: names);
                           log("${finalTemp.toJson()}");
                           await GastosController.insert(finalTemp);
                           widget.provider.listaGastos =

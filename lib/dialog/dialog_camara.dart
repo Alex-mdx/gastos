@@ -39,9 +39,6 @@ class _DialogCamaraState extends State<DialogCamara> {
                       });
                       Navigation.pop();
                     }
-                    final modelTemp = provider.gastoActual
-                        .copyWith(evidencia: provider.imagenesActual);
-                    provider.gastoActual = modelTemp;
                   },
                   label: Text('Camara', style: TextStyle(fontSize: 16.sp)),
                   icon: Icon(Icons.camera_alt, size: 20.sp)),
@@ -61,9 +58,6 @@ class _DialogCamaraState extends State<DialogCamara> {
                       }
                       Navigation.pop();
                     }
-                    final modelTemp = provider.gastoActual
-                        .copyWith(evidencia: provider.imagenesActual);
-                    provider.gastoActual = modelTemp;
                   },
                   label: Text('Galeria', style: TextStyle(fontSize: 16.sp)),
                   icon: Icon(Icons.image_search, size: 20.sp))

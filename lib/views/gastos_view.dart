@@ -27,17 +27,18 @@ class GastosView extends StatelessWidget {
                 OverflowBar(spacing: 1.w, children: [
                   const ButtonPromedioWidget(),
                   IconButton(
-                      iconSize: 22.sp,
+                      iconSize: 24.sp,
                       onPressed: () => showDialog(
                           context: context,
                           builder: (context) => DialogGaleria()),
-                      icon: Icon(LineIcons.photoVideo,
-                          color: LightThemeColors.grey)),
+                      icon: Icon(LineIcons.imagesAlt,
+                          color: LightThemeColors.second)),
                   IconButton(
-                      iconSize: 22.sp,
+                      iconSize: 24.sp,
                       onPressed: () async =>
                           await Navigation.pushNamed(route: AppRoutes.opciones),
-                      icon: Icon(Icons.settings, color: LightThemeColors.grey))
+                      icon:
+                          Icon(Icons.settings, color: LightThemeColors.second))
                 ])
               ])
             ]),

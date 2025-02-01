@@ -71,10 +71,7 @@ class DialogFotoGasto extends StatelessWidget {
                                   loadingTitle: 'Eliminando',
                                   onAcceptPressed: (context) async {
                                     provider.imagenesActual.remove(e);
-                                    final tempModel = provider.gastoActual
-                                        .copyWith(
-                                            evidencia: provider.imagenesActual);
-                                    provider.gastoActual = tempModel;
+                                    
                                     Navigation.pop();
                                   }),
                               icon:
