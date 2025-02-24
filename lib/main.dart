@@ -8,7 +8,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:dropbox_client/dropbox_client.dart';
+///import 'package:dropbox_client/dropbox_client.dart';
 import 'utilities/apis/rutas_app.dart';
 import 'utilities/navegacion_provider.dart';
 import 'utilities/preferences.dart';
@@ -28,7 +28,7 @@ Future<void> main() async {
   await MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
-  await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
+  ///await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
     runApp(MultiProvider(providers: [

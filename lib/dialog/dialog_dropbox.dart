@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:dropbox_client/dropbox_client.dart';
+//import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/dropbox_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
@@ -33,25 +33,24 @@ class _DialogDropboxState extends State<DialogDropbox> {
               icon:
                   Icon(Icons.login, size: 20.sp, color: LightThemeColors.green),
               onPressed: () async {
-                var tipo = await DropboxGen.verificarLogeo();
+                /* var tipo = await DropboxGen.verificarLogeo();
                 if (!tipo) {
                   await Dropbox.authorize();
                   await DropboxGen.verificarLogeo();
                 }
-                setState(() {});
+                setState(() {}); */
               },
               label: Text("Iniciar sesion", style: TextStyle(fontSize: 15.sp))),
         if (Preferences.tokenDropbox != "")
-          Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () async {
-                    if (send) {
-                      setState(() {
-                        send = false;
-                        proceso = "En proceso";
-                      });
-                      final result = await Dropbox.getAccountName();
+          Column(children: [
+            ElevatedButton(
+                onPressed: () async {
+                  if (send) {
+                    setState(() {
+                      send = false;
+                      proceso = "En proceso";
+                    });
+                    /* final result = await Dropbox.getAccountName();
                       setState(() {
                         proceso = "Bienvenido a dropbox $result";
                       });
@@ -69,36 +68,35 @@ class _DialogDropboxState extends State<DialogDropbox> {
                         showToast("No se encontro ningun archivo de respaldo");
                       } else {
                         showToast("viva la vida");
-                      }
-                      setState(() {
-                        send = true;
-                        proceso = "Sin proceso";
-                      });
-                    }
-                  },
-                  child: proceso == "Sin proceso"
-                      ? Text("Sincronizar",
-                          style: TextStyle(
-                              fontSize: 15.sp,
-                              color: LightThemeColors.darkBlue,
-                              fontWeight: FontWeight.bold))
-                      : CircularProgressIndicator()),
-              Text(proceso,
-                  textAlign: TextAlign.center,
-                  maxLines: 4,
-                  style:
-                      TextStyle(fontSize: 14.sp, fontStyle: FontStyle.italic)),
-              ElevatedButton.icon(
-                  style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(
-                          send ? null : LightThemeColors.grey)),
-                  onPressed: () async {
-                    if (send) {
-                      setState(() {
-                        send = false;
-                      });
+                      } */
+                    setState(() {
+                      send = true;
+                      proceso = "Sin proceso";
+                    });
+                  }
+                },
+                child: proceso == "Sin proceso"
+                    ? Text("Sincronizar",
+                        style: TextStyle(
+                            fontSize: 15.sp,
+                            color: LightThemeColors.darkBlue,
+                            fontWeight: FontWeight.bold))
+                    : CircularProgressIndicator()),
+            Text(proceso,
+                textAlign: TextAlign.center,
+                maxLines: 4,
+                style: TextStyle(fontSize: 14.sp, fontStyle: FontStyle.italic)),
+            ElevatedButton.icon(
+                style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                        send ? null : LightThemeColors.grey)),
+                onPressed: () async {
+                  if (send) {
+                    setState(() {
+                      send = false;
+                    });
 
-                      await Dropbox.unlink();
+                    /* await Dropbox.unlink();
                       var token = await Dropbox.getAccessToken();
                       log("token: $token");
                       if (token == null) {
@@ -107,20 +105,18 @@ class _DialogDropboxState extends State<DialogDropbox> {
                           Preferences.tokenDropbox = "";
                         });
                         showToast("Se ha cerrado su sesion de dropbox");
-                      }
-                      setState(() {
-                        send = true;
-                      });
-                    } else {
-                      showToast("Proceso en curso");
-                    }
-                  },
-                  label:
-                      Text("Cerrar sesion", style: TextStyle(fontSize: 15.sp)),
-                  icon: Icon(Icons.logout,
-                      size: 20.sp, color: LightThemeColors.red)),
-            ],
-          )
+                      } */
+                    setState(() {
+                      send = true;
+                    });
+                  } else {
+                    showToast("Proceso en curso");
+                  }
+                },
+                label: Text("Cerrar sesion", style: TextStyle(fontSize: 15.sp)),
+                icon: Icon(Icons.logout,
+                    size: 20.sp, color: LightThemeColors.red))
+          ])
       ])
     ]));
   }

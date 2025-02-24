@@ -115,7 +115,7 @@ class GastoProvider with ChangeNotifier {
     await MetodoGastoController.generarObtencion();
     metodo = await MetodoGastoController.getItems();
     metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
-    DropboxGen.verificarLogeo();
+    //DropboxGen.verificarLogeo();
   }
 
   ///funciones
