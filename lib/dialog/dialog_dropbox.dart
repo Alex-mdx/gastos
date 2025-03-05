@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 //import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
-import 'package:gastos/utilities/dropbox_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';

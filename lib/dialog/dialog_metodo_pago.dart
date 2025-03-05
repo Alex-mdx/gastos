@@ -4,6 +4,7 @@ import 'package:gastos/dialog/dialog_metodo_pago_crear.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -34,7 +35,10 @@ class DialogMetodoPago extends StatelessWidget {
                             selectedTileColor:
                                 tipo ? LightThemeColors.grey : null,
                             onTap: () {
-                              provider.metodoSelect = metodo;
+                              if (tipo) {
+                                provider.metodoSelect = metodo;
+                                Navigation.pop();
+                              }
                             },
                             selected: tipo
                                 ? provider.metodoSelect?.id == metodo.id
@@ -52,7 +56,8 @@ class DialogMetodoPago extends StatelessWidget {
                                         ? LightThemeColors.green
                                         : LightThemeColors.darkBlue),
                             title: SubstringHighlight(
-                                text: "${metodo.nombre} - Color",
+                                text:
+                                    "${metodo.nombre}${tipo ? "" : " - Color"}",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 term: "Color",
@@ -64,9 +69,11 @@ class DialogMetodoPago extends StatelessWidget {
                                     color: metodo.color,
                                     fontSize: (14).sp,
                                     fontWeight: FontWeight.bold)),
-                            subtitle: Text(
-                                "\$${metodo.cambio} - ${metodo.denominacion}",
-                                style: TextStyle(fontSize: 14.sp)),
+                            subtitle: !tipo
+                                ? Text(
+                                    "\$${metodo.cambio} - ${metodo.denominacion}",
+                                    style: TextStyle(fontSize: 14.sp))
+                                : null,
                             trailing: metodo.defecto == 0
                                 ? OverflowBar(children: [
                                     IconButton(

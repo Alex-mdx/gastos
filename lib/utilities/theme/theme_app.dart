@@ -23,7 +23,6 @@ ThemeData light = ThemeData(
             fontWeight: FontWeight.bold),
         titleSmall: TextStyle(color: LightThemeColors.darkBlue)),
     scaffoldBackgroundColor: LightThemeColors.background,
-    dialogBackgroundColor: LightThemeColors.dialogbackground,
     cardTheme: const CardTheme(elevation: 2, color: LightThemeColors.second),
     iconTheme: const IconThemeData(color: LightThemeColors.primary),
     iconButtonTheme: IconButtonThemeData(
@@ -84,7 +83,6 @@ ThemeData dark = ThemeData(
           fontWeight: FontWeight.bold),
       titleSmall: TextStyle(color: DarkThemeColors.darkBlue)),
   scaffoldBackgroundColor: DarkThemeColors.background,
-  dialogBackgroundColor: DarkThemeColors.dialogbackground,
   cardTheme: const CardTheme(elevation: 2, color: DarkThemeColors.second),
   iconTheme: const IconThemeData(color: DarkThemeColors.primary),
   iconButtonTheme: IconButtonThemeData(

@@ -81,14 +81,39 @@ class _SettingViewState extends State<SettingView> {
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(children: [
+                              BannerExample(tipo: 0),
                               const SettingMetodoPago(),
+                              const Divider(),
+                              Column(
+                                children: [
+                                  Text("Bidones de presupuesto",
+                                      style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold)),
+                                  Card(
+                                      elevation: 0,
+                                      color: Colors.white,
+                                      child: Padding(
+                                          padding: EdgeInsets.all(8.sp),
+                                          child: Wrap(children: [
+                                            Text("Sin bidones creados",
+                                                style:
+                                                    TextStyle(fontSize: 16.sp))
+                                          ]))),
+                                  ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Crear",
+                                          style: TextStyle(
+                                              color: LightThemeColors.green,
+                                              fontSize: 16.sp)))
+                                ]
+                              ),
                               BannerExample(tipo: 0),
                               const SettingCalidadImagen(),
                               const Divider(),
                               const SettingsRango(),
                               const Divider(),
                               const SettingPrimerDiaWidget(),
-                              const Divider(),
                               BannerExample(tipo: 0),
                               SettingPresupuestoWidget(provider: provider),
                               Divider(),

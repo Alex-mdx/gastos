@@ -8,6 +8,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
 ///import 'package:dropbox_client/dropbox_client.dart';
 import 'utilities/apis/rutas_app.dart';
 import 'utilities/navegacion_provider.dart';
@@ -16,11 +17,10 @@ import 'utilities/services/navigation_key.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
+  HttpClient createHttpClient(SecurityContext? context) =>
+      super.createHttpClient(context)
+        ..badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
 }
 
 Future<void> main() async {
@@ -28,6 +28,7 @@ Future<void> main() async {
   await MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
+
   ///await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
@@ -41,9 +42,8 @@ Future<void> main() async {
 class Main extends StatelessWidget {
   const Main({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Sizer(builder: (context, orientation, deviceType) {
-      return OKToast(
+  Widget build(BuildContext context) => Sizer(
+      builder: (context, orientation, deviceType) => OKToast(
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
           duration: const Duration(seconds: 4),
@@ -62,7 +62,5 @@ class Main extends StatelessWidget {
               theme: light,
               navigatorKey: NavigationKey.navigatorKey,
               initialRoute: AppRoutes.initialRoute,
-              routes: AppRoutes.routes));
-    });
-  }
+              routes: AppRoutes.routes)));
 }

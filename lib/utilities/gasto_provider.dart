@@ -8,7 +8,6 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
-import 'package:gastos/utilities/dropbox_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
