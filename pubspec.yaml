@@ -11,6 +11,7 @@ dependencies:
   animated_read_more_text: ^0.0.6
   archive: ^3.6.1
   badges: ^3.1.2
+  calendar_date_picker2: ^1.1.9
   cupertino_icons: ^1.0.6
   ##dropbox_client: ^1.0.0
   excel: ^4.0.6
@@ -47,6 +48,7 @@ dependencies:
   sqflite: ^2.3.3+1
   substring_highlight: ^1.0.33
   syncfusion_flutter_calendar: ^28.1.39
+  syncfusion_flutter_sliders: ^28.2.9
   timelines_plus: ^1.0.2
   youtube_player_flutter: ^9.1.1
 
