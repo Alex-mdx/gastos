@@ -89,7 +89,6 @@ class MetodoGastoController {
 
   static Future<List<MetodoPagoModel>> getItems() async {
     final db = await database();
-
     List<MetodoPagoModel> metodo = [];
     final data = await db.query(nombreDB);
     for (var element in data) {

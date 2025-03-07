@@ -16,6 +16,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:badges/badges.dart' as bd;
 import '../dialog/dialog_historial_pago.dart';
 import '../models/gasto_model.dart';
+import '../utilities/fecha_parser.dart';
 
 class HistorialView extends StatefulWidget {
   const HistorialView({super.key});
@@ -220,7 +221,7 @@ Widget historial(
                         style: TextStyle(fontSize: 16.sp)),
                     SubstringHighlight(
                         text:
-                            "${provider.convertirHora(fecha: appointment.startTime)} - Metodo de pago: ${provider.metodo.firstWhereOrNull((element) => element.id == int.parse(appointment.notes!))?.nombre ?? "Desconocido"}",
+                            "${FechaParser.convertirHora(fecha: appointment.startTime)} - Metodo de pago: ${provider.metodo.firstWhereOrNull((element) => element.id == int.parse(appointment.notes!))?.nombre ?? "Desconocido"}",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
                         term: provider.metodo

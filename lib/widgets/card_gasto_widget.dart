@@ -20,6 +20,7 @@ import '../dialog/dialog_categorias.dart';
 import '../models/categoria_model.dart';
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
+import '../utilities/fecha_parser.dart';
 
 class CardGastoWidget extends StatefulWidget {
   final GastoProvider provider;
@@ -63,17 +64,18 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       lastDate: now)) ??
                                   now;
                               final modelTemp = widget.provider.gastoActual.copyWith(
-                                  fecha: widget.provider.convertirFechaHora(
-                                      fecha: widget.provider.selectFecha?.copyWith(
-                                              year: widget
-                                                  .provider.selectFecha?.year,
-                                              month: widget
-                                                  .provider.selectFecha?.month,
-                                              day: widget
-                                                  .provider.selectFecha?.day,
-                                              hour: now.hour,
-                                              minute: now.minute,
-                                              second: now.second) ??
+                                  fecha: FechaParser.convertirFechaHora(
+                                      fecha: widget.provider.selectFecha
+                                              ?.copyWith(
+                                                  year: widget.provider
+                                                      .selectFecha?.year,
+                                                  month: widget.provider
+                                                      .selectFecha?.month,
+                                                  day: widget.provider
+                                                      .selectFecha?.day,
+                                                  hour: now.hour,
+                                                  minute: now.minute,
+                                                  second: now.second) ??
                                           now),
                                   dia: (widget.provider.selectFecha?.day ??
                                           now.day)
@@ -85,7 +87,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             },
                             icon: Icon(Icons.edit_calendar, size: 22.sp),
                             label: Text(
-                                "Fecha de ingreso\n${widget.provider.convertirFecha(fecha: widget.provider.selectFecha ?? now)}",
+                                "Fecha de ingreso\n${FechaParser.convertirFecha(fecha: widget.provider.selectFecha ?? now)}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -336,12 +338,12 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   ultimaFecha: widget.provider.selectProxima ==
                                           null
                                       ? null
-                                      : widget.provider.convertirFecha(
+                                      : FechaParser.convertirFecha(
                                           fecha:
                                               widget.provider.selectProxima!),
                                   fecha: widget.provider.gastoActual.fecha ??
-                                      widget.provider
-                                          .convertirFechaHora(fecha: now),
+                                      FechaParser.convertirFechaHora(
+                                          fecha: now),
                                   dia: widget.provider.gastoActual.dia ??
                                       (now.day).toString(),
                                   mes: widget.provider.gastoActual.mes ??

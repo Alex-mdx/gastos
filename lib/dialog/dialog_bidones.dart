@@ -18,6 +18,7 @@ class _DialogBidonesState extends State<DialogBidones> {
       Text("Bidones de Presupuesto",
           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
       Divider(height: 1.h),
+      
       Card(
           child: Column(children: [
         ElevatedButton.icon(

@@ -8,6 +8,7 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
+import 'package:gastos/utilities/fecha_parser.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
@@ -123,21 +124,6 @@ class GastoProvider with ChangeNotifier {
     return mConvertida;
   }
 
-  String convertirFecha({required DateTime fecha}) {
-    var fConvertida = DateFormat('yyyy-MM-dd').format(fecha);
-    return fConvertida;
-  }
-
-  String convertirFechaHora({required DateTime fecha}) {
-    String formatoFechaHora = DateFormat('yyyy-MM-dd HH:mm:ss').format(fecha);
-    return formatoFechaHora;
-  }
-
-  String convertirHora({required DateTime fecha}) {
-    String formatoFechaHora = DateFormat('HH:mm:ss').format(fecha);
-    return formatoFechaHora;
-  }
-
   double generarPago({required List<double> montos}) {
     double monto = 0.0;
     for (var element in montos) {
@@ -235,16 +221,16 @@ class GastoProvider with ChangeNotifier {
   List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales) {
     DateTime ahora = DateTime.now();
     int diaSemanaActual = ahora.weekday;
-    DateTime inicioSemana = DateTime.parse(convertirFecha(
+    DateTime inicioSemana = DateTime.parse(FechaParser.convertirFecha(
         fecha: ahora.subtract(Duration(days: diaSemanaActual - 1))));
     DateTime finSemana = DateTime(
-        DateTime.parse(convertirFecha(
+        DateTime.parse(FechaParser.convertirFecha(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .year,
-        DateTime.parse(convertirFecha(
+        DateTime.parse(FechaParser.convertirFecha(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .month,
-        DateTime.parse(convertirFecha(
+        DateTime.parse(FechaParser.convertirFecha(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .day,
         23,

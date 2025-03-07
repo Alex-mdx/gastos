@@ -181,4 +181,8 @@ class GastosController {
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
     await db.delete(nombreDB);
   }
+
+  
+
+  
 }

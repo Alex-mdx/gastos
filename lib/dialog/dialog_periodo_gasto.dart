@@ -10,6 +10,8 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../utilities/fecha_parser.dart';
+
 class DialogPeriodoGasto extends StatefulWidget {
   final GastoProvider provider;
   const DialogPeriodoGasto({super.key, required this.provider});
@@ -112,7 +114,7 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                       await Dialogs.showMorph(
                           title: 'Guardar periodo',
                           description:
-                              '¿Esta seguro de recordar periodicamente este tipo de gasto cada ${year != 0 ? "${widget.provider.convertirNumero(moneda: year)} año(s) " : ""}${mes != 0 ? "${widget.provider.convertirNumero(moneda: mes)} mes(es) " : ""}${dia != 0 ? "${widget.provider.convertirNumero(moneda: dia)} dia(s) " : ""}?\nProximo recordatorio: ${provider.convertirFecha(fecha: fechaModificada)}',
+                              '¿Esta seguro de recordar periodicamente este tipo de gasto cada ${year != 0 ? "${widget.provider.convertirNumero(moneda: year)} año(s) " : ""}${mes != 0 ? "${widget.provider.convertirNumero(moneda: mes)} mes(es) " : ""}${dia != 0 ? "${widget.provider.convertirNumero(moneda: dia)} dia(s) " : ""}?\nProximo recordatorio: ${FechaParser.convertirFecha(fecha: fechaModificada)}',
                           loadingTitle: "Guardando",
                           onAcceptPressed: (context) async {
                             PeriodoModelo newPeriodo = PeriodoModelo(

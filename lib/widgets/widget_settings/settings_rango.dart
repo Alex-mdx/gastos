@@ -1,11 +1,10 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../utilities/fecha_parser.dart';
 import '../../utilities/preferences.dart';
 import '../../utilities/theme/theme_color.dart';
 
@@ -28,7 +27,6 @@ class _SettingsRangoState extends State<SettingsRango> {
       SingleSelectController(Preferences.calculo);
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<GastoProvider>(context);
     return Column(children: [
       Text("Rango maximo para calculo de gasto",
           textAlign: TextAlign.center,
@@ -42,7 +40,7 @@ class _SettingsRangoState extends State<SettingsRango> {
             int rango =
                 rangos.indexWhere((element) => element.contains(selectedItem));
             return Text(
-                "$selectedItem\n${rango == 0 ? "${provider.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 31)))} - ${provider.convertirFecha(fecha: DateTime.now())}" : rango == 1 ? "${provider.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 60)))} - ${provider.convertirFecha(fecha: DateTime.now())}" : rango == 2 ? "${provider.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 91)))} - ${provider.convertirFecha(fecha: DateTime.now())}" : rango == 3 ? "${provider.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 183)))} - ${provider.convertirFecha(fecha: DateTime.now())}" : "${provider.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 365)))} - ${provider.convertirFecha(fecha: DateTime.now())}"}",
+                "$selectedItem\n${rango == 0 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 31)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 1 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 60)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 2 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 91)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 3 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 183)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 365)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}"}",
                 style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold));
           },
           hintText: 'Seleccione rango de calculo de gasto',
