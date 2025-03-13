@@ -52,39 +52,44 @@ class _DialogGaleriaState extends State<DialogGaleria> {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
                         File tipo = snapshot.data![index];
-                        return Card(
-                            child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(borderRadius),
-                                child: DetectionMime.tipo(tipo) == "jpeg"
-                                    ? Image.file(tipo,
-                                        fit: BoxFit.cover,
-                                        filterQuality: FilterQuality.low)
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                            Text(pt.basename(tipo.path),
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                style:
-                                                    TextStyle(fontSize: 14.sp)),
-                                            DetectionMime.tipo(tipo) == "xlsx"
-                                                ? Icon(LineIcons.excelFileAlt,
-                                                    size: 24.sp,
-                                                    color:
-                                                        LightThemeColors.green)
-                                                : DetectionMime.tipo(tipo) ==
-                                                        "zip"
-                                                    ? Icon(Icons.compress,
-                                                        size: 24.sp,
-                                                        color: LightThemeColors
-                                                            .yellow)
-                                                    : Icon(Icons.not_interested,
-                                                        size: 24.sp)
-                                          ])));
+                        return GestureDetector(
+                          onTap: () => print(tipo),
+                          child: Card(
+                              child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(borderRadius),
+                                  child: DetectionMime.tipo(tipo) == "jpeg"
+                                      ? Image.file(tipo,
+                                          fit: BoxFit.cover,
+                                          filterQuality: FilterQuality.low)
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                              Text(pt.basename(tipo.path),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 14.sp)),
+                                              DetectionMime.tipo(tipo) == "xlsx"
+                                                  ? Icon(LineIcons.excelFileAlt,
+                                                      size: 24.sp,
+                                                      color: LightThemeColors
+                                                          .green)
+                                                  : DetectionMime.tipo(tipo) ==
+                                                          "zip"
+                                                      ? Icon(Icons.compress,
+                                                          size: 24.sp,
+                                                          color:
+                                                              LightThemeColors
+                                                                  .yellow)
+                                                      : Icon(
+                                                          Icons.not_interested,
+                                                          size: 24.sp)
+                                            ]))),
+                        );
                       }));
             } else if (snapshot.hasError) {
               return Text("Error: \n${snapshot.error}");
