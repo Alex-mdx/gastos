@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId = "com.modx.gastos"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 3
         versionCode = 4
         versionName = "0.1.3"
         multiDexEnabled true
