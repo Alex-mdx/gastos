@@ -11,6 +11,7 @@ class BidonesModel {
   DateTime fechaInicio;
   DateTime fechaFinal;
   int cerrado;
+  List<int> gastos;
 
   BidonesModel(
       {required this.id,
@@ -22,7 +23,8 @@ class BidonesModel {
       required this.categoria,
       required this.fechaInicio,
       required this.fechaFinal,
-      required this.cerrado});
+      required this.cerrado,
+      required this.gastos});
 
   BidonesModel copyWith(
           {int? id,
@@ -34,7 +36,8 @@ class BidonesModel {
           List<int>? categoria,
           DateTime? fechaInicio,
           DateTime? fechaFinal,
-          int? cerrado}) =>
+          int? cerrado,
+          List<int>? gastos}) =>
       BidonesModel(
           id: id ?? this.id,
           identificador: identificador ?? this.identificador,
@@ -45,7 +48,8 @@ class BidonesModel {
           categoria: categoria ?? this.categoria,
           fechaInicio: fechaInicio ?? this.fechaInicio,
           fechaFinal: fechaFinal ?? this.fechaFinal,
-          cerrado: cerrado ?? this.cerrado);
+          cerrado: cerrado ?? this.cerrado,
+          gastos: gastos ?? this.gastos);
 
   factory BidonesModel.fromJson(Map<String, dynamic> json) => BidonesModel(
       id: json["id"],
@@ -61,7 +65,10 @@ class BidonesModel {
           : List<int>.from(jsonDecode(json["categoria"]).map((x) => x)),
       fechaInicio: DateTime.parse(json["fecha_inicio"]),
       fechaFinal: DateTime.parse(json["fecha_final"]),
-      cerrado: json["cerrado"]);
+      cerrado: json["cerrado"],
+      gastos: json["gastos"] == null
+          ? []
+          : List<int>.from(jsonDecode(json["gastos"]).map((x) => x)));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -69,10 +76,11 @@ class BidonesModel {
         "nombre": nombre,
         "monto_inicial": montoInicial,
         "monto_final": montoFinal,
-        "metodo_pago": List<dynamic>.from(metodoPago.map((x) => x)),
-        "categoria": List<dynamic>.from(categoria.map((x) => x)),
+        "metodo_pago": List<int>.from(metodoPago.map((x) => x)),
+        "categoria": List<int>.from(categoria.map((x) => x)),
         "fecha_inicio": fechaInicio.toIso8601String(),
         "fecha_final": fechaFinal.toIso8601String(),
-        "cerrado": cerrado
+        "cerrado": cerrado,
+        "gastos": List<int>.from(metodoPago.map((x) => x))
       };
 }

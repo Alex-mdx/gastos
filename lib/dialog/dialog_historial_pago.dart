@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../utilities/services/navigation_services.dart';
+import '../utilities/textos.dart';
 
 class DialogHistorialPago extends StatefulWidget {
   final GastoModelo gasto;
@@ -71,7 +72,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                          "${provider.metodo.firstWhereOrNull((element) => element.id == widget.gasto.metodoPagoId)?.nombre}: \$${provider.convertirNumero(moneda: widget.gasto.monto!)}",
+                          "${provider.metodo.firstWhereOrNull((element) => element.id == widget.gasto.metodoPagoId)?.nombre}: \$${Textos.moneda(moneda: widget.gasto.monto!)}",
                           style: TextStyle(fontSize: 15.sp)),
                       Text(
                           "Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == widget.gasto.categoriaId)?.nombre ?? "Desconocido"}",

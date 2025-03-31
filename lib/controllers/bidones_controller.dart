@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:gastos/models/bidones_model.dart';
-import 'package:gastos/utilities/fecha_parser.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+
+import '../utilities/textos.dart';
 
 String nombreDB = "bidones";
 
-class CategoriaController {
+class BidonesController {
   static Future<void> createTables(sql.Database database) async {
     await database.execute("""CREATE TABLE $nombreDB(
         id INTEGER,
@@ -109,7 +110,7 @@ class CategoriaController {
         .firstOrNull;
     if (datas != null) {
       BidonesModel bidon = BidonesModel.fromJson(datas);
-      var ahora = FechaParser.convertirFecha(fecha: DateTime.now());
+      var ahora = Textos.fechaYMD(fecha: DateTime.now());
       //obtengo la diferencia de dias entre la fecha final y la fecha inicial
       var days = bidon.fechaFinal.difference(bidon.fechaInicio).inDays;
       log("Limite: $bidon.fechaFinal - Ahora: $ahora");

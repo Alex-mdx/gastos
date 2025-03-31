@@ -20,9 +20,9 @@ class _MyWidgetState extends State<HomeView> {
     return PopScope(
         canPop: true,
         child: Scaffold(
-            body: Consumer<GastoProvider>(builder: (context, provider, child) {
-              return Paginado(provider: provider);
-            }),
+            body: Consumer<GastoProvider>(
+                builder: (context, provider, child) =>
+                    Paginado(provider: provider)),
             bottomNavigationBar: BottomNavigationBar(
                 showUnselectedLabels: false,
                 currentIndex: navigator.index,

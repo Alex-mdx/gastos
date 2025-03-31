@@ -13,7 +13,6 @@ dependencies:
   badges: ^3.1.2
   calendar_date_picker2: ^1.1.9
   cupertino_icons: ^1.0.6
-  ##dropbox_client: ^1.0.0
   excel: ^4.0.6
   file_picker: ^9.0.0
   flutter:

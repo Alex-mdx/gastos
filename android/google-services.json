@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "549134759455",
+    "project_id": "fir-bd64b",
+    "storage_bucket": "fir-bd64b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549134759455:android:778d1888a3108624db072a",
+        "android_client_info": {
+          "package_name": "com.modx.gastos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEq_uK749ODomi2pdq71EV9SX2HZCDkJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

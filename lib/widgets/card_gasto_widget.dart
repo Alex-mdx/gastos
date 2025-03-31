@@ -8,6 +8,7 @@ import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
@@ -20,7 +21,6 @@ import '../dialog/dialog_categorias.dart';
 import '../models/categoria_model.dart';
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
-import '../utilities/fecha_parser.dart';
 
 class CardGastoWidget extends StatefulWidget {
   final GastoProvider provider;
@@ -64,8 +64,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       lastDate: now)) ??
                                   now;
                               final modelTemp = widget.provider.gastoActual.copyWith(
-                                  fecha: FechaParser.convertirFechaHora(
-                                      fecha: widget.provider.selectFecha
+                                  fecha: Textos.fechaHMS(fecha: widget.provider.selectFecha
                                               ?.copyWith(
                                                   year: widget.provider
                                                       .selectFecha?.year,
@@ -87,7 +86,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             },
                             icon: Icon(Icons.edit_calendar, size: 22.sp),
                             label: Text(
-                                "Fecha de ingreso\n${FechaParser.convertirFecha(fecha: widget.provider.selectFecha ?? now)}",
+                                "Fecha de ingreso\n${Textos.fechaYMD(fecha: widget.provider.selectFecha ?? now)}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -338,12 +337,9 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   ultimaFecha: widget.provider.selectProxima ==
                                           null
                                       ? null
-                                      : FechaParser.convertirFecha(
-                                          fecha:
-                                              widget.provider.selectProxima!),
+                                      : Textos.fechaYMD(fecha: widget.provider.selectProxima!),
                                   fecha: widget.provider.gastoActual.fecha ??
-                                      FechaParser.convertirFechaHora(
-                                          fecha: now),
+                                      Textos.fechaYMD(fecha: now),
                                   dia: widget.provider.gastoActual.dia ??
                                       (now.day).toString(),
                                   mes: widget.provider.gastoActual.mes ??

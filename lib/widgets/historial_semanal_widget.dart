@@ -28,11 +28,6 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   final now = DateTime.now();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Container(
@@ -84,11 +79,9 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
           Expanded(
               flex: 4,
               child: TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      change = !change;
-                    });
-                  },
+                  onPressed: () => setState(() {
+                        change = !change;
+                      }),
                   icon: Icon(LineIcons.alternateExchange, size: 16.sp),
                   label: Text(change ? "Cambio \$" : "Limite %",
                       textAlign: TextAlign.center,

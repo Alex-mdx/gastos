@@ -8,11 +8,10 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
-import 'package:gastos/utilities/fecha_parser.dart';
 import 'package:gastos/utilities/preferences.dart';
+import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../models/categoria_model.dart';
 
@@ -118,12 +117,6 @@ class GastoProvider with ChangeNotifier {
     //DropboxGen.verificarLogeo();
   }
 
-  ///funciones
-  String convertirNumero({required double moneda}) {
-    var mConvertida = NumberFormat('#,##0.####').format(moneda);
-    return mConvertida;
-  }
-
   double generarPago({required List<double> montos}) {
     double monto = 0.0;
     for (var element in montos) {
@@ -221,16 +214,16 @@ class GastoProvider with ChangeNotifier {
   List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales) {
     DateTime ahora = DateTime.now();
     int diaSemanaActual = ahora.weekday;
-    DateTime inicioSemana = DateTime.parse(FechaParser.convertirFecha(
+    DateTime inicioSemana = DateTime.parse(Textos.fechaYMD(
         fecha: ahora.subtract(Duration(days: diaSemanaActual - 1))));
     DateTime finSemana = DateTime(
-        DateTime.parse(FechaParser.convertirFecha(
+        DateTime.parse(Textos.fechaYMD(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .year,
-        DateTime.parse(FechaParser.convertirFecha(
+        DateTime.parse(Textos.fechaYMD(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .month,
-        DateTime.parse(FechaParser.convertirFecha(
+        DateTime.parse(Textos.fechaYMD(
                 fecha: inicioSemana.add(const Duration(days: 7))))
             .day,
         23,

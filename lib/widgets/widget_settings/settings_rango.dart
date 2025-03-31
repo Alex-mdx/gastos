@@ -1,10 +1,9 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/textos.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../utilities/fecha_parser.dart';
 import '../../utilities/preferences.dart';
 import '../../utilities/theme/theme_color.dart';
 
@@ -40,7 +39,7 @@ class _SettingsRangoState extends State<SettingsRango> {
             int rango =
                 rangos.indexWhere((element) => element.contains(selectedItem));
             return Text(
-                "$selectedItem\n${rango == 0 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 31)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 1 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 60)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 2 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 91)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : rango == 3 ? "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 183)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}" : "${FechaParser.convertirFecha(fecha: DateTime.now().subtract(Duration(days: 365)))} - ${FechaParser.convertirFecha(fecha: DateTime.now())}"}",
+                "$selectedItem\n${rango == 0 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 31)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 1 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 60)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 2 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 91)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 3 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 183)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 365)))} - ${Textos.fechaYMD(fecha: DateTime.now())}"}",
                 style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold));
           },
           hintText: 'Seleccione rango de calculo de gasto',
