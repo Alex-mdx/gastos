@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/generate_excel.dart';
 import 'package:gastos/utilities/zip_funcion.dart';
 import 'package:mime/mime.dart';
@@ -42,7 +43,7 @@ class DetectionMime {
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           print("el archivo es un xlsx");
           await GenerateExcel.read(file);
-
+          await GastosController.base64tojpeg();
           break;
 
         default:

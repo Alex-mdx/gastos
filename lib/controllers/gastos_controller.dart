@@ -63,7 +63,9 @@ class GastosController {
       var nuevo = await getItemsOnlyEvidencia();
       log("${nuevo.length}");
       final direccion = await getDownloadsDirectory();
-      showToast("Generando imagenes desde las evidencias");
+      if (nuevo.isNotEmpty) {
+        showToast("Generando imagenes desde las evidencias");
+      }
       for (var element in nuevo) {
         List<String> evidencia = [];
         for (var i = 0; i < element.evidencia.length; i++) {
@@ -181,8 +183,4 @@ class GastosController {
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
     await db.delete(nombreDB);
   }
-
-  
-
-  
 }

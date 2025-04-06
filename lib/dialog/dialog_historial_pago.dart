@@ -8,12 +8,12 @@ import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../utilities/services/navigation_services.dart';
 import '../utilities/textos.dart';
+import 'dialog_historial_pago_foto.dart';
 
 class DialogHistorialPago extends StatefulWidget {
   final GastoModelo gasto;
@@ -97,29 +97,8 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                               var file = await ImageGen.find(e);
                               showDialog(
                                   context: context,
-                                  builder: (context) => Column(children: [
-                                        Expanded(
-                                            child: PhotoView.customChild(
-                                                minScale: PhotoViewComputedScale
-                                                    .contained,
-                                                maxScale: PhotoViewComputedScale
-                                                        .contained *
-                                                    2,
-                                                child: file == null
-                                                    ? Icon(Icons.image,
-                                                        size: 30.sp)
-                                                    : Image.file(file,
-                                                        errorBuilder: (context,
-                                                                error,
-                                                                stackTrace) =>
-                                                            Icon(Icons.image,
-                                                                size: 30.sp),
-                                                        fit: BoxFit.contain))),
-                                        IconButton(
-                                            onPressed: () => Navigation.pop(),
-                                            icon: Icon(Icons.arrow_back_ios,
-                                                size: 20.sp))
-                                      ]));
+                                  builder: (context) =>
+                                      DialogHistorialPagoFoto(file: file));
                             });
                       }).toList())
               ]))),

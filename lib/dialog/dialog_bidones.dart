@@ -30,7 +30,7 @@ class _DialogBidonesState extends State<DialogBidones> {
                     context: context,
                     builder: (context) => CalendarDatePicker2(
                         config: CalendarDatePicker2Config(
-                            calendarType: CalendarDatePicker2Type.range),
+                            calendarType: CalendarDatePicker2Type.multi),
                         value: fechas,
                         onValueChanged: (dates) {})),
                 label:
