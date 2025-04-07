@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
+import 'package:gastos/dialog/dialog_bidones.dart';
 import 'package:gastos/dialog/dialog_dropbox.dart';
 import 'package:gastos/dialog/dialog_youtube.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
@@ -84,30 +85,29 @@ class _SettingViewState extends State<SettingView> {
                               BannerExample(tipo: 0),
                               const SettingMetodoPago(),
                               const Divider(),
-                              Column(
-                                children: [
-                                  Text("Bidones de presupuesto",
-                                      style: TextStyle(
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.bold)),
-                                  Card(
-                                      elevation: 0,
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: EdgeInsets.all(8.sp),
-                                          child: Wrap(children: [
-                                            Text("Sin bidones creados",
-                                                style:
-                                                    TextStyle(fontSize: 16.sp))
-                                          ]))),
-                                  ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text("Crear",
-                                          style: TextStyle(
-                                              color: LightThemeColors.green,
-                                              fontSize: 16.sp)))
-                                ]
-                              ),
+                              Column(children: [
+                                Text("Bidones de presupuesto",
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold)),
+                                Card(
+                                    elevation: 0,
+                                    color: Colors.white,
+                                    child: Padding(
+                                        padding: EdgeInsets.all(8.sp),
+                                        child: Wrap(children: [
+                                          Text("Sin bidones creados",
+                                              style: TextStyle(fontSize: 16.sp))
+                                        ]))),
+                                ElevatedButton(
+                                    onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (context) => DialogBidones()),
+                                    child: Text("Crear",
+                                        style: TextStyle(
+                                            color: LightThemeColors.green,
+                                            fontSize: 16.sp)))
+                              ]),
                               BannerExample(tipo: 0),
                               const SettingCalidadImagen(),
                               const Divider(),

@@ -1,10 +1,5 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:gastos/models/bidones_model.dart';
 import 'package:sqflite/sqflite.dart' as sql;
-
-import '../utilities/textos.dart';
 
 String nombreDB = "bidones";
 
@@ -17,6 +12,7 @@ class BidonesController {
         monto_inicial INTEGER,
         monto_final INTEGER,
         metodo_pago INTEGER,
+        dias_efecto INTEGER,
         categoria INTEGER,
         fecha_inicio INTEGER,
         fecha_final INTEGER,
@@ -98,41 +94,5 @@ class BidonesController {
   static Future<void> deleteAll() async {
     final db = await database();
     await db.delete(nombreDB);
-  }
-
-  static Future<void> vigencias({required int identificador}) async {
-    final db = await database();
-    final datas = (await db.query(nombreDB,
-            where: "identificador = ? AND  cerrado = 0 AND ",
-            whereArgs: [identificador],
-            orderBy: "id DESC",
-            limit: 1))
-        .firstOrNull;
-    if (datas != null) {
-      BidonesModel bidon = BidonesModel.fromJson(datas);
-      var ahora = Textos.fechaYMD(fecha: DateTime.now());
-      //obtengo la diferencia de dias entre la fecha final y la fecha inicial
-      var days = bidon.fechaFinal.difference(bidon.fechaInicio).inDays;
-      log("Limite: $bidon.fechaFinal - Ahora: $ahora");
-      //comparo el dia de hoy si es despues de la fecha final
-      if (DateTime.parse(ahora).isAfter(bidon.fechaFinal)) {
-        debugPrint("cerrando...");
-        await cerrar(bidon);
-        final id = await getLastId();
-        BidonesModel aperturar = bidon.copyWith(
-            id: id,
-            montoFinal: bidon.montoInicial,
-            fechaInicio: bidon.fechaFinal, //meto la fecha final como inicial
-            fechaFinal: bidon.fechaFinal.add(Duration(days: days))
-
-            ///meto la fecha final mas "days" para obtener su patron de dias
-            );
-
-        await insert(aperturar);
-        await vigencias(identificador: identificador); //vuelvo a verificar
-      } else {
-        debugPrint("El bidon ${bidon.nombre} aun esta vigente");
-      }
-    }
   }
 }

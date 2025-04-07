@@ -25,24 +25,42 @@ class _DialogBidonesState extends State<DialogBidones> {
             TextField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(hintText: "Nombre del bidon")),
-            ElevatedButton.icon(
-                onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => CalendarDatePicker2(
-                        config: CalendarDatePicker2Config(
-                            calendarType: CalendarDatePicker2Type.multi),
-                        value: fechas,
-                        onValueChanged: (dates) {})),
-                label:
-                    Text("Rango de Fechas", style: TextStyle(fontSize: 16.sp)),
-                icon: Icon(Icons.calendar_month, size: 20.sp)),
+            Wrap(
+                spacing: .5.w,
+                alignment: WrapAlignment.spaceAround,
+                runAlignment: WrapAlignment.spaceAround,
+                children: [
+                  ChoiceChip.elevated(
+                      label: Text("Lunes", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label: Text("Martes", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label:
+                          Text("Miercoles", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label: Text("Jueves", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label: Text("Viernes", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label: Text("Sabado", style: TextStyle(fontSize: 14.sp)),
+                      selected: false),
+                  ChoiceChip.elevated(
+                      label: Text("Domingo", style: TextStyle(fontSize: 14.sp)),
+                      selected: false)
+                ]),
             TextField(
                 keyboardType: TextInputType.numberWithOptions(
                     decimal: true, signed: false),
-                decoration: InputDecoration(hintText: "\$ Monto Inicial")),
-            TextButton(
+                decoration: InputDecoration(hintText: "\$Monto Inicial")),
+            ElevatedButton.icon(
+                icon: Icon(Icons.group_work, size: 18.sp),
                 onPressed: () {},
-                child: Text("Crear",
+                label: Text("Crear",
                     style: TextStyle(
                         fontSize: 16.sp, fontWeight: FontWeight.bold)))
           ])))

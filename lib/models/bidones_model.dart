@@ -8,6 +8,7 @@ class BidonesModel {
   double montoFinal;
   List<int> metodoPago;
   List<int> categoria;
+  List<int> diasEfecto;
   DateTime fechaInicio;
   DateTime fechaFinal;
   int cerrado;
@@ -21,6 +22,7 @@ class BidonesModel {
       required this.montoFinal,
       required this.metodoPago,
       required this.categoria,
+      required this.diasEfecto,
       required this.fechaInicio,
       required this.fechaFinal,
       required this.cerrado,
@@ -34,6 +36,7 @@ class BidonesModel {
           double? montoFinal,
           List<int>? metodoPago,
           List<int>? categoria,
+          List<int>? diasEfecto,
           DateTime? fechaInicio,
           DateTime? fechaFinal,
           int? cerrado,
@@ -46,6 +49,7 @@ class BidonesModel {
           montoFinal: montoFinal ?? this.montoFinal,
           metodoPago: metodoPago ?? this.metodoPago,
           categoria: categoria ?? this.categoria,
+          diasEfecto: diasEfecto ?? this.diasEfecto,
           fechaInicio: fechaInicio ?? this.fechaInicio,
           fechaFinal: fechaFinal ?? this.fechaFinal,
           cerrado: cerrado ?? this.cerrado,
@@ -63,6 +67,9 @@ class BidonesModel {
       categoria: json["categoria"] == null
           ? []
           : List<int>.from(jsonDecode(json["categoria"]).map((x) => x)),
+      diasEfecto: json["dias_efecto"] == null
+          ? []
+          : List<int>.from(jsonDecode(json["dias_efecto"]).map((x) => x)),
       fechaInicio: DateTime.parse(json["fecha_inicio"]),
       fechaFinal: DateTime.parse(json["fecha_final"]),
       cerrado: json["cerrado"],
@@ -78,6 +85,7 @@ class BidonesModel {
         "monto_final": montoFinal,
         "metodo_pago": List<int>.from(metodoPago.map((x) => x)),
         "categoria": List<int>.from(categoria.map((x) => x)),
+        "dias_efecto": List<int>.from(diasEfecto.map((x) => x)),
         "fecha_inicio": fechaInicio.toIso8601String(),
         "fecha_final": fechaFinal.toIso8601String(),
         "cerrado": cerrado,
