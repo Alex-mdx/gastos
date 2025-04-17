@@ -1,3 +1,4 @@
+import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
@@ -29,7 +30,7 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
 
-  ///await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
+  await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
     runApp(MultiProvider(providers: [

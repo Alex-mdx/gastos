@@ -15,7 +15,7 @@ class DialogBidones extends StatefulWidget {
 
 class _DialogBidonesState extends State<DialogBidones> {
   List<int> fechas = [];
-  single
+  
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);

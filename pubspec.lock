@@ -161,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  dropbox_client:
+    dependency: "direct main"
+    description:
+      name: dropbox_client
+      sha256: "6481ddd5ca783adfdc128a48ec64bb9f4d743c6087710e05238dcfb9f39d2d56"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   equatable:
     dependency: transitive
     description:
@@ -205,10 +213,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "36a1652d99cb6bf8ccc8b9f43aded1fd60b234d23ce78af422c07f950a436ef7"
+      sha256: "8986dec4581b4bcd4b6df5d75a2ea0bede3db802f500635d05fa8be298f9467f"
       url: "https://pub.dev"
     source: hosted
-    version: "10.0.0"
+    version: "10.1.2"
   file_selector_linux:
     dependency: transitive
     description:
@@ -381,22 +389,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.7.2"
-  giffy_dialog:
+  gif_view:
     dependency: "direct main"
     description:
-      name: giffy_dialog
-      sha256: "55509ff0530f83dff57bd0ce6dc59737b61e36e3fbc2fd6259788dafb0175062"
+      name: gif_view
+      sha256: fa6881f39a6e367e8c75ca20c0e357bcb228b1e709aa28317c9076005c5943f1
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "1.0.2"
   google_mobile_ads:
     dependency: "direct main"
     description:
       name: google_mobile_ads
-      sha256: "0d4a3744b5e8ed1b8be6a1b452d309f811688855a497c6113fc4400f922db603"
+      sha256: a4f59019f2c32769fb6c60ed8aa321e9c21a36297e2c4f23452b3e779a3e7a26
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.1"
+    version: "6.0.0"
   graphs:
     dependency: transitive
     description:
@@ -605,14 +613,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.11"
-  lottie:
-    dependency: transitive
-    description:
-      name: lottie
-      sha256: "377d87b8dcef640c04717e93afb86a510f0e1117a399ab94dc4b3f39c85eaa87"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
   matcher:
     dependency: transitive
     description:
@@ -761,10 +761,10 @@ packages:
     dependency: "direct main"
     description:
       name: pro_image_editor
-      sha256: "31eca29bbe1e39505ce250dd84812270d1189e6be47b0cb0b6cbe518a32ec769"
+      sha256: "886e0698819c608766f839c29c3a1cf3356de7b50199a8f31c5eb09414f81aff"
       url: "https://pub.dev"
     source: hosted
-    version: "9.3.0"
+    version: "9.4.0"
   provider:
     dependency: "direct main"
     description:
@@ -785,10 +785,10 @@ packages:
     dependency: "direct main"
     description:
       name: rive_animated_icon
-      sha256: "5bdf3494f1aebd944739ee6dd22aad6995f084ab4cc726261e7f320f11b5cf7e"
+      sha256: "717dfd645ced8eb9364ec7023f46921f9aaf7890d023226cd4ae2751c041073e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.5"
   rive_common:
     dependency: transitive
     description:
@@ -825,10 +825,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "3ec7210872c4ba945e3244982918e502fa2bfb5230dff6832459ca0e1879b7ad"
+      sha256: c2c8c46297b5d6a80bed7741ec1f2759742c77d272f1a1698176ae828f8e1a18
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.8"
+    version: "2.4.9"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -974,34 +974,34 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: "23ac376a8345df3a5d9ebb5aa7be3d6b16ee40fc715b3bb5763e3ee3582384de"
+      sha256: "77704cf1a1ee21f17f0b6656c93009291416982550f9dc5b7b6d9336fe115223"
       url: "https://pub.dev"
     source: hosted
-    version: "29.1.33"
+    version: "29.1.38"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: f56ee689d572c86a0d96cc986120a1e81a9cee9ff6d3c33acb030766a2ad1c04
+      sha256: "98580db6186b46aae965d3f480f7830b0ee6f58c4e1bbbb3fb3de6a121f61836"
       url: "https://pub.dev"
     source: hosted
-    version: "29.1.33"
+    version: "29.1.38"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: "948368b2b4b2df05f2829efa58cfefd0b5bed1c9d388ed628636c45c59ff1be4"
+      sha256: "4abc505985b120e4a126114bb65b12dd15279c839d12464504f3596822a740ec"
       url: "https://pub.dev"
     source: hosted
-    version: "29.1.33"
+    version: "29.1.38"
   syncfusion_flutter_sliders:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_sliders
-      sha256: e93998bc84fdbc74ac4b5a17893c4f533d26711fb81cf93a4e1e767e9c6fcb2a
+      sha256: a0d479786701f505b3c29f48c1c7934e2e0ffe682adb72ed95b39918914eeea7
       url: "https://pub.dev"
     source: hosted
-    version: "29.1.33"
+    version: "29.1.38"
   synchronized:
     dependency: transitive
     description:
@@ -1126,26 +1126,26 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: e09150b28a07933839adef0e4a088bb43e8c8d9e6b93025b01882d4067a58ab0
+      sha256: "34ee3954f28ab3c8b5f96608d75125736643b3c239c969cd50d9476d5f90559a"
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.4"
+    version: "4.3.5"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
       name: webview_flutter_platform_interface
-      sha256: d937581d6e558908d7ae3dc1989c4f87b786891ab47bb9df7de548a151779d8d
+      sha256: "18b1640839cf6546784a524c72aded5b6e86b23e7167dc2311cc96f7658b64bd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.0"
+    version: "2.11.0"
   webview_flutter_wkwebview:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: c49a98510080378b1525132f407a92c3dcd3b7145bef04fb8137724aadcf1cf0
+      sha256: bf0745adeaca48a3105473440cffade47720fe2d56514de4e86f0d363439c4a7
       url: "https://pub.dev"
     source: hosted
-    version: "3.18.4"
+    version: "3.18.6"
   win32:
     dependency: transitive
     description:

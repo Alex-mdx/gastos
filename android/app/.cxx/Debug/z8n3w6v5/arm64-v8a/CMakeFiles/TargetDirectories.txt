@@ -1,0 +1,2 @@
+C:/Users/kidex/OneDrive/Documentos/GITHUB/GameMaker/gastos/android/app/.cxx/Debug/z8n3w6v5/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/kidex/OneDrive/Documentos/GITHUB/GameMaker/gastos/android/app/.cxx/Debug/z8n3w6v5/arm64-v8a/CMakeFiles/rebuild_cache.dir
