@@ -19,6 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_colorpicker: ^1.1.0
+  flutter_gemini: ^3.0.0
   flutter_launcher_icons: ^0.14.1
   flutter_localizations:
     sdk: flutter
@@ -42,7 +43,7 @@ dependencies:
   pro_image_editor: ^9.0.2
   provider: ^6.1.2
   rive_animated_icon: ^2.0.2
-  share_plus: ^10.1.2
+  share_plus: ^11.0.0
   shared_preferences: ^2.3.3
   sizer: ^3.0.4
   sqflite: ^2.3.3+1

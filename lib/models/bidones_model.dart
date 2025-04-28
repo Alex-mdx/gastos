@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class BidonesModel {
   int id;
-  int identificador;
+  String identificador;
   String nombre;
   double montoInicial;
   double montoFinal;
@@ -30,7 +30,7 @@ class BidonesModel {
 
   BidonesModel copyWith(
           {int? id,
-          int? identificador,
+          String? identificador,
           String? nombre,
           double? montoInicial,
           double? montoFinal,

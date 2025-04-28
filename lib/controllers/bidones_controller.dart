@@ -51,13 +51,13 @@ class BidonesController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<int?> getLastId() async {
+  static Future<int> getLastId() async {
     final db = await database();
     final data =
         (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
     BidonesModel? modelo = data == null ? null : BidonesModel.fromJson(data);
 
-    return modelo?.id;
+    return  ((modelo?.id) ?? 0) + 1;
   }
 
   static Future<List<BidonesModel>> getItemsByCerrado() async {

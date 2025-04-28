@@ -97,11 +97,21 @@ class MetodoGastoController {
     return metodo;
   }
 
+  static Future<MetodoPagoModel?> getItem({required int id}) async {
+    final db = await database();
+    final data = (await db.query(nombreDB, where: "id = ?", whereArgs: [id]))
+        .firstOrNull;
+    return data == null ? null : MetodoPagoModel.fromJson(data);
+  }
+
   static Future<List<MetodoPagoModel>> buscar(String word) async {
     final db = await database();
     List<MetodoPagoModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria = await db.query(nombreDB,
-        where: "nombre LIKE ?", whereArgs: ['%$word%'], orderBy: "nombre",limit: 10);
+        where: "nombre LIKE ?",
+        whereArgs: ['%$word%'],
+        orderBy: "nombre",
+        limit: 10);
     for (var element in categoria) {
       categoriaModelo.add(MetodoPagoModel.fromJson(element));
     }

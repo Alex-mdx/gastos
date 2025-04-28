@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-
+import 'dart:math' as math;
 class Textos {
   static String normalizar(String text) {
     text = text.replaceAll(
@@ -46,5 +46,17 @@ class Textos {
   static String fechaHMS({required DateTime fecha}) {
     String formatoFechaHora = DateFormat('HH:mm:ss').format(fecha);
     return formatoFechaHora;
+  }
+
+  static String randomWord(int? number) {
+    final random = math.Random();
+    const caracteres =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    String cadenaAleatoria = '';
+    for (int i = 0; i < (number ?? 10); i++) {
+      int indice = random.nextInt(caracteres.length);
+      cadenaAleatoria += caracteres[indice];
+    }
+    return cadenaAleatoria;
   }
 }

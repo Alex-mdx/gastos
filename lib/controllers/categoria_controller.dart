@@ -25,13 +25,22 @@ class CategoriaController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<int?> getLastId() async {
+  static Future<int> getLastId() async {
     final db = await database();
-    final data = (await db.query(nombreDB,limit: 1,orderBy: 'id DESC'))
-        .firstOrNull;
-    CategoriaModel? modelo = data == null ? null : CategoriaModel.fromJson(data);
+    final data =
+        (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
+    CategoriaModel? modelo =
+        data == null ? null : CategoriaModel.fromJson(data);
+
+    return ((modelo?.id) ?? 0) + 1;
+  }
+
+  static Future<CategoriaModel?> getItem({ required int id}) async {
+    final db = await database();
+    final categoria =
+        (await db.query(nombreDB,where: "id = ?",whereArgs: [id], orderBy: "nombre")).firstOrNull;
     
-    return modelo?.id;
+    return categoria == null? null: CategoriaModel.fromJson(categoria);
   }
 
   static Future<List<CategoriaModel>> getItems() async {
@@ -49,7 +58,10 @@ class CategoriaController {
     final db = await database();
     List<CategoriaModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria = await db.query(nombreDB,
-        where: "nombre LIKE ?", whereArgs: ['%$word%'], orderBy: "nombre",limit: 10);
+        where: "nombre LIKE ?",
+        whereArgs: ['%$word%'],
+        orderBy: "nombre",
+        limit: 10);
     for (var element in categoria) {
       categoriaModelo.add(CategoriaModel.fromJson(element));
     }
