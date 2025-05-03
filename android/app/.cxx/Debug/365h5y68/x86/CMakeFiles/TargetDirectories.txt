@@ -1,0 +1,2 @@
+C:/Users/saint/Documents/GitHub/gastos/android/app/.cxx/Debug/365h5y68/x86/CMakeFiles/edit_cache.dir
+C:/Users/saint/Documents/GitHub/gastos/android/app/.cxx/Debug/365h5y68/x86/CMakeFiles/rebuild_cache.dir

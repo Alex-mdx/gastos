@@ -9,6 +9,8 @@ import 'package:gastos/models/bidones_model.dart';
 import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
@@ -41,7 +43,7 @@ class _DialogBidonesState extends State<DialogBidones> {
           style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
       Divider(height: 1.h),
       Container(
-          constraints: BoxConstraints(maxHeight: 80.h),
+          constraints: BoxConstraints(maxHeight: 45.h),
           child: Scrollbar(
               child: SingleChildScrollView(
                   child: Padding(
@@ -50,6 +52,7 @@ class _DialogBidonesState extends State<DialogBidones> {
                           child:
                               Column(mainAxisSize: MainAxisSize.min, children: [
                         TextField(
+                            controller: nombre,
                             keyboardType: TextInputType.text,
                             decoration:
                                 InputDecoration(hintText: "Nombre del bidon")),
@@ -225,13 +228,13 @@ class _DialogBidonesState extends State<DialogBidones> {
                                           if (snapshot.hasData) {
                                             return Text(snapshot.data!.nombre,
                                                 style: TextStyle(
-                                                    fontSize: 14.sp,
+                                                    fontSize: 13.sp,
                                                     fontWeight:
                                                         FontWeight.bold));
                                           } else if (snapshot.hasError) {
                                             return Text("${snapshot.error}",
                                                 style:
-                                                    TextStyle(fontSize: 14.sp));
+                                                    TextStyle(fontSize: 12.sp));
                                           } else {
                                             return SizedBox(
                                                 height: 4.w,
@@ -292,13 +295,13 @@ class _DialogBidonesState extends State<DialogBidones> {
                                           if (snapshot.hasData) {
                                             return Text(snapshot.data!.nombre,
                                                 style: TextStyle(
-                                                    fontSize: 14.sp,
+                                                    fontSize: 13.sp,
                                                     fontWeight:
                                                         FontWeight.bold));
                                           } else if (snapshot.hasError) {
                                             return Text("${snapshot.error}",
                                                 style:
-                                                    TextStyle(fontSize: 14.sp));
+                                                    TextStyle(fontSize: 12.sp));
                                           } else {
                                             return SizedBox(
                                                 height: 4.w,
@@ -310,7 +313,7 @@ class _DialogBidonesState extends State<DialogBidones> {
                                 .toList()),
                         Divider(),
                         TextField(
-                            controller: nombre,
+                            controller: monto,
                             keyboardType: TextInputType.numberWithOptions(
                                 decimal: true, signed: false),
                             decoration: InputDecoration(
@@ -324,20 +327,41 @@ class _DialogBidonesState extends State<DialogBidones> {
             int id = await BidonesController.getLastId();
             String word = Textos.randomWord(10);
             final now = DateTime.now();
-            BidonesModel bidon = BidonesModel(
-                id: id,
-                identificador: word,
-                nombre: nombre.text,
-                montoInicial: double.parse(monto.text),
-                montoFinal: 0,
-                metodoPago: metodoId,
-                categoria: categoriaId,
-                diasEfecto: fechas,
-                fechaInicio: now,
-                fechaFinal: now,
-                cerrado: 0,
-                gastos: []);
-            log("${bidon.toJson()}");
+            if (nombre.text != "") {
+              if (metodoId.isNotEmpty || categoriaId.isNotEmpty) {
+                if (monto.text != "") {
+                  Dialogs.showMorph(
+                      title: "Ingresar bidon",
+                      description:
+                          "¿Desea ingresar este bidon llamado ${nombre.text}?",
+                      loadingTitle: "Guardando",
+                      onAcceptPressed: (context) async {
+                        BidonesModel bidon = BidonesModel(
+                            id: id,
+                            identificador: word,
+                            nombre: nombre.text,
+                            montoInicial: double.parse(monto.text),
+                            montoFinal: 0,
+                            metodoPago: metodoId,
+                            categoria: categoriaId,
+                            diasEfecto: fechas,
+                            fechaInicio: now,
+                            fechaFinal: now,
+                            cerrado: 0,
+                            gastos: []);
+                        log("${bidon.toJson()}");
+                        await BidonesController.insert(bidon);
+                        Navigation.pop();
+                      });
+                } else {
+                  showToast("Ingrese un monto mayor a 0");
+                }
+              } else {
+                showToast("Ingrese al menos un metodo de pago o una categoria");
+              }
+            } else {
+              showToast("Ingrese nombre al bidon");
+            }
           },
           label: Text("Crear",
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)))

@@ -43,7 +43,7 @@ class DialogCategorias extends StatelessWidget {
                       description: '¿Ingresar este tipo de gasto?',
                       loadingTitle: 'Ingresando...',
                       onAcceptPressed: (context) async {
-                        var id = (await CategoriaController.getLastId()) ?? 1;
+                        var id = (await CategoriaController.getLastId());
                         log("${id+1}");
                         CategoriaModel objeto = CategoriaModel(
                             id: id + 1,

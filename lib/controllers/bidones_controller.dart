@@ -1,9 +1,10 @@
 import 'package:gastos/models/bidones_model.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
-String nombreDB = "bidones";
+
 
 class BidonesController {
+  static String nombreDB = "bidones";
   static Future<void> createTables(sql.Database database) async {
     await database.execute("""CREATE TABLE $nombreDB(
         id INTEGER,
@@ -17,7 +18,8 @@ class BidonesController {
         fecha_inicio INTEGER,
         fecha_final INTEGER,
         cerrado INTEGER,
-        inhabilitado INTEGER
+        inhabilitado INTEGER,
+        gastos INTEGER
       )""");
   }
 
@@ -60,7 +62,7 @@ class BidonesController {
     return  ((modelo?.id) ?? 0) + 1;
   }
 
-  static Future<List<BidonesModel>> getItemsByCerrado() async {
+  static Future<List<BidonesModel>> getItemsByAbierto() async {
     final db = await database();
     List<BidonesModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =

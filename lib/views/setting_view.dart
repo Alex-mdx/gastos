@@ -1,17 +1,21 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/dialog/dialog_bidones.dart';
 import 'package:gastos/dialog/dialog_dropbox.dart';
 import 'package:gastos/dialog/dialog_youtube.dart';
+import 'package:gastos/models/bidones_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/widget_settings/setting_metodo_pago.dart';
 import 'package:gastos/widgets/widget_settings/setting_primer_dia_widget.dart';
 import 'package:gastos/widgets/widget_settings/settings_rango.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../utilities/preferences.dart';
@@ -46,10 +50,9 @@ class _SettingViewState extends State<SettingView> {
                   OverflowBar(children: [
                     if (kDebugMode)
                       ElevatedButton.icon(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) => DialogYoutube(link: "d"));
+                          onPressed: () async {
+                            var tipo =
+                                await BidonesController.getItemsByAbierto();
                           },
                           label: Text("Tutorial",
                               style: TextStyle(fontSize: 14.sp)),
@@ -95,10 +98,52 @@ class _SettingViewState extends State<SettingView> {
                                     color: Colors.white,
                                     child: Padding(
                                         padding: EdgeInsets.all(8.sp),
-                                        child: Wrap(children: [
-                                          Text("Sin bidones creados",
-                                              style: TextStyle(fontSize: 16.sp))
-                                        ]))),
+                                        child: FutureBuilder(
+                                            future: BidonesController
+                                                .getItemsByAbierto(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Wrap(
+                                                    children: snapshot.data!
+                                                        .map((bidones) => LiquidLinearProgressIndicator(
+                                                            value: .7,
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation(
+                                                                    LightThemeColors
+                                                                        .primary),
+                                                            backgroundColor:
+                                                                LightThemeColors
+                                                                    .grey,
+                                                            borderColor:
+                                                                LightThemeColors
+                                                                    .darkBlue,
+                                                            borderWidth: 2.0,
+                                                            borderRadius:
+                                                                borderRadius,
+                                                            direction:
+                                                                Axis.vertical,
+                                                            center: Text(
+                                                                "${bidones.nombre}",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold))))
+                                                        .toList());
+                                              } else if (snapshot.hasError) {
+                                                return Text("${snapshot.error}",
+                                                    style: TextStyle(
+                                                        fontSize: 12.sp));
+                                              } else if (!snapshot.hasData) {
+                                                return Text(
+                                                    "Sin bidones creados",
+                                                    style: TextStyle(
+                                                        fontSize: 16.sp));
+                                              } else {
+                                                return CircularProgressIndicator();
+                                              }
+                                            }))),
                                 ElevatedButton(
                                     onPressed: () => showDialog(
                                         context: context,

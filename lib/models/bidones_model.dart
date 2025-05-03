@@ -59,23 +59,23 @@ class BidonesModel {
       id: json["id"],
       identificador: json["identificador"],
       nombre: json["nombre"],
-      montoInicial: double.parse(json["monto_inicial"]),
-      montoFinal: double.parse(json["monto_final"]),
+      montoInicial: double.parse(json["monto_inicial"].toString()),
+      montoFinal: double.parse(json["monto_final"].toString()),
       metodoPago: json["metodo_pago"] == null
           ? []
-          : List<int>.from(jsonDecode(json["metodo_pago"]).map((x) => x)),
+          : List<int>.from(jsonDecode(json["metodo_pago"].toString()).map((x) => x)),
       categoria: json["categoria"] == null
           ? []
-          : List<int>.from(jsonDecode(json["categoria"]).map((x) => x)),
+          : List<int>.from(jsonDecode(json["categoria"].toString()).map((x) => x)),
       diasEfecto: json["dias_efecto"] == null
           ? []
-          : List<int>.from(jsonDecode(json["dias_efecto"]).map((x) => x)),
+          : List<int>.from(jsonDecode(json["dias_efecto"].toString()).map((x) => x)),
       fechaInicio: DateTime.parse(json["fecha_inicio"]),
       fechaFinal: DateTime.parse(json["fecha_final"]),
       cerrado: json["cerrado"],
       gastos: json["gastos"] == null
           ? []
-          : List<int>.from(jsonDecode(json["gastos"]).map((x) => x)));
+          : List<int>.from(jsonDecode(json["gastos"].toString()).map((x) => x)));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -83,12 +83,12 @@ class BidonesModel {
         "nombre": nombre,
         "monto_inicial": montoInicial,
         "monto_final": montoFinal,
-        "metodo_pago": List<int>.from(metodoPago.map((x) => x)),
-        "categoria": List<int>.from(categoria.map((x) => x)),
-        "dias_efecto": List<int>.from(diasEfecto.map((x) => x)),
+        "metodo_pago": jsonEncode(metodoPago),
+        "categoria": jsonEncode(categoria),
+        "dias_efecto": jsonEncode(diasEfecto),
         "fecha_inicio": fechaInicio.toIso8601String(),
         "fecha_final": fechaFinal.toIso8601String(),
         "cerrado": cerrado,
-        "gastos": List<int>.from(metodoPago.map((x) => x))
+        "gastos":jsonEncode(metodoPago)
       };
 }
