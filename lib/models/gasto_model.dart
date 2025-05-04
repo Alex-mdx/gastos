@@ -69,12 +69,14 @@ class GastoModelo {
       mes: json["mes"],
       peridico: json["peridico"],
       ultimaFecha: json["ultima_fecha"],
-      periodo: PeriodoModelo.fromJson(jsonDecode(json["periodo"].toString())),
+      periodo: json["periodo"].toString() == "null"
+          ? PeriodoModelo(year: "0", mes: "", dia: "1", modificable: 0)
+          : PeriodoModelo.fromJson(jsonDecode(json["periodo"].toString())),
       gasto: json["gasto"],
       evidencia: json["evidencia"] == null
           ? []
-          : List<String>.from((jsonDecode(json["evidencia"]))
-              .map((x) => x.toString())),
+          : List<String>.from(
+              (jsonDecode(json["evidencia"])).map((x) => x.toString())),
       nota: json["nota"],
       metodoPagoId: json["metodo_pago_id"] ?? 1);
 

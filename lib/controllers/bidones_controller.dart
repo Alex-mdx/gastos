@@ -1,8 +1,6 @@
 import 'package:gastos/models/bidones_model.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
-
-
 class BidonesController {
   static String nombreDB = "bidones";
   static Future<void> createTables(sql.Database database) async {
@@ -44,29 +42,20 @@ class BidonesController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<void> cerrar(BidonesModel cate) async {
-    final db = await database();
-    var cerrar = cate.copyWith(cerrado: 1);
-    await db.update(nombreDB, cerrar.toJson(),
-        where: "id = ? AND identificador = ?",
-        whereArgs: [cerrar.id, cerrar.identificador],
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-  }
-
   static Future<int> getLastId() async {
     final db = await database();
     final data =
         (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
     BidonesModel? modelo = data == null ? null : BidonesModel.fromJson(data);
 
-    return  ((modelo?.id) ?? 0) + 1;
+    return ((modelo?.id) ?? 0) + 1;
   }
 
   static Future<List<BidonesModel>> getItemsByAbierto() async {
     final db = await database();
     List<BidonesModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =
-        await db.query(nombreDB, where: "cerrado = 0", orderBy: "nombre");
+        await db.query(nombreDB, where: "cerrado = 0", orderBy: "nombre ASC");
     for (var element in categoria) {
       categoriaModelo.add(BidonesModel.fromJson(element));
     }

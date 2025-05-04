@@ -69,11 +69,7 @@ class _HistorialViewState extends State<HistorialView> {
                   23,
                   59,
                   59);
-              var data =
-                  await GastosController.obtenerFechasEnRangoMes(first, last);
-              setState(() {
-                lista = data;
-              });
+              await obtenerFechas();
               log("$first - $last");
             },
             initialSelectedDate: DateTime.now(),
@@ -137,7 +133,8 @@ class _HistorialViewState extends State<HistorialView> {
                   provider: provider,
                   appointment: appointment,
                   calendar: calendarAppointmentDetails,
-                  context: context);
+                  context: context,
+                  fun: () async => await obtenerFechas());
             },
             monthViewSettings: MonthViewSettings(
                 appointmentDisplayCount: 10,
@@ -182,7 +179,8 @@ Widget historial(
     {required GastoProvider provider,
     required Appointment appointment,
     required CalendarAppointmentDetails calendar,
-    required BuildContext context}) {
+    required BuildContext context,
+    required Future<void> Function() fun}) {
   return bd.Badge(
       badgeAnimation: bd.BadgeAnimation.fade(),
       badgeStyle: bd.BadgeStyle(badgeColor: LightThemeColors.darkBlue),
@@ -196,9 +194,11 @@ Widget historial(
                 int.parse(appointment.id.toString()));
             if (modelado != null) {
               showDialog(
-                  // ignore: use_build_context_synchronously
-                  context: context,
-                  builder: (context) => DialogHistorialPago(gasto: modelado));
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) =>
+                          DialogHistorialPago(gasto: modelado))
+                  .then((value) => fun());
             } else {
               showToast("Esta venta ya no existe");
             }

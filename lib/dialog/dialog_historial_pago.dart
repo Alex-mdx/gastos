@@ -55,7 +55,9 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         await GastosController.deleteItem(widget.gasto.id!);
                         provider.listaGastos =
                             await GastosController.getConfigurado();
-                        Navigation.pop();
+                        setState(() {
+                          Navigation.pop();
+                        });
                       });
                 },
                 icon: Icon(Icons.delete,
@@ -94,6 +96,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         return IconButton(
                             icon: Icon(Icons.photo, size: 20.sp),
                             onPressed: () async {
+                              debugPrint(e);
                               var file = await ImageGen.find(e);
                               showDialog(
                                   context: context,

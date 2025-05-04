@@ -89,6 +89,82 @@ class GastosController {
     }
   }
 
+  static Future<double> montoFechaDia({required int diaSemana}) async {
+    final db = await database();
+    int tipo = 0;
+
+    switch (Preferences.calculo) {
+      case "Mensual":
+        tipo = 31;
+        break;
+      case "Bimestral":
+        tipo = 61;
+        break;
+      case "Trimestral":
+        tipo = 92;
+        break;
+      case "Semestral":
+        tipo = 182;
+        break;
+      case "Anual":
+        tipo = 365;
+        break;
+      default:
+        tipo = 31;
+    }
+    final resultados = await db.rawQuery('''
+    SELECT 
+      SUM(CAST(monto AS REAL)) as total
+    FROM $nombreDB
+    WHERE 
+      fecha BETWEEN ? AND ?
+    AND CAST(strftime('%w', fecha) AS INTEGER) = ?
+''', [
+      (DateTime.now().subtract(Duration(days: tipo))).toString(),
+      (DateTime.now()).toString(),
+      diaSemana
+    ]);
+    double total = resultados.first['total'] as double? ?? 0.0;
+    return total;
+  }
+
+  static Future<int> contarDiasUnicosPorDiaSemana(int diaSemana) async {
+    final db = await database();
+    int tipo = 0;
+
+    switch (Preferences.calculo) {
+      case "Mensual":
+        tipo = 31;
+        break;
+      case "Bimestral":
+        tipo = 61;
+        break;
+      case "Trimestral":
+        tipo = 92;
+        break;
+      case "Semestral":
+        tipo = 182;
+        break;
+      case "Anual":
+        tipo = 365;
+        break;
+      default:
+        tipo = 31;
+    }
+    final resultado = await db.rawQuery('''
+    SELECT COUNT(DISTINCT fecha) as total_dias
+    FROM $nombreDB
+    WHERE fecha BETWEEN ? AND ?
+    AND ((CAST(strftime('%w', fecha) AS INTEGER) + 6) % 7) = ?
+  ''', [
+      (DateTime.now().subtract(Duration(days: tipo))).toString(),
+      (DateTime.now()).toString(),
+      diaSemana
+    ]);
+
+    return int.tryParse(resultado.first['total_dias'].toString()) ?? 1;
+  }
+
   static Future<List<GastoModelo>> getConfigurado() async {
     final db = await database();
 
@@ -120,6 +196,8 @@ class GastosController {
         await db.query(nombreDB, where: 'fecha BETWEEN ? AND ?', whereArgs: [
       (DateTime.now().subtract(Duration(days: tipo))).toString(),
       (DateTime.now()).toString(),
+    ], columns: [
+      "monto,fecha"
     ]);
     for (var element in resultados) {
       modelo.add(GastoModelo.fromJson(element));

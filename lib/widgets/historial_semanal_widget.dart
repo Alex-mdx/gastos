@@ -1,6 +1,8 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/theme/theme_app.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
@@ -46,8 +48,8 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       child: Text(dias[index],
                           style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                  ? 16.sp
-                                  : 15.sp,
+                                  ? 15.sp
+                                  : 12.sp,
                               fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
                                   : FontWeight.normal))),
@@ -77,7 +79,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
         if (widget.provider.presupuesto?.presupuesto != null &&
             widget.provider.presupuesto?.activo == 1)
           Expanded(
-              flex: 4,
+              flex: 5,
               child: TextButton.icon(
                   onPressed: () => setState(() {
                         change = !change;
@@ -112,26 +114,35 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
         if (widget.provider.presupuesto?.presupuesto != null &&
             widget.provider.presupuesto?.activo == 1)
           Expanded(
-              flex: 4,
-              child: AnimatedDefaultTextStyle(
-                  style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: widget.provider.porcentualColor(
-                          (100 * widget.provider.promedioTotalSemana()) /
-                              widget.provider.presupuesto!.presupuesto!)),
-                  duration: Durations.medium1,
-                  child: AnimatedFlipCounter(
-                      value: change
-                          ? (widget.provider.presupuesto!.presupuesto! -
-                                  widget.provider.promedioTotalSemana())
-                              .abs()
-                          : (100 * widget.provider.promedioTotalSemana()) /
-                              widget.provider.presupuesto!.presupuesto!,
-                      duration: Durations.long3,
-                      fractionDigits: change ? 2 : 0,
-                      prefix: change ? "\$" : null,
-                      suffix: change ? null : "%")))
+              flex: 5,
+              child: Column(children: [
+                LinearProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation(LightThemeColors.primary),
+                    value: widget.provider.promedioTotalSemana() /
+                        widget.provider.presupuesto!.presupuesto!,
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    minHeight: (.65).h),
+                AnimatedDefaultTextStyle(
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: widget.provider.porcentualColor(
+                            (100 * widget.provider.promedioTotalSemana()) /
+                                widget.provider.presupuesto!.presupuesto!)),
+                    duration: Durations.medium1,
+                    child: AnimatedFlipCounter(
+                        value: change
+                            ? (widget.provider.presupuesto!.presupuesto! -
+                                    widget.provider.promedioTotalSemana())
+                                .abs()
+                            : (100 * widget.provider.promedioTotalSemana()) /
+                                widget.provider.presupuesto!.presupuesto!,
+                        duration: Durations.long3,
+                        fractionDigits: change ? 2 : 0,
+                        prefix: change ? "\$" : null,
+                        suffix: change ? null : "%"))
+              ]))
       ])
     ]);
   }

@@ -15,7 +15,6 @@ import 'package:gastos/widgets/widget_settings/setting_metodo_pago.dart';
 import 'package:gastos/widgets/widget_settings/setting_primer_dia_widget.dart';
 import 'package:gastos/widgets/widget_settings/settings_rango.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import '../utilities/preferences.dart';
@@ -93,57 +92,70 @@ class _SettingViewState extends State<SettingView> {
                                     style: TextStyle(
                                         fontSize: 18.sp,
                                         fontWeight: FontWeight.bold)),
-                                Card(
-                                    elevation: 0,
-                                    color: Colors.white,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8.sp),
-                                        child: FutureBuilder(
-                                            future: BidonesController
-                                                .getItemsByAbierto(),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.hasData) {
-                                                return Wrap(
-                                                    children: snapshot.data!
-                                                        .map((bidones) => LiquidLinearProgressIndicator(
-                                                            value: .7,
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation(
-                                                                    LightThemeColors
-                                                                        .primary),
-                                                            backgroundColor:
-                                                                LightThemeColors
-                                                                    .grey,
-                                                            borderColor:
-                                                                LightThemeColors
-                                                                    .darkBlue,
-                                                            borderWidth: 2.0,
-                                                            borderRadius:
-                                                                borderRadius,
-                                                            direction:
-                                                                Axis.vertical,
-                                                            center: Text(
-                                                                "${bidones.nombre}",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        16.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))))
-                                                        .toList());
-                                              } else if (snapshot.hasError) {
-                                                return Text("${snapshot.error}",
-                                                    style: TextStyle(
-                                                        fontSize: 12.sp));
-                                              } else if (!snapshot.hasData) {
-                                                return Text(
-                                                    "Sin bidones creados",
-                                                    style: TextStyle(
-                                                        fontSize: 16.sp));
-                                              } else {
-                                                return CircularProgressIndicator();
-                                              }
-                                            }))),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Card(
+                                      elevation: 0,
+                                      color: Colors.white,
+                                      child: Padding(
+                                          padding: EdgeInsets.all(8.sp),
+                                          child: FutureBuilder(
+                                              future: BidonesController
+                                                  .getItemsByAbierto(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  return snapshot
+                                                          .data!.isNotEmpty
+                                                      ? Wrap(
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .center,
+                                                          alignment:
+                                                              WrapAlignment
+                                                                  .spaceAround,
+                                                          spacing: 1.w,
+                                                          children: snapshot
+                                                              .data!
+                                                              .map((bidones) =>
+                                                                  SizedBox(
+                                                                      width:
+                                                                          30.w,
+                                                                      child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .center,
+                                                                          mainAxisSize: MainAxisSize
+                                                                              .min,
+                                                                          children: [
+                                                                            TextButton(
+                                                                                onPressed: () => showDialog(context: context, builder: (context) => DialogBidones(bidon: bidones)),
+                                                                                child: Text("${bidones.nombre} -${(((bidones.montoInicial - bidones.montoFinal))) / bidones.montoInicial}", style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
+                                                                            LinearProgressIndicator(
+                                                                                minHeight: 1.h,
+                                                                                valueColor: AlwaysStoppedAnimation(bidones.inhabilitado == 0 ? LightThemeColors.darkBlue : LightThemeColors.darkGrey),
+                                                                                borderRadius: BorderRadius.circular(borderRadius),
+                                                                                semanticsValue: "${bidones.montoInicial}",
+                                                                                value: (((bidones.montoInicial - bidones.montoFinal))) / bidones.montoInicial)
+                                                                          ])))
+                                                              .toList())
+                                                      : Text(
+                                                          "Sin bidones creados",
+                                                          style: TextStyle(
+                                                              fontSize: 16.sp));
+                                                } else if (snapshot.hasError) {
+                                                  return Text(
+                                                      "${snapshot.error}",
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp));
+                                                } else if (!snapshot.hasData) {
+                                                  return Text(
+                                                      "Sin bidones creados",
+                                                      style: TextStyle(
+                                                          fontSize: 16.sp));
+                                                } else {
+                                                  return CircularProgressIndicator();
+                                                }
+                                              }))),
+                                ),
                                 ElevatedButton(
                                     onPressed: () => showDialog(
                                         context: context,
@@ -162,7 +174,7 @@ class _SettingViewState extends State<SettingView> {
                               BannerExample(tipo: 0),
                               SettingPresupuestoWidget(provider: provider),
                               Divider(),
-                              const BackupManual(),
+                              const BackupManual()
                             ]))))),
             floatingActionButton: BannerExample(tipo: 1)));
   }

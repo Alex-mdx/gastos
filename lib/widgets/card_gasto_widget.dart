@@ -64,7 +64,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       lastDate: now)) ??
                                   now;
                               final modelTemp = widget.provider.gastoActual.copyWith(
-                                  fecha: Textos.fechaHMS(fecha: widget.provider.selectFecha
+                                  fecha: Textos.fechaHMS(
+                                      fecha: widget.provider.selectFecha
                                               ?.copyWith(
                                                   year: widget.provider
                                                       .selectFecha?.year,
@@ -275,7 +276,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     style: TextStyle(fontSize: 15.sp)),
                                 icon: const Icon(Icons.calendar_month))), */
                     SizedBox(
-                        height: 7.h,
+                        height: 6.h,
                         child: TextField(
                             onTapOutside: (event) {
                               if (!currentFocus.hasPrimaryFocus) {
@@ -296,8 +297,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             onSubmitted: (value) {
                               log("${widget.provider.gastoActual.toJson()}");
                             },
-                            decoration:
-                                InputDecoration(hintText: "Notas de gasto")))
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: .5.h, horizontal: 2.w),
+                                hintText: "Notas de gasto")))
                   ])))),
       SizedBox(
           width: double.infinity,
@@ -324,22 +327,24 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               i++) {
                             await ImageGen.generar(
                                 archivo: widget.provider.imagenesActual[i],
-                                name: "gasto_${id}_$i");
-                            names.add("gasto_${id}_$i");
+                                name: "gasto_${i + 1}_$id");
+                            names.add("gasto_${i + 1}_$id.jpg");
                           }
                           //?La tabla de gasto es para notificar si dicha tarjeta es modificable
                           final finalTemp = widget.provider.gastoActual
                               .copyWith(
-                                  id: (await GastosController.getLastId()),
+                                  id: id,
                                   metodoPagoId:
                                       widget.provider.metodoSelect!.id,
                                   gasto: 1,
                                   ultimaFecha: widget.provider.selectProxima ==
                                           null
                                       ? null
-                                      : Textos.fechaYMD(fecha: widget.provider.selectProxima!),
+                                      : Textos.fechaYMD(
+                                          fecha:
+                                              widget.provider.selectProxima!),
                                   fecha: widget.provider.gastoActual.fecha ??
-                                      Textos.fechaYMD(fecha: now),
+                                      Textos.fechaYMDHMS(fecha: now),
                                   dia: widget.provider.gastoActual.dia ??
                                       (now.day).toString(),
                                   mes: widget.provider.gastoActual.mes ??

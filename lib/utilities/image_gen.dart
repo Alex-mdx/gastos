@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,14 +30,14 @@ class ImageGen {
           try {
             // Eliminar el archivo
             await archivo.delete();
-            print('Archivo eliminado: ${archivo.path}');
+            debugPrint('Archivo eliminado: ${archivo.path}');
           } catch (e) {
-            print('Error al eliminar el archivo: ${archivo.path}, error: $e');
+            debugPrint('Error al eliminar el archivo: ${archivo.path}, error: $e');
           }
         }
       }
     } else {
-      print('No se pudo encontrar la carpeta de descargas.');
+      debugPrint('No se pudo encontrar la carpeta de descargas.');
     }
   }
 
@@ -48,11 +49,11 @@ class ImageGen {
     // Buscar el archivo por nombre
     for (var elemento in elementos) {
       if (elemento is File && elemento.path.endsWith(nombre)) {
-        print('Archivo encontrado: ${elemento.path}');
+        debugPrint('Archivo encontrado: ${elemento.path}');
         return elemento; // Retornar el archivo encontrado
       }
     }
-    print('Archivo no encontrado.');
+    debugPrint('Archivo no encontrado.');
     return null; // Retornar null si no se encuentra el archivo
   }
 
@@ -60,10 +61,10 @@ class ImageGen {
       {required Uint8List archivo, required String name}) async {
     final directory = await getDownloadsDirectory();
     // Crea un archivo en la ruta especificada
-    final file = File("${directory!.path}/$name.jpeg");
+    final file = File("${directory!.path}/$name.jpg");
     // Escribe los datos del Uint8List en el archivo
     await file.writeAsBytes(archivo);
-    print("archivo generado ${file.path}");
+    debugPrint("archivo generado ${file.path}");
     return file;
   }
 }

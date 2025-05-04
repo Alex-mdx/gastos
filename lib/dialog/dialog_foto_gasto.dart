@@ -49,68 +49,60 @@ class DialogFotoGasto extends StatelessWidget {
                 height: 26.sp,
                 width: 26.sp,
                 filterQuality: FilterQuality.low)),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) => Column(children: [
-                    Expanded(
-                        child: PhotoView.customChild(
-                            minScale: PhotoViewComputedScale.contained,
-                            maxScale: PhotoViewComputedScale.contained * 2,
-                            child: Image.memory(e))),
-                    OverflowBar(
-                        alignment: MainAxisAlignment.spaceAround,
-                        overflowSpacing: 1.h,
-                        children: [
-                          IconButton(
-                              iconSize: 24.sp,
-                              onPressed: () => Dialogs.showMorph(
-                                  title: "Eliminar",
-                                  description:
-                                      '¿Desea eliminar esta foto seleccionada?',
-                                  loadingTitle: 'Eliminando',
-                                  onAcceptPressed: (context) async {
-                                    provider.imagenesActual.remove(e);
-                                    
-                                    Navigation.pop();
-                                  }),
-                              icon:
-                                  const Icon(Icons.delete, color: Colors.red)),
-                          IconButton(
-                              iconSize: 24.sp,
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProImageEditor.memory(
-                                            e,
-                                            callbacks: ProImageEditorCallbacks(
-                                                onImageEditingComplete: (Uint8List
-                                                        bytes) async =>
-                                                    Dialogs.showMorph(
-                                                        title: "Guardar imagen",
-                                                        description:
-                                                            "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
-                                                        loadingTitle:
-                                                            "Guardando",
-                                                        onAcceptPressed:
-                                                            (context) async {
-                                                          int index = provider
-                                                              .imagenesActual
-                                                              .indexWhere(
-                                                                  (element) =>
-                                                                      element ==
-                                                                      e);
-                                                          provider.imagenesActual[
-                                                              index] = bytes;
-                                                          Navigation.popTwice();
-                                                          showToast(
-                                                              "Salga y vuelva a entrar para que se efectuen los cambios");
-                                                        })))));
-                              },
-                              icon: Icon(Icons.edit))
-                        ])
-                  ]));
-        });
+        onPressed: () => showDialog(
+            context: context,
+            builder: (context) => Column(children: [
+                  Expanded(
+                      child: PhotoView.customChild(
+                          minScale: PhotoViewComputedScale.contained,
+                          maxScale: PhotoViewComputedScale.contained * 2,
+                          child: Image.memory(e))),
+                  OverflowBar(
+                      alignment: MainAxisAlignment.spaceAround,
+                      overflowSpacing: 1.h,
+                      children: [
+                        IconButton(
+                            iconSize: 24.sp,
+                            onPressed: () => Dialogs.showMorph(
+                                title: "Eliminar",
+                                description:
+                                    '¿Desea eliminar esta foto seleccionada?',
+                                loadingTitle: 'Eliminando',
+                                onAcceptPressed: (context) async {
+                                  provider.imagenesActual.remove(e);
+                                  Navigation.pop();
+                                }),
+                            icon: const Icon(Icons.delete, color: Colors.red)),
+                        IconButton(
+                            iconSize: 24.sp,
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProImageEditor.memory(
+                                        e,
+                                        callbacks: ProImageEditorCallbacks(
+                                            onImageEditingComplete: (Uint8List
+                                                    bytes) async =>
+                                                Dialogs.showMorph(
+                                                    title: "Guardar imagen",
+                                                    description:
+                                                        "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
+                                                    loadingTitle: "Guardando",
+                                                    onAcceptPressed:
+                                                        (context) async {
+                                                      int index = provider
+                                                          .imagenesActual
+                                                          .indexWhere(
+                                                              (element) =>
+                                                                  element == e);
+                                                      provider.imagenesActual[
+                                                          index] = bytes;
+                                                      Navigation.popTwice();
+                                                      showToast(
+                                                          "Salga y vuelva a entrar para que se efectuen los cambios");
+                                                    }))))),
+                            icon: Icon(Icons.edit))
+                      ])
+                ])));
   }
 }

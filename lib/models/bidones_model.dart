@@ -12,6 +12,7 @@ class BidonesModel {
   DateTime fechaInicio;
   DateTime fechaFinal;
   int cerrado;
+  int inhabilitado;
   List<int> gastos;
 
   BidonesModel(
@@ -26,6 +27,7 @@ class BidonesModel {
       required this.fechaInicio,
       required this.fechaFinal,
       required this.cerrado,
+      required this.inhabilitado,
       required this.gastos});
 
   BidonesModel copyWith(
@@ -40,6 +42,7 @@ class BidonesModel {
           DateTime? fechaInicio,
           DateTime? fechaFinal,
           int? cerrado,
+          int? inhabilitado,
           List<int>? gastos}) =>
       BidonesModel(
           id: id ?? this.id,
@@ -53,6 +56,7 @@ class BidonesModel {
           fechaInicio: fechaInicio ?? this.fechaInicio,
           fechaFinal: fechaFinal ?? this.fechaFinal,
           cerrado: cerrado ?? this.cerrado,
+          inhabilitado: inhabilitado ?? this.inhabilitado,
           gastos: gastos ?? this.gastos);
 
   factory BidonesModel.fromJson(Map<String, dynamic> json) => BidonesModel(
@@ -73,6 +77,7 @@ class BidonesModel {
       fechaInicio: DateTime.parse(json["fecha_inicio"]),
       fechaFinal: DateTime.parse(json["fecha_final"]),
       cerrado: json["cerrado"],
+      inhabilitado: json["inhabilitado"],
       gastos: json["gastos"] == null
           ? []
           : List<int>.from(jsonDecode(json["gastos"].toString()).map((x) => x)));
@@ -89,6 +94,7 @@ class BidonesModel {
         "fecha_inicio": fechaInicio.toIso8601String(),
         "fecha_final": fechaFinal.toIso8601String(),
         "cerrado": cerrado,
+        "inhabilitado": inhabilitado,
         "gastos":jsonEncode(metodoPago)
       };
 }

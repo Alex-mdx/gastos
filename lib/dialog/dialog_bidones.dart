@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DialogBidones extends StatefulWidget {
-  const DialogBidones({super.key});
+  final BidonesModel? bidon;
+  const DialogBidones({super.key, this.bidon});
 
   @override
   State<DialogBidones> createState() => _DialogBidonesState();
@@ -35,335 +36,453 @@ class _DialogBidonesState extends State<DialogBidones> {
   List<int> metodoId = [];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.bidon != null) {
+      nombre.text = widget.bidon?.nombre ?? "";
+      monto.text = (widget.bidon?.montoInicial ?? "").toString();
+      fechas = widget.bidon?.diasEfecto ?? [];
+      categoriaId = widget.bidon?.categoria ?? [];
+      metodoId = widget.bidon?.metodoPago ?? [];
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Dialog(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-      Text("Bidones de Presupuesto",
-          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
-      Divider(height: 1.h),
-      Container(
-          constraints: BoxConstraints(maxHeight: 45.h),
-          child: Scrollbar(
-              child: SingleChildScrollView(
-                  child: Padding(
-                      padding: EdgeInsets.all(8.sp),
-                      child: Card(
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
-                        TextField(
-                            controller: nombre,
-                            keyboardType: TextInputType.text,
-                            decoration:
-                                InputDecoration(hintText: "Nombre del bidon")),
-                        Text(
-                            "Dias que se rellenara de manera automatica\n(Si no se selecciona ninguna, se rellenara de manera automatica hasta el que bidon este vacio)",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                        Wrap(
-                            spacing: .5.w,
-                            alignment: WrapAlignment.spaceAround,
-                            runAlignment: WrapAlignment.spaceAround,
-                            children: [
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 0)) {
-                                        fechas.remove(0);
-                                      } else {
-                                        fechas.add(0);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 0),
-                                  label: Text("Lunes",
-                                      style: TextStyle(fontSize: 14.sp))),
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 1)) {
-                                        fechas.remove(1);
-                                      } else {
-                                        fechas.add(1);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 1),
-                                  label: Text("Martes",
-                                      style: TextStyle(fontSize: 14.sp))),
-                              ChoiceChip.elevated(
-                                onSelected: (value) {
-                                  setState(() {
-                                    if (fechas.any((element) => element == 2)) {
-                                      fechas.remove(2);
-                                    } else {
-                                      fechas.add(2);
-                                    }
-                                  });
-                                },
-                                selected: fechas.any((element) => element == 2),
-                                label: Text("Miercoles",
-                                    style: TextStyle(fontSize: 14.sp)),
-                              ),
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 3)) {
-                                        fechas.remove(3);
-                                      } else {
-                                        fechas.add(3);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 3),
-                                  label: Text("Jueves",
-                                      style: TextStyle(fontSize: 14.sp))),
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 4)) {
-                                        fechas.remove(4);
-                                      } else {
-                                        fechas.add(4);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 4),
-                                  label: Text("Viernes",
-                                      style: TextStyle(fontSize: 14.sp))),
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 5)) {
-                                        fechas.remove(5);
-                                      } else {
-                                        fechas.add(5);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 5),
-                                  label: Text("Sabado",
-                                      style: TextStyle(fontSize: 14.sp))),
-                              ChoiceChip.elevated(
-                                  onSelected: (value) {
-                                    setState(() {
-                                      if (fechas
-                                          .any((element) => element == 6)) {
-                                        fechas.remove(6);
-                                      } else {
-                                        fechas.add(6);
-                                      }
-                                    });
-                                  },
-                                  selected:
-                                      fechas.any((element) => element == 6),
-                                  label: Text("Domingo",
-                                      style: TextStyle(fontSize: 14.sp)))
-                            ]),
-                        Text(
-                            "Categorias que afectara este bidon de presupuesto",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                        CustomDropdown.searchRequest(
-                            futureRequest: (p0) async =>
-                                await CategoriaController.buscar(p0),
-                            hintText: 'Categorias',
-                            controller: categoria,
-                            items: provider.listaCategoria,
-                            itemsListPadding: EdgeInsets.all(0),
-                            listItemPadding: EdgeInsets.all(0),
-                            headerBuilder: (context, selectedItem, enabled) =>
-                                Text(selectedItem.nombre,
-                                    style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.bold)),
-                            listItemBuilder: (context, item, isSelected,
-                                    onItemSelect) =>
-                                ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 0, horizontal: 1.w),
-                                    title: Text(item.nombre,
-                                        style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Text(item.descripcion,
-                                        maxLines: 2,
-                                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold))),
-                            onChanged: (p0) {
-                              if (p0 != null) {
-                                if (!categoriaId
-                                    .contains(categoria.value!.id!)) {
-                                  setState(() {
-                                    categoriaId.add(categoria.value!.id!);
-                                  });
-                                } else {
-                                  showToast("Ya ha ingresado este elemento");
-                                }
-                              }
-                            }),
-                        Wrap(
-                            runSpacing: 0,
-                            spacing: 1.w,
-                            children: categoriaId
-                                .map((e) => Chip(
-                                    onDeleted: () => setState(() {
-                                          categoriaId.remove(e);
-                                        }),
-                                    label: FutureBuilder(
-                                        future:
-                                            CategoriaController.getItem(id: e),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(snapshot.data!.nombre,
-                                                style: TextStyle(
-                                                    fontSize: 13.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold));
-                                          } else if (snapshot.hasError) {
-                                            return Text("${snapshot.error}",
-                                                style:
-                                                    TextStyle(fontSize: 12.sp));
-                                          } else {
-                                            return SizedBox(
-                                                height: 4.w,
-                                                width: 4.w,
-                                                child:
-                                                    CircularProgressIndicator());
-                                          }
-                                        })))
-                                .toList()),
-                        Divider(),
-                        Text(
-                            "Metodos de pago que afectara este bidon de presupuesto",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                        CustomDropdown.searchRequest(
-                            futureRequest: (p0) async =>
-                                await MetodoGastoController.buscar(p0),
-                            hintText: 'Metodo de pago',
-                            controller: metodo,
-                            itemsListPadding: EdgeInsets.all(0),
-                            listItemPadding: EdgeInsets.all(0),
-                            headerBuilder: (context, selectedItem, enabled) =>
-                                Text(selectedItem.nombre,
-                                    style: TextStyle(
-                                        fontSize: 15.sp,
-                                        fontWeight: FontWeight.bold)),
-                            listItemBuilder:
-                                (context, item, isSelected, onItemSelect) =>
-                                    ListTile(
-                                        title: Text(item.nombre,
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.bold))),
-                            items: provider.metodo,
-                            onChanged: (p0) {
-                              if (p0 != null) {
-                                if (!metodoId.contains(metodo.value!.id)) {
-                                  setState(() {
-                                    metodoId.add(metodo.value!.id);
-                                  });
-                                } else {
-                                  showToast("Ya ha ingresado este elemento");
-                                }
-                              }
-                            }),
-                        Wrap(
-                            spacing: 1.w,
-                            children: metodoId
-                                .map((e) => Chip(
-                                    onDeleted: () => setState(() {
-                                          metodoId.remove(e);
-                                        }),
-                                    label: FutureBuilder(
-                                        future: MetodoGastoController.getItem(
-                                            id: e),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Text(snapshot.data!.nombre,
-                                                style: TextStyle(
-                                                    fontSize: 13.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold));
-                                          } else if (snapshot.hasError) {
-                                            return Text("${snapshot.error}",
-                                                style:
-                                                    TextStyle(fontSize: 12.sp));
-                                          } else {
-                                            return SizedBox(
-                                                height: 4.w,
-                                                width: 4.w,
-                                                child:
-                                                    CircularProgressIndicator());
-                                          }
-                                        })))
-                                .toList()),
-                        Divider(),
-                        TextField(
-                            controller: monto,
-                            keyboardType: TextInputType.numberWithOptions(
-                                decimal: true, signed: false),
-                            decoration: InputDecoration(
-                                hintText: "Monto Inicial",
-                                prefixIcon: Icon(Icons.monetization_on,
-                                    color: LightThemeColors.green)))
-                      ])))))),
-      ElevatedButton.icon(
-          icon: Icon(Icons.group_work, size: 20.sp),
-          onPressed: () async {
-            int id = await BidonesController.getLastId();
-            String word = Textos.randomWord(10);
-            final now = DateTime.now();
-            if (nombre.text != "") {
-              if (metodoId.isNotEmpty || categoriaId.isNotEmpty) {
-                if (monto.text != "") {
-                  Dialogs.showMorph(
-                      title: "Ingresar bidon",
-                      description:
-                          "¿Desea ingresar este bidon llamado ${nombre.text}?",
-                      loadingTitle: "Guardando",
-                      onAcceptPressed: (context) async {
-                        BidonesModel bidon = BidonesModel(
-                            id: id,
-                            identificador: word,
-                            nombre: nombre.text,
-                            montoInicial: double.parse(monto.text),
-                            montoFinal: 0,
-                            metodoPago: metodoId,
-                            categoria: categoriaId,
-                            diasEfecto: fechas,
-                            fechaInicio: now,
-                            fechaFinal: now,
-                            cerrado: 0,
-                            gastos: []);
-                        log("${bidon.toJson()}");
-                        await BidonesController.insert(bidon);
+      OverflowBar(children: [
+        SizedBox(
+            width: 50.w,
+            child: Text("Bidones de Presupuesto",
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold))),
+        if (widget.bidon != null)
+          OverflowBar(children: [
+            IconButton(
+                iconSize: 20.sp,
+                onPressed: () => Dialogs.showMorph(
+                    title: widget.bidon!.inhabilitado == 0
+                        ? "Inhabilitar bidon"
+                        : "Habilitar bidon",
+                    description: widget.bidon!.inhabilitado == 1
+                        ? "Al habilitar el bidon este mismo vuelve estar listo para que sea afectado por los metodos y categorias qeu haya enlazado"
+                        : "Si deshabilita este bidon, aquellos  metodos de pago y/o categorias vinculadas a sus gastos no afectaran en el vacio del bidon",
+                    loadingTitle: widget.bidon!.inhabilitado == 1
+                        ? "Habilitando"
+                        : "Inhabilitando",
+                    onAcceptPressed: (context) async {
+                      final cate = widget.bidon!.copyWith(
+                          inhabilitado:
+                              widget.bidon!.inhabilitado == 1 ? 0 : 1);
+                      await BidonesController.update(cate);
+                      setState(() {
                         Navigation.pop();
                       });
+                    }),
+                icon: Icon(
+                    widget.bidon!.inhabilitado == 1
+                        ? Icons.mobile_friendly
+                        : Icons.mobile_off,
+                    color: widget.bidon!.inhabilitado == 1
+                        ? LightThemeColors.green
+                        : LightThemeColors.darkGrey)),
+            IconButton(
+                iconSize: 20.sp,
+                onPressed: () => Dialogs.showMorph(
+                    title: "Cerrar bidon",
+                    description:
+                        "Si cierra este bidon ya no estara disponible para su uso, pero podra visualizarlo en reportes en dado caso que se haya afectado con sus gastos",
+                    loadingTitle: "Inhabilitando",
+                    onAcceptPressed: (context) async {
+                      final cate =
+                          widget.bidon!.copyWith(inhabilitado: 1, cerrado: 1);
+                      await BidonesController.update(cate);
+                      setState(() {
+                        Navigation.pop();
+                      });
+                    }),
+                icon: Icon(Icons.close_rounded, color: LightThemeColors.red))
+          ])
+      ]),
+      Divider(height: 1.h),
+      widget.bidon?.inhabilitado == 1
+          ? SizedBox(
+              width: double.infinity,
+              child: Card(
+                  child: Padding(
+                      padding: EdgeInsets.all(10.sp),
+                      child: Text("Bidon Deshabilitado",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14.sp)))))
+          : Container(
+              constraints: BoxConstraints(maxHeight: 45.h),
+              child: Scrollbar(
+                  child: SingleChildScrollView(
+                      child: Padding(
+                          padding: EdgeInsets.all(8.sp),
+                          child: Card(
+                              child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                TextField(
+                                    controller: nombre,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                        hintText: "Nombre del bidon")),
+                                Text(
+                                    "Dias que se rellenara de manera automatica\n(Si no se selecciona ninguna, se rellenara de manera automatica hasta el que bidon este vacio)",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold)),
+                                Wrap(
+                                    spacing: .5.w,
+                                    alignment: WrapAlignment.spaceAround,
+                                    runAlignment: WrapAlignment.spaceAround,
+                                    children: [
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 0)) {
+                                                fechas.remove(0);
+                                              } else {
+                                                fechas.add(0);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 0),
+                                          label: Text("Lunes",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp))),
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 1)) {
+                                                fechas.remove(1);
+                                              } else {
+                                                fechas.add(1);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 1),
+                                          label: Text("Martes",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp))),
+                                      ChoiceChip.elevated(
+                                        onSelected: (value) {
+                                          setState(() {
+                                            if (fechas.any(
+                                                (element) => element == 2)) {
+                                              fechas.remove(2);
+                                            } else {
+                                              fechas.add(2);
+                                            }
+                                          });
+                                        },
+                                        selected: fechas
+                                            .any((element) => element == 2),
+                                        label: Text("Miercoles",
+                                            style: TextStyle(fontSize: 14.sp)),
+                                      ),
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 3)) {
+                                                fechas.remove(3);
+                                              } else {
+                                                fechas.add(3);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 3),
+                                          label: Text("Jueves",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp))),
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 4)) {
+                                                fechas.remove(4);
+                                              } else {
+                                                fechas.add(4);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 4),
+                                          label: Text("Viernes",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp))),
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 5)) {
+                                                fechas.remove(5);
+                                              } else {
+                                                fechas.add(5);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 5),
+                                          label: Text("Sabado",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp))),
+                                      ChoiceChip.elevated(
+                                          onSelected: (value) {
+                                            setState(() {
+                                              if (fechas.any(
+                                                  (element) => element == 6)) {
+                                                fechas.remove(6);
+                                              } else {
+                                                fechas.add(6);
+                                              }
+                                            });
+                                          },
+                                          selected: fechas
+                                              .any((element) => element == 6),
+                                          label: Text("Domingo",
+                                              style:
+                                                  TextStyle(fontSize: 14.sp)))
+                                    ]),
+                                Text(
+                                    "Categorias que afectara este bidon de presupuesto",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold)),
+                                CustomDropdown.searchRequest(
+                                    futureRequest: (p0) async =>
+                                        await CategoriaController.buscar(p0),
+                                    hintText: 'Categorias',
+                                    controller: categoria,
+                                    items: provider.listaCategoria,
+                                    itemsListPadding: EdgeInsets.all(0),
+                                    listItemPadding: EdgeInsets.all(0),
+                                    headerBuilder: (context, selectedItem, enabled) =>
+                                        Text(selectedItem.nombre,
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.bold)),
+                                    listItemBuilder: (context, item, isSelected,
+                                            onItemSelect) =>
+                                        ListTile(
+                                            contentPadding: EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 1.w),
+                                            title: Text(item.nombre,
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontWeight: FontWeight.bold)),
+                                            subtitle: Text(item.descripcion, maxLines: 2, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold))),
+                                    onChanged: (p0) {
+                                      if (p0 != null) {
+                                        if (!categoriaId
+                                            .contains(categoria.value!.id!)) {
+                                          setState(() {
+                                            categoriaId
+                                                .add(categoria.value!.id!);
+                                          });
+                                        } else {
+                                          showToast(
+                                              "Ya ha ingresado este elemento");
+                                        }
+                                      }
+                                    }),
+                                Wrap(
+                                    runSpacing: 0,
+                                    spacing: 1.w,
+                                    children: categoriaId
+                                        .map((e) => Chip(
+                                            onDeleted: () => setState(() {
+                                                  categoriaId.remove(e);
+                                                }),
+                                            label: FutureBuilder(
+                                                future:
+                                                    CategoriaController.getItem(
+                                                        id: e),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                        snapshot.data!.nombre,
+                                                        style: TextStyle(
+                                                            fontSize: 13.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold));
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Text(
+                                                        "${snapshot.error}",
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp));
+                                                  } else {
+                                                    return SizedBox(
+                                                        height: 4.w,
+                                                        width: 4.w,
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                })))
+                                        .toList()),
+                                Divider(),
+                                Text(
+                                    "Metodos de pago que afectara este bidon de presupuesto",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold)),
+                                CustomDropdown.searchRequest(
+                                    futureRequest: (p0) async =>
+                                        await MetodoGastoController.buscar(p0),
+                                    hintText: 'Metodo de pago',
+                                    controller: metodo,
+                                    itemsListPadding: EdgeInsets.all(0),
+                                    listItemPadding: EdgeInsets.all(0),
+                                    headerBuilder: (context, selectedItem,
+                                            enabled) =>
+                                        Text(selectedItem.nombre,
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.bold)),
+                                    listItemBuilder: (context, item, isSelected,
+                                            onItemSelect) =>
+                                        ListTile(
+                                            title: Text(item.nombre,
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                    items: provider.metodo,
+                                    onChanged: (p0) {
+                                      if (p0 != null) {
+                                        if (!metodoId
+                                            .contains(metodo.value!.id)) {
+                                          setState(() {
+                                            metodoId.add(metodo.value!.id);
+                                          });
+                                        } else {
+                                          showToast(
+                                              "Ya ha ingresado este elemento");
+                                        }
+                                      }
+                                    }),
+                                Wrap(
+                                    spacing: 1.w,
+                                    children: metodoId
+                                        .map((e) => Chip(
+                                            onDeleted: () => setState(() {
+                                                  metodoId.remove(e);
+                                                }),
+                                            label: FutureBuilder(
+                                                future: MetodoGastoController
+                                                    .getItem(id: e),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Text(
+                                                        snapshot.data!.nombre,
+                                                        style: TextStyle(
+                                                            fontSize: 13.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold));
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Text(
+                                                        "${snapshot.error}",
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp));
+                                                  } else {
+                                                    return SizedBox(
+                                                        height: 4.w,
+                                                        width: 4.w,
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                })))
+                                        .toList()),
+                                Divider(),
+                                TextField(
+                                    controller: monto,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true, signed: false),
+                                    decoration: InputDecoration(
+                                        hintText: "Monto Inicial",
+                                        prefixIcon: Icon(Icons.monetization_on,
+                                            color: LightThemeColors.green)))
+                              ])))))),
+      ElevatedButton.icon(
+          icon: Icon(Icons.group_work,
+              size: 20.sp,
+              color: widget.bidon == null
+                  ? LightThemeColors.primary
+                  : LightThemeColors.green),
+          onPressed: () async {
+            if (widget.bidon?.inhabilitado == 1) {
+              showToast("Bidon inhablitado");
+            } else {
+              int id = await BidonesController.getLastId();
+              String word = Textos.randomWord(10);
+              final now = DateTime.now();
+              if (nombre.text != "") {
+                if (metodoId.isNotEmpty || categoriaId.isNotEmpty) {
+                  if (double.tryParse(monto.text) != null) {
+                    Dialogs.showMorph(
+                        title: widget.bidon == null
+                            ? "Ingresar bidon"
+                            : "Actualizar bidon",
+                        description:
+                            "¿Desea ${widget.bidon == null ? "ingresar" : "actualizar"} este bidon llamado ${nombre.text}?",
+                        loadingTitle: "Guardando",
+                        onAcceptPressed: (context) async {
+                          BidonesModel bidon = BidonesModel(
+                              id: widget.bidon?.id ?? id,
+                              identificador:
+                                  widget.bidon?.identificador ?? word,
+                              nombre: nombre.text,
+                              montoInicial: double.parse(monto.text),
+                              montoFinal: widget.bidon?.montoFinal ?? 0,
+                              metodoPago: metodoId,
+                              categoria: categoriaId,
+                              diasEfecto: fechas,
+                              fechaInicio: widget.bidon?.fechaInicio ?? now,
+                              fechaFinal: widget.bidon?.fechaFinal ?? now,
+                              cerrado: widget.bidon?.cerrado ?? 0,
+                              inhabilitado: widget.bidon?.inhabilitado ?? 0,
+                              gastos: []);
+                          log("${bidon.toJson()}");
+                          await BidonesController.insert(bidon);
+                          Navigation.pop();
+                        });
+                  } else {
+                    showToast("Ingrese un monto mayor a 0");
+                  }
                 } else {
-                  showToast("Ingrese un monto mayor a 0");
+                  showToast(
+                      "Ingrese al menos un metodo de pago o una categoria");
                 }
               } else {
-                showToast("Ingrese al menos un metodo de pago o una categoria");
+                showToast("Ingrese nombre al bidon");
               }
-            } else {
-              showToast("Ingrese nombre al bidon");
             }
           },
-          label: Text("Crear",
+          label: Text(
+              widget.bidon?.inhabilitado == 1
+                  ? "Inhabilitado"
+                  : widget.bidon == null
+                      ? "Crear"
+                      : "Actualizar",
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)))
     ]));
   }
