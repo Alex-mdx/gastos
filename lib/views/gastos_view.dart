@@ -42,27 +42,26 @@ class GastosView extends StatelessWidget {
                 ])
               ])
             ]),
-        body: Padding(
-            padding: EdgeInsets.all(8.sp),
-            child: Stack(children: [
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                      height: 28.h,
-                      child: SingleChildScrollView(
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
-                        HistorialSemanalWidget(provider: provider),
-                        BannerExample(tipo: 0),
-                        /* Column(children: [
-                        const Divider(),
-                          Text("Recomendacion de gasto para esta semana",
-                              style: TextStyle(fontSize: 16.sp))
-                        ]) */
-                      ])))),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CardGastoWidget(provider: provider))
-            ])));
+        body: Stack(children: [
+          Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                  height: 32.h,
+                  child: SingleChildScrollView(
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    HistorialSemanalWidget(provider: provider),
+                    BannerExample(tipo: 0),
+                    /* Column(children: [
+                  const Divider(),
+                    Text("Recomendacion de gasto para esta semana",
+                        style: TextStyle(fontSize: 16.sp))
+                  ]) */
+                  ])))),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 1.w),
+                  child: CardGastoWidget(provider: provider)))
+        ]));
   }
 }

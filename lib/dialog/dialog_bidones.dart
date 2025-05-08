@@ -460,9 +460,14 @@ class _DialogBidonesState extends State<DialogBidones> {
                               fechaFinal: widget.bidon?.fechaFinal ?? now,
                               cerrado: widget.bidon?.cerrado ?? 0,
                               inhabilitado: widget.bidon?.inhabilitado ?? 0,
-                              gastos: []);
+                              gastos: widget.bidon?.gastos ?? []);
                           log("${bidon.toJson()}");
-                          await BidonesController.insert(bidon);
+                          if (widget.bidon == null) {
+                            await BidonesController.insert(bidon);
+                          } else {
+                            await BidonesController.update(bidon);
+                          }
+                          setState(() {});
                           Navigation.pop();
                         });
                   } else {

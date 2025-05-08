@@ -30,7 +30,7 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
     super.initState();
     if (widget.metodo != null) {
       nombre.text = widget.metodo?.nombre ?? "";
-      cambio.text = widget.metodo?.cambio.toString() ?? "0";
+      cambio.text = widget.metodo?.cambio.toString() ?? "1";
       denominacion.text = widget.metodo?.denominacion ?? "";
     }
   }

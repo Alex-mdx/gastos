@@ -31,7 +31,7 @@ class _HistorialViewState extends State<HistorialView> {
   @override
   void initState() {
     super.initState();
-    obtenerFechas();
+    WidgetsBinding.instance.addPostFrameCallback((_) => obtenerFechas());
   }
 
   final now = DateTime.now();
@@ -40,9 +40,13 @@ class _HistorialViewState extends State<HistorialView> {
 
   Future<List<GastoModelo>> obtenerFechas() async {
     var data = await GastosController.obtenerFechasEnRangoMes(first, last);
+    if (mounted) {
     setState(() {
       lista = data;
     });
+  } else {
+    debugPrint('Widget no montado, omitiendo setState()');
+  }
 
     return data;
   }

@@ -62,18 +62,17 @@ class BidonesController {
     return categoriaModelo;
   }
 
-  static Future<List<BidonesModel>> buscar(String word) async {
+  static Future<List<BidonesModel>> buscarCoincidencia(
+      int metodoPagoId, int categoriaId) async {
     final db = await database();
-    List<BidonesModel> categoriaModelo = [];
-    List<Map<String, dynamic>> categoria = await db.query(nombreDB,
-        where: "nombre LIKE ?",
-        whereArgs: ['%$word%'],
-        orderBy: "nombre",
-        limit: 10);
-    for (var element in categoria) {
-      categoriaModelo.add(BidonesModel.fromJson(element));
+    List<BidonesModel> modelado = [];
+    List<Map<String, dynamic>> data = await db.query(nombreDB,
+        where: "(metodo_pago LIKE ? OR categoria LIKE ?) AND cerrado = 0",
+        whereArgs: ['%$metodoPagoId%', '%$categoriaId%']);
+    for (var element in data) {
+      modelado.add(BidonesModel.fromJson(element));
     }
-    return categoriaModelo;
+    return modelado;
   }
 
   static Future<void> deleteItem(int identificador) async {

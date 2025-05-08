@@ -21,6 +21,7 @@ import '../dialog/dialog_categorias.dart';
 import '../models/categoria_model.dart';
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
+import '../utilities/operacion_bidon.dart';
 
 class CardGastoWidget extends StatefulWidget {
   final GastoProvider provider;
@@ -103,6 +104,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   searchHintText: "Nombre categoria de gasto",
                                   noResultFoundText: "Sin resultados",
                                   controller: controller,
+                                  closedHeaderPadding: EdgeInsets.symmetric(
+                                      horizontal: 1.w, vertical: 0),
                                   decoration: CustomDropdownDecoration(
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
                                           color: LightThemeColors.green,
@@ -141,8 +144,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                           subtitle: Text(item.descripcion,
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                              style:
-                                                  TextStyle(fontSize: 14.sp)),
+                                              style: TextStyle(fontSize: 14.sp)),
                                           trailing: IconButton(
                                               onPressed: () {
                                                 Dialogs.showMorph(
@@ -351,9 +353,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       (now.month).toString(),
                                   evidencia: names);
                           log("${finalTemp.toJson()}");
-                          await GastosController.insert(finalTemp);
+
+                          /* await GastosController.insert(finalTemp);
                           widget.provider.listaGastos =
-                              await GastosController.getConfigurado();
+                              await GastosController.getConfigurado(); */
+                          OperacionBidon.restador(finalTemp);
                           widget.provider.selectProxima =
                               widget.provider.selectProxima;
                           widget.provider.gastoActual = GastoModelo(
@@ -376,7 +380,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               nota: null);
                           //Limpia de variables locales
                           widget.provider.imagenesActual = [];
-                          widget.provider.notas.clear();
+                          widget.provider.notas.text = "";
                           widget.provider.selectFecha = DateTime.now();
                           showToast("Tarjeta de gasto Guardada con exito");
                         });

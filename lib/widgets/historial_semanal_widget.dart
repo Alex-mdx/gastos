@@ -37,6 +37,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
           width: 100.w,
           height: 16.h,
           child: Timeline.tileBuilder(
+              padding: EdgeInsets.all(0),
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               builder: TimelineTileBuilder.fromStyle(
@@ -47,19 +48,40 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                       padding: EdgeInsets.symmetric(horizontal: 1.w),
                       child: Text(dias[index],
                           style: TextStyle(
-                              fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                              fontSize: dias[index].toLowerCase().contains(
+                                      DateFormat('EEEE', 'es').format(now))
                                   ? 15.sp
-                                  : 12.sp,
-                              fontWeight: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                                  : 13.sp,
+                              fontWeight: dias[index].toLowerCase().contains(
+                                      DateFormat('EEEE', 'es').format(now))
                                   ? FontWeight.bold
                                   : FontWeight.normal))),
-                  oppositeContentsBuilder: (context, index) => Card(
-                      child: Padding(
-                          padding: EdgeInsets.all(6.sp),
-                          child: AnimatedDefaultTextStyle(
-                              style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, color: widget.provider.presupuesto?.activo == 1 ? widget.provider.porcentualColor(widget.provider.obtenerPorcentajeDia(index, widget.provider.promediarDiaSemana(index))) : Colors.black),
-                              duration: Duration(seconds: 1),
-                              child: AnimatedFlipCounter(value: widget.provider.promediarDiaSemana(index), duration: Durations.long3, fractionDigits: 1, prefix: "\$")))),
+                  oppositeContentsBuilder: (context, index) => SizedBox(
+                        width: 14.w,
+                        height: 6.h,
+                        child: Card(
+                            child: Padding(
+                                padding: EdgeInsets.all(4.sp),
+                                child: AnimatedDefaultTextStyle(
+                                    style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: widget.provider.presupuesto?.activo == 1
+                                            ? widget.provider.porcentualColor(
+                                                widget.provider.obtenerPorcentajeDia(
+                                                    index,
+                                                    widget.provider
+                                                        .promediarDiaSemana(
+                                                            index)))
+                                            : Colors.black),
+                                    duration: Duration(seconds: 1),
+                                    child: AnimatedFlipCounter(
+                                        value: widget.provider
+                                            .promediarDiaSemana(index),
+                                        duration: Durations.long3,
+                                        fractionDigits: 0,
+                                        prefix: "\$")))),
+                      ),
                   itemCount: dias.length))),
       Row(children: [
         Expanded(
