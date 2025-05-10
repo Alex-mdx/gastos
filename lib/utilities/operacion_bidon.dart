@@ -14,13 +14,13 @@ class OperacionBidon {
       List<int> addGasto = [...bidon.categoria, gasto.id!];
       final now = DateTime.now();
       var resta = bidon.montoFinal - (gasto.monto ?? 0);
+      log("$resta");
       if (resta >= 0) {
-        var restar = bidon.copyWith(fechaFinal: now, gastos: addGasto,montoFinal: resta);
+        var restar = bidon.copyWith(
+            fechaFinal: now, gastos: addGasto, montoFinal: resta);
         log("$restar");
       } else {
-        if(bidon.diasEfecto.where((dias) => dias == now.weekday).isNotEmpty){
-
-        }
+        if (bidon.diasEfecto.where((dias) => dias == now.weekday).isNotEmpty) {}
         //log("$restar");
       }
     }

@@ -20,6 +20,7 @@ class GastosView extends StatelessWidget {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
         appBar: AppBar(
+            toolbarHeight: 6.h,
             title: Text('Gastos',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
             actions: [
@@ -46,7 +47,7 @@ class GastosView extends StatelessWidget {
           Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
-                  height: 32.h,
+                  height: 35.h,
                   child: SingleChildScrollView(
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                     HistorialSemanalWidget(provider: provider),

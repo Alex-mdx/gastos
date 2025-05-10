@@ -44,6 +44,7 @@ class _SettingViewState extends State<SettingView> {
         },
         child: Scaffold(
             appBar: AppBar(
+                toolbarHeight: 6.h,
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(children: [
@@ -123,8 +124,8 @@ class _SettingViewState extends State<SettingView> {
                                                                       child: Column(
                                                                           mainAxisAlignment: MainAxisAlignment
                                                                               .center,
-                                                                          mainAxisSize: MainAxisSize
-                                                                              .min,
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
                                                                           children: [
                                                                             TextButton(
                                                                                 onPressed: () => showDialog(context: context, builder: (context) => DialogBidones(bidon: bidones)),
@@ -137,10 +138,13 @@ class _SettingViewState extends State<SettingView> {
                                                                                 value: (((bidones.montoInicial - bidones.montoFinal))) / bidones.montoInicial)
                                                                           ])))
                                                               .toList())
-                                                      : Text(
-                                                          "Sin bidones creados",
-                                                          style: TextStyle(
-                                                              fontSize: 16.sp));
+                                                      : Center(
+                                                          child: Text(
+                                                              "Sin bidones creados",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      16.sp)),
+                                                        );
                                                 } else if (snapshot.hasError) {
                                                   return Text(
                                                       "${snapshot.error}",
