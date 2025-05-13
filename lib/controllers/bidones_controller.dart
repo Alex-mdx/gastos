@@ -37,8 +37,8 @@ class BidonesController {
   static Future<void> update(BidonesModel cate) async {
     final db = await database();
     await db.update(nombreDB, cate.toJson(),
-        where: "identificador = ?",
-        whereArgs: [cate.identificador],
+        where: "identificador = ? AND id = ?",
+        whereArgs: [cate.identificador, cate.id],
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
@@ -55,7 +55,7 @@ class BidonesController {
     final db = await database();
     List<BidonesModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =
-        await db.query(nombreDB, where: "cerrado = 0", orderBy: "nombre ASC");
+        await db.query(nombreDB, orderBy: "nombre ASC");
     for (var element in categoria) {
       categoriaModelo.add(BidonesModel.fromJson(element));
     }

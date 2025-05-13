@@ -21,7 +21,7 @@ class DialogMetodoPagoCrear extends StatefulWidget {
 
 class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
   TextEditingController nombre = TextEditingController();
-  TextEditingController cambio = TextEditingController(text: "0");
+  TextEditingController cambio = TextEditingController(text: "1");
   TextEditingController denominacion = TextEditingController();
   Color coloreado = LightThemeColors.primary;
   bool press = true;

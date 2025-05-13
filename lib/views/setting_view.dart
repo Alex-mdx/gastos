@@ -120,7 +120,7 @@ class _SettingViewState extends State<SettingView> {
                                                               .map((bidones) =>
                                                                   SizedBox(
                                                                       width:
-                                                                          30.w,
+                                                                          31.w,
                                                                       child: Column(
                                                                           mainAxisAlignment: MainAxisAlignment
                                                                               .center,
@@ -129,13 +129,13 @@ class _SettingViewState extends State<SettingView> {
                                                                           children: [
                                                                             TextButton(
                                                                                 onPressed: () => showDialog(context: context, builder: (context) => DialogBidones(bidon: bidones)),
-                                                                                child: Text("${bidones.nombre} -${(((bidones.montoInicial - bidones.montoFinal))) / bidones.montoInicial}", style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
+                                                                                child: Text("${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : ((bidones.montoFinal) / bidones.montoInicial)) * 100)}% - \$${bidones.montoFinal}", textAlign: TextAlign.center, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
                                                                             LinearProgressIndicator(
                                                                                 minHeight: 1.h,
                                                                                 valueColor: AlwaysStoppedAnimation(bidones.inhabilitado == 0 ? LightThemeColors.darkBlue : LightThemeColors.darkGrey),
                                                                                 borderRadius: BorderRadius.circular(borderRadius),
                                                                                 semanticsValue: "${bidones.montoInicial}",
-                                                                                value: (((bidones.montoInicial - bidones.montoFinal))) / bidones.montoInicial)
+                                                                                value: bidones.montoFinal == 0 ? 0 : ((bidones.montoFinal) / bidones.montoInicial))
                                                                           ])))
                                                               .toList())
                                                       : Center(

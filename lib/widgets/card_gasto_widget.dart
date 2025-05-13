@@ -225,6 +225,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                           size: 20.sp,
                                           color: LightThemeColors.green)),
                                   direction: Axis.vertical,
+                                  step: 1,
+                                  autofocus: false,
+                                  interval: Durations.long1,
+                                  spacing: 0,
                                   onSubmitted: (p0) {
                                     final tempModel = widget
                                         .provider.gastoActual
@@ -291,14 +295,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             style: TextStyle(fontSize: 15.sp),
                             controller: widget.provider.notas,
                             keyboardType: TextInputType.text,
-                            onChanged: (value) {
-                              final tempModel = widget.provider.gastoActual
-                                  .copyWith(nota: widget.provider.notas.text);
-                              widget.provider.gastoActual = tempModel;
-                            },
-                            onSubmitted: (value) {
-                              log("${widget.provider.gastoActual.toJson()}");
-                            },
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: .5.h, horizontal: 2.w),
@@ -339,6 +335,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   metodoPagoId:
                                       widget.provider.metodoSelect!.id,
                                   gasto: 1,
+                                  nota: widget.provider.notas.text,
                                   ultimaFecha: widget.provider.selectProxima ==
                                           null
                                       ? null
@@ -357,7 +354,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           /* await GastosController.insert(finalTemp);
                           widget.provider.listaGastos =
                               await GastosController.getConfigurado(); */
-                          OperacionBidon.restador(finalTemp);
+                          await OperacionBidon.restador(
+                              gasto: finalTemp, resta: finalTemp.monto!);
                           widget.provider.selectProxima =
                               widget.provider.selectProxima;
                           widget.provider.gastoActual = GastoModelo(
@@ -381,6 +379,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           //Limpia de variables locales
                           widget.provider.imagenesActual = [];
                           widget.provider.notas.text = "";
+                          widget.provider.notas.selection =
+                              TextSelection.collapsed(offset: 0);
                           widget.provider.selectFecha = DateTime.now();
                           showToast("Tarjeta de gasto Guardada con exito");
                         });

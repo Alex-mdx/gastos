@@ -452,7 +452,7 @@ class _DialogBidonesState extends State<DialogBidones> {
                                   widget.bidon?.identificador ?? word,
                               nombre: nombre.text,
                               montoInicial: double.parse(monto.text),
-                              montoFinal: widget.bidon?.montoFinal ?? 0,
+                              montoFinal: double.parse(monto.text),
                               metodoPago: metodoId,
                               categoria: categoriaId,
                               diasEfecto: fechas,
