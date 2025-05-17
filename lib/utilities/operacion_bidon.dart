@@ -16,7 +16,7 @@ class OperacionBidon {
       List<int> addGasto = [...bidon.categoria, gasto.id!];
       final now = DateTime.now();
       var montoRestado = bidon.montoFinal - (resta);
-      log("${bidon.toJson()}\n$montoRestado");
+      log("${bidon.toJson()}\nRestado: $montoRestado");
       if (montoRestado >= 0) {
         var objeto = bidon.copyWith(
             fechaFinal: now, gastos: addGasto, montoFinal: montoRestado);
@@ -40,10 +40,9 @@ class OperacionBidon {
             cerrado: 0,
             inhabilitado: 0,
             gastos: addGasto);
-        double newResta = bidon.montoInicial - montoRestado.abs();
-        if (bidon.diasEfecto
-            .where((dias) => dias == now.weekday - 1)
-            .isNotEmpty) {
+        double newResta = (bidon.montoInicial - montoRestado.abs());
+        log("restaLoop: $newResta");
+        if (bidon.diasEfecto.isNotEmpty) {
           if (bidon.diasEfecto.contains(now.weekday - 1)) {
             final cerrar = objetoSaldado.copyWith(cerrado: 1);
             await BidonesController.update(cerrar);
@@ -51,26 +50,25 @@ class OperacionBidon {
               final restado = newBidon.copyWith(montoFinal: newResta);
               await BidonesController.insert(restado);
             } else {
-              final restado = newBidon.copyWith(montoFinal: 0);
-              await BidonesController.insert(restado);
+              await BidonesController.insert(newBidon);
+              await restador(gasto: gasto, resta: montoRestado.abs());
             }
-            await restador(gasto: gasto, resta: newResta);
           } else {
             final restarObjeto = objetoSaldado.copyWith(
                 montoFinal: objetoSaldado.montoFinal - montoRestado.abs());
             await BidonesController.update(restarObjeto);
           }
         } else {
+          log("Sin dias");
           final cerrar = objetoSaldado.copyWith(cerrado: 1);
           await BidonesController.update(cerrar);
           if (newResta >= 0) {
             final restado = newBidon.copyWith(montoFinal: newResta);
             await BidonesController.insert(restado);
           } else {
-            final restado = newBidon.copyWith(montoFinal: 0);
-            await BidonesController.insert(restado);
+            await BidonesController.insert(newBidon);
+            await restador(gasto: gasto, resta: montoRestado.abs());
           }
-          await restador(gasto: gasto, resta: newResta);
         }
       }
     }
