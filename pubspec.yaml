@@ -10,7 +10,7 @@ dependencies:
   animated_flip_counter: ^0.3.4
   animated_read_more_text: ^0.0.6
   archive: ^3.6.1
-  awesome_notifications: ^0.10.0
+  awesome_notifications: 0.10.0
   badges: ^3.1.2
   calendar_date_picker2: ^2.0.0
   cupertino_icons: ^1.0.6
