@@ -1,5 +1,6 @@
 import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/notificaciones_fun.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
@@ -26,6 +27,11 @@ class GastosView extends StatelessWidget {
             actions: [
               Column(children: [
                 OverflowBar(spacing: 1.w, children: [
+                  IconButton(
+                      onPressed: () async {
+                        await NotificacionesFun().show();
+                      },
+                      icon: Icon(Icons.precision_manufacturing_sharp)),
                   const ButtonPromedioWidget(),
                   IconButton(
                       iconSize: 24.sp,

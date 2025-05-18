@@ -13,6 +13,7 @@ import 'package:sizer/sizer.dart';
 ///import 'package:dropbox_client/dropbox_client.dart';
 import 'utilities/apis/rutas_app.dart';
 import 'utilities/navegacion_provider.dart';
+import 'utilities/notificaciones_fun.dart';
 import 'utilities/preferences.dart';
 import 'utilities/services/navigation_key.dart';
 
@@ -30,6 +31,7 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
   await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
+  await NotificacionesFun.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
     runApp(MultiProvider(providers: [

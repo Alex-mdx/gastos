@@ -23,7 +23,8 @@ class Preferences {
   static bool get tema => _preferences?.getBool('tema') ?? false;
   static set tema(bool value) => _preferences?.setBool('tema', value);
 
-  static String get setting => _preferences?.getString('setting') ?? "-0001-11-30 01:00:00.000";
+  static String get setting =>
+      _preferences?.getString('setting') ?? "-0001-11-30 01:00:00.000";
   static set setting(String value) => _preferences?.setString('setting', value);
 
   static double get calidadFoto =>
@@ -35,4 +36,14 @@ class Preferences {
       _preferences?.getString('tokenDropbox') ?? "";
   static set tokenDropbox(String value) =>
       _preferences?.setString('tokenDropbox', value);
+
+  static String get recordatorio1 =>
+      _preferences?.getString('recordatorio1') ?? "21:00";
+  static set recordatorio1(String value) =>
+      _preferences?.setString('recordatorio1', value);
+
+  static String get recordatorio2 =>
+      _preferences?.getString('recordatorio2') ?? "13:00";
+  static set recordatorio2(String value) =>
+      _preferences?.setString('recordatorio2', value);
 }

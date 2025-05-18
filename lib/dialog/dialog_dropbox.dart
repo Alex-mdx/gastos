@@ -1,11 +1,14 @@
+import 'dart:developer';
 
-//import 'package:dropbox_client/dropbox_client.dart';
+import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
+
+import '../utilities/dropbox_gen.dart';
 
 class DialogDropbox extends StatefulWidget {
   const DialogDropbox({super.key});
@@ -31,12 +34,12 @@ class _DialogDropboxState extends State<DialogDropbox> {
               icon:
                   Icon(Icons.login, size: 20.sp, color: LightThemeColors.green),
               onPressed: () async {
-                /* var tipo = await DropboxGen.verificarLogeo();
+                var tipo = await DropboxGen.verificarLogeo();
                 if (!tipo) {
                   await Dropbox.authorize();
                   await DropboxGen.verificarLogeo();
                 }
-                setState(() {}); */
+                setState(() {});
               },
               label: Text("Iniciar sesion", style: TextStyle(fontSize: 15.sp))),
         if (Preferences.tokenDropbox != "")
@@ -48,25 +51,24 @@ class _DialogDropboxState extends State<DialogDropbox> {
                       send = false;
                       proceso = "En proceso";
                     });
-                    /* final result = await Dropbox.getAccountName();
-                      setState(() {
-                        proceso = "Bienvenido a dropbox $result";
-                      });
-                      final url = await Dropbox.listFolder('');
-                      setState(() {
-                        proceso = "Se ingreso a su carpeta de respaldo $url";
-                      });
-                      final urls =
-                          await Dropbox.getTemporaryLink('/gasto.xlsx');
-                      print(urls);
-                      setState(() {
-                        proceso = "url: $urls";
-                      });
-                      if (urls!.contains("not_found")) {
-                        showToast("No se encontro ningun archivo de respaldo");
-                      } else {
-                        showToast("viva la vida");
-                      } */
+                    final result = await Dropbox.getAccountName();
+                    setState(() {
+                      proceso = "Bienvenido a dropbox $result";
+                    });
+                    final url = await Dropbox.listFolder('');
+                    setState(() {
+                      proceso = "Se ingreso a su carpeta de respaldo $url";
+                    });
+                    final urls = await Dropbox.getTemporaryLink('/gasto.xlsx');
+                    print(urls);
+                    setState(() {
+                      proceso = "url: $urls";
+                    });
+                    if (urls!.contains("not_found")) {
+                      showToast("No se encontro ningun archivo de respaldo");
+                    } else {
+                      showToast("viva la vida");
+                    }
                     setState(() {
                       send = true;
                       proceso = "Sin proceso";
@@ -94,16 +96,16 @@ class _DialogDropboxState extends State<DialogDropbox> {
                       send = false;
                     });
 
-                    /* await Dropbox.unlink();
-                      var token = await Dropbox.getAccessToken();
-                      log("token: $token");
-                      if (token == null) {
-                        print(token);
-                        setState(() {
-                          Preferences.tokenDropbox = "";
-                        });
-                        showToast("Se ha cerrado su sesion de dropbox");
-                      } */
+                    await Dropbox.unlink();
+                    var token = await Dropbox.getAccessToken();
+                    log("token: $token");
+                    if (token == null) {
+                      print(token);
+                      setState(() {
+                        Preferences.tokenDropbox = "";
+                      });
+                      showToast("Se ha cerrado su sesion de dropbox");
+                    }
                     setState(() {
                       send = true;
                     });

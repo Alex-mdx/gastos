@@ -10,7 +10,6 @@ dependencies:
   animated_flip_counter: ^0.3.4
   animated_read_more_text: ^0.0.6
   archive: ^3.6.1
-  awesome_notifications: 0.10.0
   badges: ^3.1.2
   calendar_date_picker2: ^2.0.0
   cupertino_icons: ^1.0.6
@@ -22,6 +21,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   flutter_gemini: ^3.0.0
   flutter_launcher_icons: ^0.14.1
+  flutter_local_notifications: ^19.2.0
   flutter_localizations:
     sdk: flutter
   flutter_spinbox: ^0.13.1
@@ -51,6 +51,7 @@ dependencies:
   syncfusion_flutter_calendar: ^29.1.33
   syncfusion_flutter_sliders: ^29.1.33
   timelines_plus: ^1.0.2
+  timezone: ^0.10.0
   youtube_player_flutter: ^9.1.1
 
 dev_dependencies:

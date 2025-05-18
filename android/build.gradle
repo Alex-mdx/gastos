@@ -6,7 +6,7 @@ allprojects {
 }
 
 rootProject.buildDir = "../build"
-subprojects {
+/* subprojects {
     afterEvaluate { project ->
         if (project.plugins.hasPlugin("com.android.application") ||
                 project.plugins.hasPlugin("com.android.library")) {
@@ -15,7 +15,7 @@ subprojects {
             }
         }
     }
-}
+} */
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
     project.evaluationDependsOn(':app')
