@@ -10,7 +10,6 @@ import 'package:gastos/controllers/metodo_gasto_controller.dart';
 import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
-import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,29 +17,31 @@ import 'package:share_plus/share_plus.dart';
 import '../models/periodo_model.dart';
 
 class GenerateExcel {
-  static Future<File?> backUp(GastoProvider provider) async {
+  static Future<File?> backUp() async {
     try {
       showToast("Generando csv de gastos");
       var excel = Excel.createExcel();
       Sheet sheet1 = excel['Gastos'];
-      sheet1.appendRow(provider.listaGastos.first
+      var gastos = await GastosController.getAll();
+      sheet1.appendRow(gastos.first
           .toJson()
           .keys
           .map((e) => TextCellValue(e.toString()))
           .toList());
-      for (var element in provider.listaGastos) {
+      for (var element in gastos) {
         log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
         sheet1.appendRow(
             element.toJson().values.map((i) => TextCellValue("$i")).toList());
       }
 
       Sheet sheet2 = excel['Categorias'];
-      sheet2.appendRow(provider.listaCategoria.first
+      var categorias = await CategoriaController.getItems();
+      sheet2.appendRow(categorias.first
           .toJson()
           .keys
           .map((e) => TextCellValue(e.toString()))
           .toList());
-      for (var element in provider.listaCategoria) {
+      for (var element in categorias) {
         sheet2.appendRow(element
             .toJson()
             .values
@@ -49,12 +50,13 @@ class GenerateExcel {
       }
 
       Sheet sheet3 = excel['MetodoPago'];
-      sheet3.appendRow(provider.metodo.first
+      var metodoPago = await MetodoGastoController.getItems();
+      sheet3.appendRow(metodoPago.first
           .toJson()
           .keys
           .map((e) => TextCellValue(e.toString()))
           .toList());
-      for (var element in provider.metodo) {
+      for (var element in metodoPago) {
         sheet3.appendRow(element
             .toJson()
             .values
@@ -69,15 +71,17 @@ class GenerateExcel {
       await archivo.writeAsBytes(excel.encode()!);
       return archivo;
     } catch (e) {
-      print(e);
+      debugPrint("$e");
       showToast("Error al generar resplado de datos csv\n$e");
       return null;
     }
   }
 
   static Future<bool> compartidoGlobal(File file) async {
-    String rutaArchivo = file.path;
-    final result = await Share.shareXFiles([XFile(rutaArchivo)]);
+    final params =
+        ShareParams(text: 'Evidencia', files: [XFile(file.path)]);
+
+    final result = await SharePlus.instance.share(params);
     if (result.status == ShareResultStatus.success) {
       showToast("Se compartio con exito el documento");
     } else {
@@ -152,10 +156,9 @@ class GenerateExcel {
                       evidencia: 10 < maximo
                           ? row[10]!.value.toString() == "null"
                               ? []
-                              : List<String>.from(jsonDecode(
-                                      row[10]!.value.toString())
-                                  .map((x) =>
-                                      x.toString()))
+                              : List<String>.from(
+                                  jsonDecode(row[10]!.value.toString())
+                                      .map((x) => x.toString()))
                           : [],
                       nota: 11 < maximo
                           ? row[11]!.value.toString() == "null"

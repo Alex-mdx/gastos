@@ -62,6 +62,7 @@ class _SettingViewState extends State<SettingView> {
                           iconSize: 24.sp,
                           onPressed: () async => showDialog(
                               context: context,
+                              barrierDismissible: false,
                               builder: (context) => DialogDropbox()),
                           icon: Stack(alignment: Alignment.center, children: [
                             Icon(LineIcons.dropbox,

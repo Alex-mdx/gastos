@@ -39,12 +39,16 @@ class BackupManual extends StatelessWidget {
                   loadingTitle: "Exportando",
                   onAcceptPressed: (context) async {
                     List<File> archivos = [];
-                    var csv = await GenerateExcel.backUp(provider);
-                    archivos.addIf(csv != null, csv!);
+                    var csv = await GenerateExcel.backUp();
+                    if (csv != null) {
+                      archivos.add(csv);
+                    
+
                     var imagenes = await ImageGen.obtenerImagenesEvidencia();
                     archivos.addAll(imagenes);
                     var file = await ZipFuncion.toZip(archivos);
                     await GenerateExcel.compartidoGlobal(file!);
+                    }
                   }),
               label: Text("Exportacion datos",
                   style:

@@ -195,7 +195,7 @@ class GastosController {
     final resultados =
         await db.query(nombreDB, where: 'fecha BETWEEN ? AND ?', whereArgs: [
       (DateTime.now().subtract(Duration(days: tipo))).toString(),
-      (DateTime.now()).toString(),
+      (DateTime.now()).toString()
     ], columns: [
       "monto,fecha"
     ]);
@@ -228,6 +228,18 @@ class GastosController {
         .firstOrNull;
     GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
     return modelo;
+  }
+
+  static Future<List<GastoModelo>> getAll() async {
+    final db = await database();
+    await SqlGenerator.existColumna(
+        add: "metodo_pago_id", database: database, nombreDB: nombreDB);
+    final data = (await db.query(nombreDB, orderBy: "id asc"));
+    List<GastoModelo> modelado = [];
+    for (var element in data) {
+      modelado.add(GastoModelo.fromJson(element));
+    }
+    return modelado;
   }
 
   static Future<void> updateItem(GastoModelo gasto) async {

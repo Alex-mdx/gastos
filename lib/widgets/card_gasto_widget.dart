@@ -221,6 +221,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   decrementIcon:
                                       Icon(LineIcons.minusCircle, size: 22.sp),
                                   decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 2.w, vertical: 1.h),
                                       icon: Icon(Icons.attach_money,
                                           size: 20.sp,
                                           color: LightThemeColors.green)),
