@@ -85,10 +85,10 @@ packages:
     dependency: "direct main"
     description:
       name: calendar_date_picker2
-      sha256: "293020a283210ccefff669499178c127acbb5e77ae13864f992c8a3e68a8aca1"
+      sha256: "9c9b5586fb512bf1181d7f3a6273bffa9e65a4e16689902e112771e7d71d063b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   characters:
     dependency: transitive
     description:
@@ -285,10 +285,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_macos
-      sha256: "271ab9986df0c135d45c3cdb6bd0faa5db6f4976d3e4b437cf7d0f258d941bfc"
+      sha256: "8c9250b2bd2d8d4268e39c82543bacbaca0fda7d29e0728c3c4bbb7c820fd711"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4+2"
+    version: "0.9.4+3"
   file_selector_platform_interface:
     dependency: transitive
     description:
@@ -305,6 +305,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+4"
+  filesize:
+    dependency: "direct main"
+    description:
+      name: filesize
+      sha256: f53df1f27ff60e466eefcd9df239e02d4722d5e2debee92a87dfd99ac66de2af
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fixnum:
     dependency: transitive
     description:
@@ -451,6 +459,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_phoenix:
+    dependency: "direct main"
+    description:
+      name: flutter_phoenix
+      sha256: "39589dac934ea476d0e43fb60c1ddfba58f14960743640c8250dea11c4333378"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -929,10 +945,10 @@ packages:
     dependency: "direct main"
     description:
       name: pro_image_editor
-      sha256: eb09292ee3a17c05872c7ecddfa3e316fd8044d3191d4ef6c2b89c0de0ad7dfa
+      sha256: "44077e96da25d66bb1f2dfbc4d34cd42faca8a55753efd4ef1f64a4c46d8a802"
       url: "https://pub.dev"
     source: hosted
-    version: "9.9.3"
+    version: "9.9.5"
   provider:
     dependency: "direct main"
     description:
@@ -1206,34 +1222,42 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: "659ea4c8d38d318d700c49157871238c6840df54007c1e3fed48756335259b82"
+      sha256: de97d33bbe79e1c739dd4a960e0bae8a0827737d5a05a3cf6509f4de6c1230ca
       url: "https://pub.dev"
     source: hosted
-    version: "29.2.5"
+    version: "29.2.7"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "69fa2cccda6013770273fb726d03528c35d6ced00a28a7b21fae8c7d5c756a73"
+      sha256: "6898c5dc81f73ac4e1156a075e4dd4591ea8927f26dcc77f6ba0e9b1b1d6c8c5"
       url: "https://pub.dev"
     source: hosted
-    version: "29.2.5"
+    version: "29.2.7"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: e5f45d7c2ab0e8e0f977cc9ce72aec2a8b3ef948fa76cba78c3d3465c7f834da
+      sha256: "6e3d6627379d5fdd6e145d5eb717ba9de2b57c48fd9c8b2db381b7d6be2b08c3"
       url: "https://pub.dev"
     source: hosted
-    version: "29.2.5"
+    version: "29.2.7"
   syncfusion_flutter_sliders:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_sliders
-      sha256: "8c155af2bbd68bc4f4d3f5adcf63f2fafe5e085cebc58c02402ee4f4d8d4bb20"
+      sha256: b0094c8f864a6e6716e773edcd149c2736452ab6e282e7aae867412b9948f6c9
       url: "https://pub.dev"
     source: hosted
-    version: "29.2.5"
+    version: "29.2.7"
+  syncfusion_localizations:
+    dependency: transitive
+    description:
+      name: syncfusion_localizations
+      sha256: c518011464c4096dd5da8205123906762d756574ae44e3bdacc129a50d065f49
+      url: "https://pub.dev"
+    source: hosted
+    version: "29.2.7"
   synchronized:
     dependency: transitive
     description:

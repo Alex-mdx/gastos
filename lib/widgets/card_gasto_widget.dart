@@ -13,6 +13,7 @@ import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
+import 'package:zo_animated_border/widget/zo_breathing_border.dart';
 import '../controllers/gastos_controller.dart';
 import '../dialog/dialog_camara.dart';
 import 'package:badges/badges.dart' as badges;
@@ -304,102 +305,113 @@ class _MyWidgetState extends State<CardGastoWidget> {
                   ])))),
       SizedBox(
           width: double.infinity,
-          child: ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor:
-                      WidgetStatePropertyAll(LightThemeColors.green)),
-              onPressed: () async {
-                if (widget.provider.gastoActual.categoriaId != null) {
-                  if (widget.provider.gastoActual.monto != null &&
-                      widget.provider.gastoActual.monto! > 0.0) {
-                    log("${widget.provider.gastoActual.toJson()}");
-                    await Dialogs.showMorph(
-                        title: "Ingresar gasto",
-                        description: "¿Desea ingresar esta tarjeta de gasto?",
-                        loadingTitle: "Ingresando...",
-                        onAcceptPressed: (context) async {
-                          final now = DateTime.now();
-                          var id = (await GastosController.getLastId());
-                          //generar files en biblioteca
-                          List<String> names = [];
-                          for (var i = 0;
-                              i < widget.provider.imagenesActual.length;
-                              i++) {
-                            await ImageGen.generar(
-                                archivo: widget.provider.imagenesActual[i],
-                                name: "gasto_${i + 1}_$id");
-                            names.add("gasto_${i + 1}_$id.jpg");
-                          }
-                          //?La tabla de gasto es para notificar si dicha tarjeta es modificable
-                          final finalTemp = widget.provider.gastoActual
-                              .copyWith(
-                                  id: id,
-                                  metodoPagoId:
-                                      widget.provider.metodoSelect!.id,
-                                  gasto: 1,
-                                  nota: widget.provider.notas.text,
-                                  ultimaFecha: widget.provider.selectProxima ==
-                                          null
-                                      ? null
-                                      : Textos.fechaYMD(
-                                          fecha:
-                                              widget.provider.selectProxima!),
-                                  fecha: widget.provider.gastoActual.fecha ??
-                                      Textos.fechaYMDHMS(fecha: now),
-                                  dia: widget.provider.gastoActual.dia ??
-                                      (now.day).toString(),
-                                  mes: widget.provider.gastoActual.mes ??
-                                      (now.month).toString(),
-                                  evidencia: names);
-                          log("${finalTemp.toJson()}");
+          child: ZoBreathingBorder(
+            borderWidth: 1.0,
+            borderRadius: BorderRadius.circular(75),
+            colors: [
+              Colors.blue,
+              Colors.purple,
+              Colors.red,
+              Colors.orange,
+            ],
+            duration: const Duration(seconds: 4),
+            child: ElevatedButton.icon(
+                style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll(LightThemeColors.green)),
+                onPressed: () async {
+                  if (widget.provider.gastoActual.categoriaId != null) {
+                    if (widget.provider.gastoActual.monto != null &&
+                        widget.provider.gastoActual.monto! > 0.0) {
+                      log("${widget.provider.gastoActual.toJson()}");
+                      await Dialogs.showMorph(
+                          title: "Ingresar gasto",
+                          description: "¿Desea ingresar esta tarjeta de gasto?",
+                          loadingTitle: "Ingresando...",
+                          onAcceptPressed: (context) async {
+                            final now = DateTime.now();
+                            var id = (await GastosController.getLastId());
+                            //generar files en biblioteca
+                            List<String> names = [];
+                            for (var i = 0;
+                                i < widget.provider.imagenesActual.length;
+                                i++) {
+                              await ImageGen.generar(
+                                  archivo: widget.provider.imagenesActual[i],
+                                  name: "gasto_${i + 1}_$id");
+                              names.add("gasto_${i + 1}_$id.jpg");
+                            }
+                            //?La tabla de gasto es para notificar si dicha tarjeta es modificable
+                            final finalTemp = widget.provider.gastoActual
+                                .copyWith(
+                                    id: id,
+                                    metodoPagoId:
+                                        widget.provider.metodoSelect!.id,
+                                    gasto: 1,
+                                    nota: widget.provider.notas.text,
+                                    ultimaFecha:
+                                        widget.provider.selectProxima == null
+                                            ? null
+                                            : Textos.fechaYMD(
+                                                fecha: widget
+                                                    .provider.selectProxima!),
+                                    fecha: widget.provider.gastoActual.fecha ??
+                                        Textos.fechaYMDHMS(fecha: now),
+                                    dia: widget.provider.gastoActual.dia ??
+                                        (now.day).toString(),
+                                    mes: widget.provider.gastoActual.mes ??
+                                        (now.month).toString(),
+                                    evidencia: names);
+                            log("${finalTemp.toJson()}");
 
-                          /* await GastosController.insert(finalTemp);
-                          widget.provider.listaGastos =
-                              await GastosController.getConfigurado(); */
-                          await OperacionBidon.restador(
-                              gasto: finalTemp, resta: finalTemp.monto!);
-                          widget.provider.selectProxima =
-                              widget.provider.selectProxima;
-                          widget.provider.gastoActual = GastoModelo(
-                              id: null,
-                              monto: null,
-                              categoriaId: finalTemp.categoriaId,
-                              metodoPagoId: finalTemp.metodoPagoId,
-                              fecha: null,
-                              dia: null,
-                              mes: null,
-                              peridico: null,
-                              ultimaFecha: null,
-                              periodo: PeriodoModelo(
-                                  year: null,
-                                  mes: null,
-                                  dia: null,
-                                  modificable: null),
-                              gasto: null,
-                              evidencia: [],
-                              nota: null);
-                          //Limpia de variables locales
-                          widget.provider.imagenesActual = [];
-                          widget.provider.notas.text = "";
-                          widget.provider.notas.selection =
-                              TextSelection.collapsed(offset: 0);
-                          widget.provider.selectFecha = DateTime.now();
-                          showToast("Tarjeta de gasto Guardada con exito");
-                        });
+                            /* await GastosController.insert(finalTemp);
+                            widget.provider.listaGastos =
+                                await GastosController.getConfigurado(); */
+                            await OperacionBidon.restador(
+                                gasto: finalTemp, resta: finalTemp.monto!);
+                            widget.provider.selectProxima =
+                                widget.provider.selectProxima;
+                            widget.provider.gastoActual = GastoModelo(
+                                id: null,
+                                monto: null,
+                                categoriaId: finalTemp.categoriaId,
+                                metodoPagoId: finalTemp.metodoPagoId,
+                                fecha: null,
+                                dia: null,
+                                mes: null,
+                                peridico: null,
+                                ultimaFecha: null,
+                                periodo: PeriodoModelo(
+                                    year: null,
+                                    mes: null,
+                                    dia: null,
+                                    modificable: null),
+                                gasto: null,
+                                evidencia: [],
+                                nota: null);
+                            //Limpia de variables locales
+                            widget.provider.imagenesActual = [];
+                            widget.provider.notas.text = "";
+                            widget.provider.notas.selection =
+                                TextSelection.collapsed(offset: 0);
+                            widget.provider.selectFecha = DateTime.now();
+                            showToast("Tarjeta de gasto Guardada con exito");
+                          });
+                    } else {
+                      showToast("ingrese un monto mayor a 0");
+                    }
                   } else {
-                    showToast("ingrese un monto mayor a 0");
+                    showToast("Ingrese una categoria de gasto");
                   }
-                } else {
-                  showToast("Ingrese una categoria de gasto");
-                }
-              },
-              icon:
-                  Icon(Icons.savings_rounded, size: 22.sp, color: Colors.white),
-              label: Text("Guardar Gasto",
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold))))
+                },
+                icon: Icon(Icons.savings_rounded,
+                    size: 22.sp, color: Colors.white),
+                label: Text("Guardar Gasto",
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        color: ThemaMain.background,
+                        fontWeight: FontWeight.bold))),
+          ))
     ]);
   }
 }

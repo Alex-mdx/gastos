@@ -20,9 +20,6 @@ class Preferences {
   static int get primerDia => _preferences?.getInt('primerDia') ?? 2;
   static set primerDia(int value) => _preferences?.setInt('primerDia', value);
 
-  static bool get tema => _preferences?.getBool('tema') ?? false;
-  static set tema(bool value) => _preferences?.setBool('tema', value);
-
   static String get setting =>
       _preferences?.getString('setting') ?? "-0001-11-30 01:00:00.000";
   static set setting(String value) => _preferences?.setString('setting', value);
@@ -46,4 +43,9 @@ class Preferences {
       _preferences?.getString('recordatorio2') ?? "13:00";
   static set recordatorio2(String value) =>
       _preferences?.setString('recordatorio2', value);
+
+      static bool get thema =>
+      _preferences?.getBool('thema') ?? true;
+  static set thema(bool value) =>
+      _preferences?.setBool('thema', value);
 }

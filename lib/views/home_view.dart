@@ -26,6 +26,8 @@ class _MyWidgetState extends State<HomeView> {
             bottomNavigationBar: BottomNavigationBar(
                 showUnselectedLabels: false,
                 currentIndex: navigator.index,
+                selectedLabelStyle:
+                    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                 onTap: (index) async {
                   navigator.index = index;
                   await navigator.animateToPage(index);
@@ -76,5 +78,5 @@ class PaginadoState extends State<Paginado> {
 
 BottomNavigationBarItem _buildBottomNavigationBarItem(
     IconData icon, String label) {
-  return BottomNavigationBarItem(icon: Icon(icon, size: 24.sp), label: label);
+  return BottomNavigationBarItem(icon: Icon(icon, size: 22.sp), label: label);
 }

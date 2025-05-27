@@ -1,4 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/preferences.dart';
+
+class ThemaMain {
+  static Color primary =
+      (Preferences.thema ? LightThemeColors.primary : DarkThemeColors.primary);
+  static Color second =
+      (Preferences.thema ? LightThemeColors.second : DarkThemeColors.second);
+
+  static Color green =
+      (Preferences.thema ? LightThemeColors.green : DarkThemeColors.green);
+  static Color red =
+      (Preferences.thema ? LightThemeColors.red : DarkThemeColors.red);
+  static Color yellow =
+      (Preferences.thema ? LightThemeColors.yellow : DarkThemeColors.yellow);
+  static Color purple =
+      (Preferences.thema ? LightThemeColors.purple : DarkThemeColors.purple);
+
+  static Color background = (Preferences.thema
+      ? LightThemeColors.background
+      : DarkThemeColors.background);
+  static Color dialogbackground = (Preferences.thema
+      ? LightThemeColors.dialogbackground
+      : DarkThemeColors.dialogbackground);
+  static Color darkGrey = (Preferences.thema
+      ? LightThemeColors.darkGrey
+      : DarkThemeColors.darkGrey);
+  static Color darkBlue = (Preferences.thema
+      ? LightThemeColors.darkBlue
+      : DarkThemeColors.darkBlue);
+
+  static Color grey =
+      (Preferences.thema ? LightThemeColors.grey : DarkThemeColors.grey);
+}
 
 class LightThemeColors {
   static const primary = Color.fromARGB(255, 4, 142, 223);
@@ -18,17 +51,18 @@ class LightThemeColors {
 }
 
 class DarkThemeColors {
-  static const primary = Color.fromARGB(255, 4, 121, 189);
+  static const primary = Color.fromARGB(255, 53, 225, 255);
   static const second = Color.fromARGB(255, 40, 42, 43);
 
-  static const green = Color.fromARGB(255, 5, 56, 18);
-  static const red = Color.fromARGB(255, 100, 9, 17);
-  static const yellow = Color.fromARGB(255, 75, 74, 5);
+  static const green = Color.fromARGB(255, 70, 255, 116);
+  static const red = Color.fromARGB(255, 255, 70, 86);
+  static const yellow = Color.fromARGB(255, 255, 252, 86);
+  static const purple = Color.fromARGB(255, 156, 80, 255);
 
-  static const background = Color.fromARGB(255, 66, 67, 68);
-  static const dialogbackground = Color.fromARGB(255, 32, 34, 34);
-  static const darkGrey = Color.fromARGB(255, 217, 222, 240);
-  static const darkBlue = Color.fromARGB(255, 189, 213, 245);
+  static const background = Color.fromARGB(255, 20, 20, 20);
+  static const dialogbackground = Color.fromARGB(255, 29, 31, 31);
+  static const darkGrey = Color.fromARGB(255, 220, 221, 224);
+  static const darkBlue = Color.fromARGB(255, 172, 198, 233);
 
-  static const grey = Color.fromARGB(255, 222, 227, 230);
+  static const grey = Color.fromARGB(255, 197, 199, 201);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -44,25 +45,26 @@ Future<void> main() async {
 class Main extends StatelessWidget {
   const Main({super.key});
   @override
-  Widget build(BuildContext context) => Sizer(
-      builder: (context, orientation, deviceType) => OKToast(
-          dismissOtherOnShow: true,
-          position: ToastPosition.bottom,
-          duration: const Duration(seconds: 4),
-          textStyle: TextStyle(fontSize: 15.sp, color: Colors.white),
-          child: MaterialApp(
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate
-              ],
-              supportedLocales: const [
-                Locale('es')
-              ],
-              debugShowCheckedModeBanner: false,
-              title: 'Gastos',
-              theme: light,
-              navigatorKey: NavigationKey.navigatorKey,
-              initialRoute: AppRoutes.initialRoute,
-              routes: AppRoutes.routes)));
+  Widget build(BuildContext context) => Phoenix(
+      child: Sizer(
+          builder: (context, orientation, deviceType) => OKToast(
+              dismissOtherOnShow: true,
+              position: ToastPosition.bottom,
+              duration: const Duration(seconds: 4),
+              textStyle: TextStyle(fontSize: 15.sp, color: Colors.white),
+              child: MaterialApp(
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate
+                  ],
+                  supportedLocales: const [
+                    Locale('es')
+                  ],
+                  debugShowCheckedModeBanner: false,
+                  title: 'Gastos',
+                  theme: Preferences.thema ? light: dark,
+                  navigatorKey: NavigationKey.navigatorKey,
+                  initialRoute: AppRoutes.initialRoute,
+                  routes: AppRoutes.routes))));
 }

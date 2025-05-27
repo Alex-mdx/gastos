@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dropbox_client/dropbox_client.dart';
+import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
@@ -128,7 +129,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                 zip.path,
                                 '/respaldo_CG.zip',
                                 (uploaded, total) => setState(() {
-                                      proceso = "Progreso: $uploaded / $total";
+                                      proceso = "Progreso: ${filesize(uploaded)} / ${filesize(total)}";
                                     }));
                           } else {
                             showToast("No se pudo generar el archivo compreso");
