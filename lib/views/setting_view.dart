@@ -5,14 +5,11 @@ import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/dialog/dialog_bidones.dart';
 import 'package:gastos/dialog/dialog_dropbox.dart';
-import 'package:gastos/dialog/dialog_youtube.dart';
-import 'package:gastos/models/bidones_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:gastos/widgets/widget_settings/setting_metodo_pago.dart';
-import 'package:gastos/widgets/widget_settings/setting_primer_dia_widget.dart';
 import 'package:gastos/widgets/widget_settings/settings_rango.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -175,8 +172,6 @@ class _SettingViewState extends State<SettingView> {
                               const Divider(),
                               const SettingsRango(),
                               const Divider(),
-                              const SettingPrimerDiaWidget(),
-                              BannerExample(tipo: 0),
                               SettingPresupuestoWidget(provider: provider),
                               Divider(),
                               const BackupManual()

@@ -306,7 +306,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
       SizedBox(
           width: double.infinity,
           child: ZoBreathingBorder(
-            borderWidth: 1.0,
+            borderWidth: 2.0,
             borderRadius: BorderRadius.circular(75),
             colors: [
               Colors.blue,

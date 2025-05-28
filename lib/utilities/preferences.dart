@@ -17,9 +17,6 @@ class Preferences {
   static String get calculo => _preferences?.getString('calculo') ?? "Mensual";
   static set calculo(String value) => _preferences?.setString('calculo', value);
 
-  static int get primerDia => _preferences?.getInt('primerDia') ?? 2;
-  static set primerDia(int value) => _preferences?.setInt('primerDia', value);
-
   static String get setting =>
       _preferences?.getString('setting') ?? "-0001-11-30 01:00:00.000";
   static set setting(String value) => _preferences?.setString('setting', value);

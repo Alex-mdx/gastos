@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
@@ -124,11 +123,7 @@ class _HistorialViewState extends State<HistorialView> {
             dataSource:
                 _getCalendarDataSource(provider: provider, lista: lista),
             viewHeaderHeight: 2.h,
-            firstDayOfWeek: Preferences.primerDia == 0
-                ? 6
-                : Preferences.primerDia == 1
-                    ? 7
-                    : 1,
+            firstDayOfWeek:1,
             headerHeight: 4.h,
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
