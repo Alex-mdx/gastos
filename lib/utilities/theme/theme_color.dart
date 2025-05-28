@@ -51,7 +51,7 @@ class LightThemeColors {
 }
 
 class DarkThemeColors {
-  static const primary = Color.fromARGB(255, 53, 225, 255);
+  static const primary = Color.fromARGB(255, 53, 198, 255);
   static const second = Color.fromARGB(255, 40, 42, 43);
 
   static const green = Color.fromARGB(255, 70, 255, 116);

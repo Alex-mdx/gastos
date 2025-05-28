@@ -404,13 +404,13 @@ class _MyWidgetState extends State<CardGastoWidget> {
                     showToast("Ingrese una categoria de gasto");
                   }
                 },
-                icon: Icon(Icons.savings_rounded,
+                icon: Icon(LineIcons.wallet,
                     size: 22.sp, color: Colors.white),
                 label: Text("Guardar Gasto",
                     style: TextStyle(
                         fontSize: 16.sp,
                         color: ThemaMain.background,
-                        fontWeight: FontWeight.bold))),
+                        fontWeight: FontWeight.bold)))
           ))
     ]);
   }
