@@ -33,22 +33,19 @@ class NotificacionesFun {
     });
   }
 
-  static Future<void> periodico() async {
+  static Future<void> periodico(int hora, int minuto) async {
     // Configurar detalles de la notificación para Android
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-            'periodic_channel_id', 'Notificaciones periódicas',
+            'channel_periodic', 'Notificaciones instantáneas',
+            enableVibration: true,
             importance: Importance.high,
             priority: Priority.high,
             showWhen: true,
-            enableVibration: true,
-            color: LightTheme.primary,
+            color: LightTheme.green,
             colorized: true,
-            largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
-            icon: '@mipmap/ic_launcher', // Usa el icono adaptativo
-            styleInformation: BigPictureStyleInformation(
-                DrawableResourceAndroidBitmap('ic_launcher'),
-                hideExpandedLargeIcon: false));
+            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+            icon: '@mipmap/ic_launcher');
 
     // Configurar detalles para iOS
     const DarwinNotificationDetails iosNotificationDetails =
@@ -60,10 +57,10 @@ class NotificacionesFun {
 
     // Programar notificación diaria a las 9:00 AM
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0, // ID de la notificación
+        10,
         'Control de Gastos',
         '¡Es hora de ingresar tus gastos!',
-        nextTime(9, 0), // 9:00 AM
+        nextTime(hora, minuto),
         platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time);

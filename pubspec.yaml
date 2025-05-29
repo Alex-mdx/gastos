@@ -27,6 +27,7 @@ dependencies:
     sdk: flutter
   flutter_phoenix: ^1.1.1
   flutter_spinbox: ^0.13.1
+  flutter_time_picker_spinner: ^2.0.0
   get: ^4.6.6
   gif_view: ^1.0.2
   google_mobile_ads: ^6.0.0
