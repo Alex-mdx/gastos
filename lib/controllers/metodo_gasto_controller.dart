@@ -33,7 +33,7 @@ class MetodoGastoController {
         denominacion: "MXN",
         status: 0,
         defecto: 1,
-        color: LightThemeColors.primary);
+        color: ThemaMain.primary);
     final result = await find(metodo);
     if (result == null) {
       await insert(metodo);

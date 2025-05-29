@@ -42,7 +42,7 @@ class NotificacionesFun {
             priority: Priority.high,
             showWhen: true,
             enableVibration: true,
-            color: LightThemeColors.primary,
+            color: LightTheme.primary,
             colorized: true,
             largeIcon: DrawableResourceAndroidBitmap('ic_launcher'),
             icon: '@mipmap/ic_launcher', // Usa el icono adaptativo
@@ -89,7 +89,7 @@ class NotificacionesFun {
             importance: Importance.high,
             priority: Priority.high,
             showWhen: true,
-            color: LightThemeColors.green,
+            color: LightTheme.green,
             colorized: true,
             largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
             icon: '@mipmap/ic_launcher');

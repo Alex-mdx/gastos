@@ -34,7 +34,7 @@ class _SettingsRangoState extends State<SettingsRango> {
           controller: controller,
           decoration: CustomDropdownDecoration(
               prefixIcon: Icon(LineIcons.calendarPlusAlt,
-                  color: LightThemeColors.green, size: 22.sp)),
+                  color: ThemaMain.green, size: 22.sp)),
           headerBuilder: (context, selectedItem, enabled) {
             int rango =
                 rangos.indexWhere((element) => element.contains(selectedItem));

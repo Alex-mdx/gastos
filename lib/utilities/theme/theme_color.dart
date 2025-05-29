@@ -3,39 +3,35 @@ import 'package:gastos/utilities/preferences.dart';
 
 class ThemaMain {
   static Color primary =
-      (Preferences.thema ? LightThemeColors.primary : DarkThemeColors.primary);
+      (Preferences.thema ? LightTheme.primary : DarkTheme.primary);
   static Color second =
-      (Preferences.thema ? LightThemeColors.second : DarkThemeColors.second);
+      (Preferences.thema ? LightTheme.second : DarkTheme.second);
+  static Color white = Colors.white;
+  static Color black = Colors.black;
 
-  static Color green =
-      (Preferences.thema ? LightThemeColors.green : DarkThemeColors.green);
-  static Color red =
-      (Preferences.thema ? LightThemeColors.red : DarkThemeColors.red);
+  static Color green = (Preferences.thema ? LightTheme.green : DarkTheme.green);
+  static Color red = (Preferences.thema ? LightTheme.red : DarkTheme.red);
   static Color yellow =
-      (Preferences.thema ? LightThemeColors.yellow : DarkThemeColors.yellow);
+      (Preferences.thema ? LightTheme.yellow : DarkTheme.yellow);
   static Color purple =
-      (Preferences.thema ? LightThemeColors.purple : DarkThemeColors.purple);
+      (Preferences.thema ? LightTheme.purple : DarkTheme.purple);
 
-  static Color background = (Preferences.thema
-      ? LightThemeColors.background
-      : DarkThemeColors.background);
+  static Color background =
+      (Preferences.thema ? LightTheme.background : DarkTheme.background);
   static Color dialogbackground = (Preferences.thema
-      ? LightThemeColors.dialogbackground
-      : DarkThemeColors.dialogbackground);
-  static Color darkGrey = (Preferences.thema
-      ? LightThemeColors.darkGrey
-      : DarkThemeColors.darkGrey);
-  static Color darkBlue = (Preferences.thema
-      ? LightThemeColors.darkBlue
-      : DarkThemeColors.darkBlue);
+      ? LightTheme.dialogbackground
+      : DarkTheme.dialogbackground);
+  static Color darkGrey =
+      (Preferences.thema ? LightTheme.darkGrey : DarkTheme.darkGrey);
+  static Color darkBlue =
+      (Preferences.thema ? LightTheme.darkBlue : DarkTheme.darkBlue);
 
-  static Color grey =
-      (Preferences.thema ? LightThemeColors.grey : DarkThemeColors.grey);
+  static Color grey = (Preferences.thema ? LightTheme.grey : DarkTheme.grey);
 }
 
-class LightThemeColors {
+class LightTheme {
   static const primary = Color.fromARGB(255, 4, 142, 223);
-  static const second = Color.fromARGB(255, 241, 243, 243);
+  static const second = Color.fromARGB(255, 246, 247, 247);
 
   static const green = Color.fromARGB(255, 1, 207, 53);
   static const red = Color.fromARGB(255, 231, 20, 38);
@@ -50,7 +46,7 @@ class LightThemeColors {
   static const grey = Color.fromARGB(255, 206, 210, 212);
 }
 
-class DarkThemeColors {
+class DarkTheme {
   static const primary = Color.fromARGB(255, 53, 198, 255);
   static const second = Color.fromARGB(255, 40, 42, 43);
 

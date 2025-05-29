@@ -13,7 +13,6 @@ import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
-import 'package:zo_animated_border/widget/zo_breathing_border.dart';
 import '../controllers/gastos_controller.dart';
 import '../dialog/dialog_camara.dart';
 import 'package:badges/badges.dart' as badges;
@@ -109,8 +108,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       horizontal: 1.w, vertical: 0),
                                   decoration: CustomDropdownDecoration(
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
-                                          color: LightThemeColors.green,
-                                          size: 20.sp),
+                                          color: ThemaMain.green, size: 20.sp),
                                       closedSuffixIcon: controller.value != null
                                           ? IconButton(
                                               iconSize: 20.sp,
@@ -147,28 +145,24 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(fontSize: 14.sp)),
                                           trailing: IconButton(
-                                              onPressed: () {
-                                                Dialogs.showMorph(
-                                                    title: "Eliminar",
-                                                    description:
-                                                        "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
-                                                    loadingTitle: "Eliminando",
-                                                    onAcceptPressed:
-                                                        (context) async {
-                                                      await CategoriaController
-                                                          .deleteItem(item.id!);
-                                                      final data =
-                                                          await CategoriaController
-                                                              .getItems();
-                                                      setState(() {
-                                                        controller.clear();
-                                                        widget.provider
-                                                                .listaCategoria =
-                                                            data;
-                                                      });
+                                              onPressed: () => Dialogs.showMorph(
+                                                  title: "Eliminar",
+                                                  description: "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
+                                                  loadingTitle: "Eliminando",
+                                                  onAcceptPressed: (context) async {
+                                                    await CategoriaController
+                                                        .deleteItem(item.id!);
+                                                    final data =
+                                                        await CategoriaController
+                                                            .getItems();
+                                                    setState(() {
+                                                      controller.clear();
+                                                      widget.provider
+                                                              .listaCategoria =
+                                                          data;
                                                     });
-                                              },
-                                              icon: Icon(Icons.delete, size: 18.sp, color: LightThemeColors.red))),
+                                                  }),
+                                              icon: Icon(Icons.delete, size: 18.sp, color: ThemaMain.red))),
                                   overlayHeight: 50.h,
                                   onChanged: (value) {
                                     if (value != null) {
@@ -181,12 +175,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     }
                                   })),
                           IconButton.filled(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => const Dialog(
-                                        child: DialogCategorias()));
-                              },
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const Dialog(child: DialogCategorias())),
                               icon:
                                   Stack(alignment: Alignment.center, children: [
                                 Icon(LineIcons.wavyMoneyBill,
@@ -200,11 +192,9 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         alignment: MainAxisAlignment.spaceAround,
                         children: [
                           IconButton.filled(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => const DialogCamara());
-                              },
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (context) => const DialogCamara()),
                               icon: Icon(Icons.add_photo_alternate,
                                   size: 22.sp, color: Colors.white)),
                           SizedBox(
@@ -222,11 +212,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   decrementIcon:
                                       Icon(LineIcons.minusCircle, size: 22.sp),
                                   decoration: InputDecoration(
+                                      fillColor: ThemaMain.white,
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 2.w, vertical: 1.h),
                                       icon: Icon(Icons.attach_money,
-                                          size: 20.sp,
-                                          color: LightThemeColors.green)),
+                                          size: 20.sp, color: ThemaMain.green)),
                                   direction: Axis.vertical,
                                   step: 1,
                                   autofocus: false,
@@ -246,13 +236,13 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   })),
                           badges.Badge(
                               badgeStyle: badges.BadgeStyle(
-                                  badgeColor: LightThemeColors.primary),
+                                  badgeColor: ThemaMain.primary),
                               showBadge:
                                   widget.provider.imagenesActual.isNotEmpty,
                               badgeContent: Text(
                                   "${widget.provider.imagenesActual.length}",
                                   style: TextStyle(
-                                      color: LightThemeColors.second,
+                                      color: ThemaMain.second,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.bold)),
                               child: IconButton.filled(
@@ -305,113 +295,104 @@ class _MyWidgetState extends State<CardGastoWidget> {
                   ])))),
       SizedBox(
           width: double.infinity,
-          child: ZoBreathingBorder(
-            borderWidth: 2.0,
-            borderRadius: BorderRadius.circular(75),
-            colors: [
-              Colors.blue,
-              Colors.purple,
-              Colors.red,
-              Colors.orange,
-            ],
-            duration: const Duration(seconds: 4),
-            child: ElevatedButton.icon(
-                style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStatePropertyAll(LightThemeColors.green)),
-                onPressed: () async {
-                  if (widget.provider.gastoActual.categoriaId != null) {
-                    if (widget.provider.gastoActual.monto != null &&
-                        widget.provider.gastoActual.monto! > 0.0) {
-                      log("${widget.provider.gastoActual.toJson()}");
-                      await Dialogs.showMorph(
-                          title: "Ingresar gasto",
-                          description: "¿Desea ingresar esta tarjeta de gasto?",
-                          loadingTitle: "Ingresando...",
-                          onAcceptPressed: (context) async {
-                            final now = DateTime.now();
-                            var id = (await GastosController.getLastId());
-                            //generar files en biblioteca
-                            List<String> names = [];
-                            for (var i = 0;
-                                i < widget.provider.imagenesActual.length;
-                                i++) {
-                              await ImageGen.generar(
-                                  archivo: widget.provider.imagenesActual[i],
-                                  name: "gasto_${i + 1}_$id");
-                              names.add("gasto_${i + 1}_$id.jpg");
-                            }
-                            //?La tabla de gasto es para notificar si dicha tarjeta es modificable
-                            final finalTemp = widget.provider.gastoActual
-                                .copyWith(
-                                    id: id,
-                                    metodoPagoId:
-                                        widget.provider.metodoSelect!.id,
-                                    gasto: 1,
-                                    nota: widget.provider.notas.text,
-                                    ultimaFecha:
-                                        widget.provider.selectProxima == null
-                                            ? null
-                                            : Textos.fechaYMD(
-                                                fecha: widget
-                                                    .provider.selectProxima!),
-                                    fecha: widget.provider.gastoActual.fecha ??
-                                        Textos.fechaYMDHMS(fecha: now),
-                                    dia: widget.provider.gastoActual.dia ??
-                                        (now.day).toString(),
-                                    mes: widget.provider.gastoActual.mes ??
-                                        (now.month).toString(),
-                                    evidencia: names);
-                            log("${finalTemp.toJson()}");
+          child: ElevatedButton.icon(
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                      (widget.provider.gastoActual.monto != null &&
+                              widget.provider.gastoActual.monto! > 0.0)
+                          ? ThemaMain.green
+                          : ThemaMain.darkGrey)),
+              onPressed: () async {
+                if (widget.provider.gastoActual.categoriaId != null) {
+                  if (widget.provider.gastoActual.monto != null &&
+                      widget.provider.gastoActual.monto! > 0.0) {
+                    log("${widget.provider.gastoActual.toJson()}");
+                    await Dialogs.showMorph(
+                        title: "Ingresar gasto",
+                        description: "¿Desea ingresar esta tarjeta de gasto?",
+                        loadingTitle: "Ingresando...",
+                        onAcceptPressed: (context) async {
+                          final now = DateTime.now();
+                          var id = (await GastosController.getLastId());
+                          //generar files en biblioteca
+                          List<String> names = [];
+                          for (var i = 0;
+                              i < widget.provider.imagenesActual.length;
+                              i++) {
+                            await ImageGen.generar(
+                                archivo: widget.provider.imagenesActual[i],
+                                name: "gasto_${i + 1}_$id");
+                            names.add("gasto_${i + 1}_$id.jpg");
+                          }
+                          //?La tabla de gasto es para notificar si dicha tarjeta es modificable
+                          final finalTemp = widget.provider.gastoActual
+                              .copyWith(
+                                  id: id,
+                                  metodoPagoId:
+                                      widget.provider.metodoSelect!.id,
+                                  gasto: 1,
+                                  nota: widget.provider.notas.text,
+                                  ultimaFecha: widget.provider.selectProxima ==
+                                          null
+                                      ? null
+                                      : Textos.fechaYMD(
+                                          fecha:
+                                              widget.provider.selectProxima!),
+                                  fecha: widget.provider.gastoActual.fecha ??
+                                      Textos.fechaYMDHMS(fecha: now),
+                                  dia: widget.provider.gastoActual.dia ??
+                                      (now.day).toString(),
+                                  mes: widget.provider.gastoActual.mes ??
+                                      (now.month).toString(),
+                                  evidencia: names);
+                          log("${finalTemp.toJson()}");
+                          await OperacionBidon.restador(
+                              gasto: finalTemp, resta: finalTemp.monto!);
+                          await GastosController.insert(finalTemp);
+                          widget.provider.listaGastos =
+                              await GastosController.getConfigurado();
 
-                            /* await GastosController.insert(finalTemp);
-                            widget.provider.listaGastos =
-                                await GastosController.getConfigurado(); */
-                            await OperacionBidon.restador(
-                                gasto: finalTemp, resta: finalTemp.monto!);
-                            widget.provider.selectProxima =
-                                widget.provider.selectProxima;
-                            widget.provider.gastoActual = GastoModelo(
-                                id: null,
-                                monto: null,
-                                categoriaId: finalTemp.categoriaId,
-                                metodoPagoId: finalTemp.metodoPagoId,
-                                fecha: null,
-                                dia: null,
-                                mes: null,
-                                peridico: null,
-                                ultimaFecha: null,
-                                periodo: PeriodoModelo(
-                                    year: null,
-                                    mes: null,
-                                    dia: null,
-                                    modificable: null),
-                                gasto: null,
-                                evidencia: [],
-                                nota: null);
-                            //Limpia de variables locales
-                            widget.provider.imagenesActual = [];
-                            widget.provider.notas.text = "";
-                            widget.provider.notas.selection =
-                                TextSelection.collapsed(offset: 0);
-                            widget.provider.selectFecha = DateTime.now();
-                            showToast("Tarjeta de gasto Guardada con exito");
-                          });
-                    } else {
-                      showToast("ingrese un monto mayor a 0");
-                    }
+                          widget.provider.selectProxima =
+                              widget.provider.selectProxima;
+                          widget.provider.gastoActual = GastoModelo(
+                              id: null,
+                              monto: null,
+                              categoriaId: finalTemp.categoriaId,
+                              metodoPagoId: finalTemp.metodoPagoId,
+                              fecha: null,
+                              dia: null,
+                              mes: null,
+                              peridico: null,
+                              ultimaFecha: null,
+                              periodo: PeriodoModelo(
+                                  year: null,
+                                  mes: null,
+                                  dia: null,
+                                  modificable: null),
+                              gasto: null,
+                              evidencia: [],
+                              nota: null);
+                          //Limpia de variables locales
+                          widget.provider.imagenesActual = [];
+                          widget.provider.notas.text = "";
+                          widget.provider.notas.selection =
+                              TextSelection.collapsed(offset: 0);
+                          widget.provider.selectFecha = DateTime.now();
+                          showToast("Tarjeta de gasto Guardada con exito");
+                        });
                   } else {
-                    showToast("Ingrese una categoria de gasto");
+                    showToast("ingrese un monto mayor a 0");
                   }
-                },
-                icon: Icon(LineIcons.wallet,
-                    size: 22.sp, color: Colors.white),
-                label: Text("Guardar Gasto",
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        color: ThemaMain.background,
-                        fontWeight: FontWeight.bold)))
-          ))
+                } else {
+                  showToast("Ingrese una categoria de gasto");
+                }
+              },
+              icon: Icon(LineIcons.wallet, size: 22.sp, color: Colors.white),
+              label: Text("Guardar Gasto",
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      color: ThemaMain.white,
+                      fontWeight: FontWeight.bold))))
     ]);
   }
 }

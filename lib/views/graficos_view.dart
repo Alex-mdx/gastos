@@ -20,7 +20,7 @@ class GraficosView extends StatelessWidget {
               BannerExample(tipo: 1),
               RiveAnimatedIcon(
                   riveIcon: RiveIcon.warning,
-                  color: LightThemeColors.yellow,
+                  color: ThemaMain.yellow,
                   loopAnimation: true,
                   height: 40.w,
                   width: 40.w),

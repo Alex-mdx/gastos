@@ -262,17 +262,17 @@ class GastoProvider with ChangeNotifier {
 
   Color porcentualColor(double monto) {
     if (monto == 0) {
-      return LightThemeColors.darkBlue;
+      return ThemaMain.darkBlue;
     } else if (monto < 25) {
-      return LightThemeColors.primary;
+      return ThemaMain.primary;
     } else if (monto >= 25 && monto < 50) {
-      return LightThemeColors.green;
+      return ThemaMain.green;
     } else if (monto >= 50 && monto < 75) {
-      return LightThemeColors.yellow;
+      return ThemaMain.yellow;
     } else if (monto >= 75 && monto < 100) {
-      return LightThemeColors.red;
+      return ThemaMain.red;
     } else {
-      return LightThemeColors.purple;
+      return ThemaMain.purple;
     }
   }
 }

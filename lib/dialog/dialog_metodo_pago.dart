@@ -33,7 +33,7 @@ class DialogMetodoPago extends StatelessWidget {
                       return Column(children: [
                         ListTile(
                             selectedTileColor:
-                                tipo ? LightThemeColors.grey : null,
+                                tipo ? ThemaMain.grey : null,
                             onTap: () {
                               if (tipo) {
                                 provider.metodoSelect = metodo;
@@ -50,11 +50,11 @@ class DialogMetodoPago extends StatelessWidget {
                                 size: 20.sp,
                                 color: tipo
                                     ? provider.metodoSelect?.id == metodo.id
-                                        ? LightThemeColors.green
-                                        : LightThemeColors.darkBlue
+                                        ? ThemaMain.green
+                                        : ThemaMain.darkBlue
                                     : metodo.defecto == 1
-                                        ? LightThemeColors.green
-                                        : LightThemeColors.darkBlue),
+                                        ? ThemaMain.green
+                                        : ThemaMain.darkBlue),
                             title: SubstringHighlight(
                                 text:
                                     "${metodo.nombre}${tipo ? "" : " - Color"}",
@@ -84,7 +84,7 @@ class DialogMetodoPago extends StatelessWidget {
                                                 DialogMetodoPagoCrear(
                                                     metodo: metodo)),
                                         icon: Icon(Icons.edit,
-                                            color: LightThemeColors.primary)),
+                                            color: ThemaMain.primary)),
                                     IconButton(
                                         iconSize: 20.sp,
                                         onPressed: () {
@@ -102,7 +102,7 @@ class DialogMetodoPago extends StatelessWidget {
                                               });
                                         },
                                         icon: Icon(Icons.delete_outline,
-                                            color: LightThemeColors.red))
+                                            color: ThemaMain.red))
                                   ])
                                 : null),
                         Divider(height: 0)

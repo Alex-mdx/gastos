@@ -105,7 +105,7 @@ class _HistorialViewState extends State<HistorialView> {
                                 ? BoxDecoration(
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
-                                    color: LightThemeColors.grey)
+                                    color: ThemaMain.grey)
                                 : null,
                             child: Align(
                                 alignment: Alignment.topCenter,
@@ -166,7 +166,7 @@ AppointmentDataSource _getCalendarDataSource(
         subject:
             'Gasto: \$${lista[i].monto} - Categoria: ${provider.listaCategoria.firstWhereOrNull((element) => element.id == lista[i].categoriaId)?.nombre ?? "Sin Categoria"}',
         color: provider.presupuesto?.activo == 0 || provider.presupuesto == null
-            ? LightThemeColors.primary
+            ? ThemaMain.primary
             : provider.porcentualColor(provider.obtenerPorcentajeDia(
                 DateTime.parse(lista[i].fecha!).weekday - 1,
                 lista[i].monto!))));
@@ -182,9 +182,9 @@ Widget historial(
     required Future<void> Function() fun}) {
   return bd.Badge(
       badgeAnimation: bd.BadgeAnimation.fade(),
-      badgeStyle: bd.BadgeStyle(badgeColor: LightThemeColors.darkBlue),
+      badgeStyle: bd.BadgeStyle(badgeColor: ThemaMain.darkBlue),
       badgeContent:
-          Icon(LineIcons.imageFile, size: 18.sp, color: LightThemeColors.green),
+          Icon(LineIcons.imageFile, size: 18.sp, color: ThemaMain.green),
       position: bd.BadgePosition.topEnd(end: -3, top: -3),
       showBadge: int.tryParse(appointment.location ?? "0") != 0,
       child: InkWell(

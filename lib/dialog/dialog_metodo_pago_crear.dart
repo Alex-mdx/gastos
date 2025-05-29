@@ -23,7 +23,7 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
   TextEditingController nombre = TextEditingController();
   TextEditingController cambio = TextEditingController(text: "1");
   TextEditingController denominacion = TextEditingController();
-  Color coloreado = LightThemeColors.primary;
+  Color coloreado = ThemaMain.primary;
   bool press = true;
   @override
   void initState() {

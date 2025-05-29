@@ -140,7 +140,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
               child: Column(children: [
                 LinearProgressIndicator(
                     valueColor:
-                        AlwaysStoppedAnimation(LightThemeColors.primary),
+                        AlwaysStoppedAnimation(ThemaMain.primary),
                     value: widget.provider.promedioTotalSemana() /
                         widget.provider.presupuesto!.presupuesto!,
                     borderRadius: BorderRadius.circular(borderRadius),
@@ -169,3 +169,4 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     ]);
   }
 }
+                              

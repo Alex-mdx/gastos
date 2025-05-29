@@ -29,7 +29,7 @@ class _SettingMetodoPagoState extends State<SettingMetodoPago> {
             iconSize: 20.sp,
             onPressed: () => showDialog(
                 context: context, builder: (context) => DialogMetodoPago(tipo: false)),
-            icon: Icon(Icons.more_horiz, color: LightThemeColors.green))
+            icon: Icon(Icons.more_horiz, color: ThemaMain.green))
       ])
     ]);
   }

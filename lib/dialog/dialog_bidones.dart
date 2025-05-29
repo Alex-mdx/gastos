@@ -87,8 +87,8 @@ class _DialogBidonesState extends State<DialogBidones> {
                         ? Icons.mobile_friendly
                         : Icons.mobile_off,
                     color: widget.bidon!.inhabilitado == 1
-                        ? LightThemeColors.green
-                        : LightThemeColors.darkGrey)),
+                        ? ThemaMain.green
+                        : ThemaMain.darkGrey)),
             IconButton(
                 iconSize: 20.sp,
                 onPressed: () => Dialogs.showMorph(
@@ -104,7 +104,7 @@ class _DialogBidonesState extends State<DialogBidones> {
                         Navigation.pop();
                       });
                     }),
-                icon: Icon(Icons.close_rounded, color: LightThemeColors.red))
+                icon: Icon(Icons.close_rounded, color: ThemaMain.red))
           ])
       ]),
       Divider(height: 1.h),
@@ -420,14 +420,14 @@ class _DialogBidonesState extends State<DialogBidones> {
                                     decoration: InputDecoration(
                                         hintText: "Monto Inicial",
                                         prefixIcon: Icon(Icons.monetization_on,
-                                            color: LightThemeColors.green)))
+                                            color: ThemaMain.green)))
                               ])))))),
       ElevatedButton.icon(
           icon: Icon(Icons.group_work,
               size: 20.sp,
               color: widget.bidon == null
-                  ? LightThemeColors.primary
-                  : LightThemeColors.green),
+                  ? ThemaMain.primary
+                  : ThemaMain.green),
           onPressed: () async {
             if (widget.bidon?.inhabilitado == 1) {
               showToast("Bidon inhablitado");

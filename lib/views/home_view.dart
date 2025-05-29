@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -26,6 +27,9 @@ class _MyWidgetState extends State<HomeView> {
             bottomNavigationBar: BottomNavigationBar(
                 showUnselectedLabels: false,
                 currentIndex: navigator.index,
+                unselectedItemColor: ThemaMain.darkBlue,
+                selectedItemColor: ThemaMain.second,
+                backgroundColor: ThemaMain.primary,
                 selectedLabelStyle:
                     TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                 onTap: (index) async {

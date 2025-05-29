@@ -64,8 +64,8 @@ class _SettingViewState extends State<SettingView> {
                           icon: Stack(alignment: Alignment.center, children: [
                             Icon(LineIcons.dropbox,
                                 color: Preferences.tokenDropbox == ""
-                                    ? LightThemeColors.red
-                                    : LightThemeColors.green),
+                                    ? ThemaMain.red
+                                    : ThemaMain.green),
                             /* RiveAnimatedIcon(
                                 riveIcon: RiveIcon.reload2,
                                 strokeWidth: 10,
@@ -130,7 +130,7 @@ class _SettingViewState extends State<SettingView> {
                                                                                 child: Text("${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : ((bidones.montoFinal) / bidones.montoInicial)) * 100)}% - \$${bidones.montoFinal}", textAlign: TextAlign.center, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
                                                                             LinearProgressIndicator(
                                                                                 minHeight: 1.h,
-                                                                                valueColor: AlwaysStoppedAnimation(bidones.inhabilitado == 0 ? LightThemeColors.darkBlue : LightThemeColors.darkGrey),
+                                                                                valueColor: AlwaysStoppedAnimation(bidones.inhabilitado == 0 ? ThemaMain.darkBlue : ThemaMain.darkGrey),
                                                                                 borderRadius: BorderRadius.circular(borderRadius),
                                                                                 semanticsValue: "${bidones.montoInicial}",
                                                                                 value: bidones.montoFinal == 0 ? 0 : ((bidones.montoFinal) / bidones.montoInicial))
@@ -164,7 +164,7 @@ class _SettingViewState extends State<SettingView> {
                                         builder: (context) => DialogBidones()),
                                     child: Text("Crear",
                                         style: TextStyle(
-                                            color: LightThemeColors.green,
+                                            color: ThemaMain.green,
                                             fontSize: 16.sp)))
                               ]),
                               BannerExample(tipo: 0),

@@ -224,7 +224,7 @@ class GenerateExcel {
                           5 < maximo ? int.parse(row[5]!.value.toString()) : 1,
                       color: 6 < maximo
                           ? Color(int.parse(row[6]!.value.toString()))
-                          : LightThemeColors.primary);
+                          : ThemaMain.primary);
                   log("${metodoGasto.toJson()}");
                   await MetodoGastoController.insert(metodoGasto);
                 }

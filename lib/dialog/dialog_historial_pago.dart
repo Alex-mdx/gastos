@@ -61,7 +61,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                       });
                 },
                 icon: Icon(Icons.delete,
-                    color: LightThemeColors.red, size: 20.sp))
+                    color: ThemaMain.red, size: 20.sp))
           ]),
       SingleChildScrollView(
           child: Padding(

@@ -39,13 +39,13 @@ class GastosView extends StatelessWidget {
                           context: context,
                           builder: (context) => DialogGaleria()),
                       icon: Icon(LineIcons.imagesAlt,
-                          color: LightThemeColors.second)),
+                          color: ThemaMain.second)),
                   IconButton(
                       iconSize: 24.sp,
                       onPressed: () async =>
                           await Navigation.pushNamed(route: AppRoutes.opciones),
                       icon:
-                          Icon(Icons.settings, color: LightThemeColors.second))
+                          Icon(Icons.settings, color: ThemaMain.second))
                 ])
               ])
             ]),

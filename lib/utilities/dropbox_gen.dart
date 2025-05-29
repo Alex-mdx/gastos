@@ -1,8 +1,21 @@
 import 'package:dropbox_client/dropbox_client.dart';
 import 'package:gastos/utilities/preferences.dart';
+import 'package:http/http.dart' as http;
 
 class DropboxGen {
   static Future<bool> verificarLogeo() async {
+    var result = await Dropbox.getAccessToken();
+    if (result != null) {
+      Preferences.tokenDropbox = result;
+      await Dropbox.authorizeWithAccessToken(result);
+      return true;
+    } else {
+      Preferences.tokenDropbox = "";
+      return false;
+    }
+  }
+
+  static Future<bool> descargar({required String nombre,  required String url }) async {
     var result = await Dropbox.getAccessToken();
     if (result != null) {
       Preferences.tokenDropbox = result;

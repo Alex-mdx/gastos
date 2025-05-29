@@ -63,20 +63,19 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                     value: temporal.presupuesto!,
                     keyboardType:
                         const TextInputType.numberWithOptions(signed: false),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                        fillColor: ThemaMain.white,
                         labelText: "Monto limite para esta semana"))),
             Expanded(
                 flex: 1,
                 child: IconButton.filled(
                     iconSize: 24.sp,
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) =>
-                              DialogPresupuestoDia(provider: widget.provider));
-                    },
-                    icon: Icon(LineIcons.commentsDollar,
-                        color: LightThemeColors.green)))
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) =>
+                            DialogPresupuestoDia(provider: widget.provider)),
+                    icon:
+                        Icon(LineIcons.commentsDollar, color: ThemaMain.green)))
           ])),
       ElevatedButton.icon(
           icon: Icon(
@@ -117,8 +116,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                   : "Activar",
               style: TextStyle(fontSize: 16.sp))),
       ElevatedButton.icon(
-          icon:
-              Icon(LineIcons.eraser, size: 20.sp, color: LightThemeColors.red),
+          icon: Icon(LineIcons.eraser, size: 20.sp, color: ThemaMain.red),
           onPressed: () {
             Dialogs.showMorph(
                 title: "Eliminar presupuesto",
@@ -145,7 +143,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                 });
           },
           label: Text("Eliminar presupuestos",
-              style: TextStyle(fontSize: 16.sp, color: LightThemeColors.red)))
+              style: TextStyle(fontSize: 16.sp, color: ThemaMain.red)))
     ]);
   }
 }

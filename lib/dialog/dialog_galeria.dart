@@ -76,14 +76,14 @@ class _DialogGaleriaState extends State<DialogGaleria> {
                                               DetectionMime.tipo(tipo) == "xlsx"
                                                   ? Icon(LineIcons.excelFileAlt,
                                                       size: 24.sp,
-                                                      color: LightThemeColors
+                                                      color: ThemaMain
                                                           .green)
                                                   : DetectionMime.tipo(tipo) ==
                                                           "zip"
                                                       ? Icon(Icons.compress,
                                                           size: 24.sp,
                                                           color:
-                                                              LightThemeColors
+                                                              ThemaMain
                                                                   .yellow)
                                                       : Icon(
                                                           Icons.not_interested,

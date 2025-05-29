@@ -32,11 +32,11 @@ class _DialogHistorialPagoFotoState extends State<DialogHistorialPagoFoto> {
                       children: [
                           Text("Imagen no soportada",
                               style: TextStyle(
-                                  color: LightThemeColors.grey,
+                                  color: ThemaMain.grey,
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.bold)),
                           Icon(Icons.image_not_supported,
-                              size: 42.sp, color: LightThemeColors.yellow),
+                              size: 42.sp, color: ThemaMain.yellow),
                           TextButton.icon(
                               onPressed: () async => await Dialogs.showMorph(
                                   title: "Reparar imagen",

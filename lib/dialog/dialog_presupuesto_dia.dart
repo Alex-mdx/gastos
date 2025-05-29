@@ -94,7 +94,7 @@ class _DialogPresupuestoDiaState extends State<DialogPresupuestoDia> {
                                   });
                             },
                             icon: Icon(Icons.cleaning_services,
-                                color: LightThemeColors.darkBlue))
+                                color: ThemaMain.darkBlue))
                       ]),
                   const Divider(),
                   SingleChildScrollView(

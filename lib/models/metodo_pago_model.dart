@@ -45,7 +45,7 @@ class MetodoPagoModel {
           denominacion: json["denominacion"],
           status: Parser.toInt(json["status"]) ?? 1,
           defecto: Parser.toInt(json["defecto"]) ?? 1,
-          color: Color(json["color"] ?? LightThemeColors.primary));
+          color: Color(json["color"] ?? ThemaMain.primary));
 
   Map<String, dynamic> toJson() => {
         "id": id,
