@@ -4,6 +4,20 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificacionesFun {
+  static List<String> names = [
+    "¡Ey! ¿Dónde quedó ese billete que tenías ayer?",
+    "Si no lo anotas, tu dinero se evaporará como tu motivación un lunes.",
+    "Registra tus gastos o no dejes que tu billetera llore en silencio",
+    "¿Sabes qué no vuelve? El dinero que gastaste y no apuntaste.",
+    "Si no lo escribes, técnicamente no gastaste nada… ¿o sí?",
+    "¿'No sé en qué se me fue el dinero'? ¡Apúntalo y deja de adivinar!",
+    "El único misterio aceptable es el de las pirámides, no el de tus finanzas",
+    "Registra ahora o llora después",
+    "¿Vas a postergarlo? Tu cuenta de banco no es tu tarea de la escuela",
+    "Si no lo haces ahora, tu yo del futuro te odiará",
+    "Tu dinero está muy seguro",
+    "¡Activa el modo 'adulto responsable' y apunta ese gasto!"
+  ];
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static Future<void> init() async {
@@ -33,7 +47,7 @@ class NotificacionesFun {
     });
   }
 
-  static Future<void> periodico(int hora, int minuto) async {
+  static Future<void> periodico(int hora, int minuto, int id) async {
     // Configurar detalles de la notificación para Android
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -44,6 +58,13 @@ class NotificacionesFun {
             showWhen: true,
             color: LightTheme.green,
             colorized: true,
+            channelShowBadge: true,
+            setAsGroupSummary: true,
+            styleInformation: BigTextStyleInformation('',
+                htmlFormatContentTitle: true,
+                htmlFormatBigText: true,
+                summaryText: 'Resumen',
+                htmlFormatSummaryText: true),
             largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
             icon: '@mipmap/ic_launcher');
 
@@ -56,12 +77,9 @@ class NotificacionesFun {
         android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);
 
     // Programar notificación diaria a las 9:00 AM
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        10,
-        'Control de Gastos',
-        '¡Es hora de ingresar tus gastos!',
-        nextTime(hora, minuto),
-        platformChannelSpecifics,
+    names.shuffle();
+    await flutterLocalNotificationsPlugin.zonedSchedule(id, 'Control de Gastos',
+        names.first, nextTime(hora, minuto), platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time);
   }
@@ -88,13 +106,20 @@ class NotificacionesFun {
             showWhen: true,
             color: LightTheme.green,
             colorized: true,
+            channelShowBadge: true,
+            setAsGroupSummary: true,
+            styleInformation: BigTextStyleInformation('',
+                htmlFormatContentTitle: true,
+                htmlFormatBigText: true,
+                summaryText: 'Resumen',
+                htmlFormatSummaryText: true),
             largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
             icon: '@mipmap/ic_launcher');
 
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(1, 'Notificación instantánea',
-        'Esta es una notificación de prueba', platformChannelSpecifics);
+    names.shuffle();
+    await flutterLocalNotificationsPlugin.show(
+        1, 'Notificación instantánea', names.first, platformChannelSpecifics);
   }
 }

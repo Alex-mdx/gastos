@@ -5,6 +5,7 @@ import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/dialog/dialog_bidones.dart';
 import 'package:gastos/dialog/dialog_dropbox.dart';
+import 'package:gastos/dialog/dialog_setting_notificaciones.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
@@ -45,15 +46,10 @@ class _SettingViewState extends State<SettingView> {
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(children: [
-                    if (kDebugMode)
-                      ElevatedButton.icon(
-                          onPressed: () async {
-                            var tipo =
-                                await BidonesController.getItemsByAbierto();
-                          },
-                          label: Text("Tutorial",
-                              style: TextStyle(fontSize: 14.sp)),
-                          icon: Icon(LineIcons.youtube, size: 20.sp)),
+                    IconButton(
+                        iconSize: 20.sp,
+                        onPressed: () =>showDialog(context: context, builder: (context) => DialogSettingNotificaciones()),
+                        icon: Icon(LineIcons.bell,color: ThemaMain.yellow)),
                     if (kDebugMode)
                       IconButton.filled(
                           iconSize: 24.sp,
