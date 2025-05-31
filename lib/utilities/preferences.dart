@@ -32,17 +32,23 @@ class Preferences {
       _preferences?.setString('tokenDropbox', value);
 
   static String get recordatorio1 =>
-      _preferences?.getString('recordatorio1') ?? "21:00";
+      _preferences?.getString('recordatorio1') ?? "12:30";
   static set recordatorio1(String value) =>
       _preferences?.setString('recordatorio1', value);
+  static bool get recordatorioAct1 =>
+      _preferences?.getBool('recordatorioAct1') ?? false;
+  static set recordatorioAct1(bool value) =>
+      _preferences?.setBool('recordatorioAct1', value);
 
   static String get recordatorio2 =>
-      _preferences?.getString('recordatorio2') ?? "13:00";
+      _preferences?.getString('recordatorio2') ?? "21:30";
   static set recordatorio2(String value) =>
       _preferences?.setString('recordatorio2', value);
+  static bool get recordatorioAct2 =>
+      _preferences?.getBool('recordatorioAct2') ?? false;
+  static set recordatorioAct2(bool value) =>
+      _preferences?.setBool('recordatorioAct2', value);
 
-      static bool get thema =>
-      _preferences?.getBool('thema') ?? true;
-  static set thema(bool value) =>
-      _preferences?.setBool('thema', value);
+  static bool get thema => _preferences?.getBool('thema') ?? true;
+  static set thema(bool value) => _preferences?.setBool('thema', value);
 }

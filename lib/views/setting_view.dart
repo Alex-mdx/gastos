@@ -45,31 +45,24 @@ class _SettingViewState extends State<SettingView> {
                 toolbarHeight: 6.h,
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
-                  OverflowBar(children: [
-                    IconButton(
-                        iconSize: 20.sp,
-                        onPressed: () =>showDialog(context: context, builder: (context) => DialogSettingNotificaciones()),
-                        icon: Icon(LineIcons.bell,color: ThemaMain.yellow)),
-                    if (kDebugMode)
-                      IconButton.filled(
-                          iconSize: 24.sp,
-                          onPressed: () async => showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => DialogDropbox()),
-                          icon: Stack(alignment: Alignment.center, children: [
-                            Icon(LineIcons.dropbox,
-                                color: Preferences.tokenDropbox == ""
-                                    ? ThemaMain.red
-                                    : ThemaMain.green),
-                            /* RiveAnimatedIcon(
-                                riveIcon: RiveIcon.reload2,
-                                strokeWidth: 10,
-                                loopAnimation: true,
-                                color: Colors.white,
-                                height: 26.sp,
-                                width: 24.sp) */
-                          ]))
+                  OverflowBar(spacing: 1.w, children: [
+                    IconButton.filled(
+                        iconSize: 22.sp,
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) =>
+                                DialogSettingNotificaciones()),
+                        icon: Icon(LineIcons.bell, color: ThemaMain.yellow)),
+                    IconButton.filled(
+                        iconSize: 22.sp,
+                        onPressed: () async => showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => DialogDropbox()),
+                        icon: Icon(LineIcons.dropbox,
+                            color: Preferences.tokenDropbox == ""
+                                ? ThemaMain.red
+                                : ThemaMain.green))
                   ])
                 ]),
             body: SizedBox(

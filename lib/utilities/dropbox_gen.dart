@@ -1,6 +1,5 @@
 import 'package:dropbox_client/dropbox_client.dart';
 import 'package:gastos/utilities/preferences.dart';
-import 'package:http/http.dart' as http;
 
 class DropboxGen {
   static Future<bool> verificarLogeo() async {

@@ -47,7 +47,7 @@ class NotificacionesFun {
     });
   }
 
-  static Future<void> periodico(int hora, int minuto, int id) async {
+  static Future<void> periodico(int id, String time) async {
     // Configurar detalles de la notificación para Android
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -79,19 +79,25 @@ class NotificacionesFun {
     // Programar notificación diaria a las 9:00 AM
     names.shuffle();
     await flutterLocalNotificationsPlugin.zonedSchedule(id, 'Control de Gastos',
-        names.first, nextTime(hora, minuto), platformChannelSpecifics,
+        names.first, nextTime(time), platformChannelSpecifics,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time);
   }
 
-  static tz.TZDateTime nextTime(int hour, int minute) {
+  static Future<void> cancel(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+  }
+
+  static tz.TZDateTime nextTime(String hora) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    List<int> time = hora.split(":").map((e) => int.parse(e)).toList();
     tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, time[0], time[1]);
 
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
+    
 
     return scheduledDate;
   }

@@ -48,6 +48,11 @@ class Textos {
     return formatoFechaHora;
   }
 
+  static String fechaHM({required DateTime fecha}) {
+    String formatoFechaHora = DateFormat('HH:mm').format(fecha);
+    return formatoFechaHora;
+  }
+
   static String randomWord(int? number) {
     final random = math.Random();
     const caracteres =
