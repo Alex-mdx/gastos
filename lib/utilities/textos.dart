@@ -53,6 +53,10 @@ class Textos {
     return formatoFechaHora;
   }
 
+  static DateTime parseCompact(String dateStr) {
+    return DateFormat('yyyyMMdd HHmmss').parse(dateStr);
+  }
+
   static String randomWord(int? number) {
     final random = math.Random();
     const caracteres =

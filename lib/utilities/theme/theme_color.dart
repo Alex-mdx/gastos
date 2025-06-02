@@ -38,8 +38,8 @@ class LightTheme {
   static const yellow = Color.fromARGB(255, 235, 210, 4);
   static const purple = Color.fromARGB(255, 106, 20, 218);
 
-  static const background = Color.fromARGB(255, 238, 241, 245);
-  static const dialogbackground = Color.fromARGB(255, 237, 245, 244);
+  static const background = Color.fromARGB(255, 238, 244, 245);
+  static const dialogbackground = Color.fromARGB(255, 224, 241, 239);
   static const darkGrey = Color.fromARGB(255, 119, 122, 133);
   static const darkBlue = Color.fromARGB(255, 0, 36, 84);
 

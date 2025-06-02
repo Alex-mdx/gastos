@@ -19,18 +19,6 @@ class DropboxGen {
     }
   }
 
-  static Future<bool> descargar(
-      {required String nombre, required String url}) async {
-    var result = await Dropbox.getAccessToken();
-    if (result != null) {
-      Preferences.tokenDropbox = result;
-      await Dropbox.authorizeWithAccessToken(result);
-      return true;
-    } else {
-      Preferences.tokenDropbox = "";
-      return false;
-    }
-  }
 
   static Future<DropboxModel?> infoFile({required String name}) async {
     try {
