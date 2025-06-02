@@ -29,7 +29,7 @@ class GastosView extends StatelessWidget {
                 OverflowBar(spacing: 1.w, children: [
                   IconButton(
                       onPressed: () async {
-                        await NotificacionesFun().show();
+                        await NotificacionesFun.show(1);
                       },
                       icon: Icon(Icons.precision_manufacturing_sharp)),
                   const ButtonPromedioWidget(),

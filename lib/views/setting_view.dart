@@ -46,13 +46,14 @@ class _SettingViewState extends State<SettingView> {
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(spacing: 1.w, children: [
-                    IconButton.filled(
-                        iconSize: 22.sp,
-                        onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) =>
-                                DialogSettingNotificaciones()),
-                        icon: Icon(LineIcons.bell, color: ThemaMain.yellow)),
+                    if (kDebugMode)
+                      IconButton.filled(
+                          iconSize: 22.sp,
+                          onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  DialogSettingNotificaciones()),
+                          icon: Icon(LineIcons.bell, color: ThemaMain.yellow)),
                     IconButton.filled(
                         iconSize: 22.sp,
                         onPressed: () async => showDialog(

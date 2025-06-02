@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dropbox_client/dropbox_client.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/models/dropbox_model.dart';
 import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
@@ -29,10 +30,13 @@ class _DialogDropboxState extends State<DialogDropbox> {
   bool descarga = true;
   bool carga = true;
   String proceso = "Sin proceso";
+
+  DropboxModel? backOnline;
   @override
   void initState() {
     super.initState();
     token();
+    file();
   }
 
   void token() async {
@@ -42,6 +46,10 @@ class _DialogDropboxState extends State<DialogDropbox> {
         Preferences.tokenDropbox = token;
       });
     }
+  }
+
+  Future<void> file() async {
+    backOnline = await DropboxGen.infoFile(name: "respaldo_CG.zip");
   }
 
   @override
@@ -160,61 +168,72 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                       color: ThemaMain.darkBlue,
                                       fontWeight: FontWeight.bold))
                               : CircularProgressIndicator()),
-                      ElevatedButton.icon(
-                          style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  send ? null : ThemaMain.grey)),
-                          icon: Icon(LineIcons.fileDownload, size: 20.sp),
-                          onPressed: () async {
-                            if (send) {
-                              setState(() {
-                                descarga = false;
-                                send = false;
-                                proceso = "En proceso";
-                              });
-                              final result = await Dropbox.getAccountName();
-                              setState(() {
-                                proceso = "Bienvenido a dropbox $result";
-                              });
-                              final url = await Dropbox.listFolder('');
-                              setState(() {
-                                proceso =
-                                    "Se ingreso a su carpeta de respaldo $url";
-                              });
-                              setState(() {
-                                proceso = "Buscando archivo de respaldo";
-                              });
-                              final respaldo = await Dropbox.getTemporaryLink(
-                                  '/respaldo_CG.zip');
-                              log("resplado $respaldo");
-                              if (respaldo!.toString().contains("not_found")) {
-                                showToast("No se encontro archivo de respaldo");
-                              } else {
-                                final direccion = await getDownloadsDirectory();
-                                final filepath =
-                                    '${direccion?.path}/respaldo_CG.zip';
-                                final result = await Dropbox.download(
-                                    "/respaldo_CG.zip",
-                                    filepath,
-                                    (downloaded, total) => setState(() {
-                                          proceso =
-                                              "Descarga: ${filesize(downloaded)} / ${filesize(total)}";
-                                        }));
-                                showToast("Descarga de resplado con exito");
-                                debugPrint("$result");
-                              }
-                              setState(() {
-                                descarga = true;
-                                send = true;
-                                proceso = "Sin proceso";
-                              });
-                            } else {
-                              showToast("Descarga en proceso");
-                            }
-                          },
-                          label: Text("Descargar",
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: ThemaMain.darkBlue)))
+                      Column(
+                        children: [
+                          ElevatedButton.icon(
+                              style: ButtonStyle(
+                                  backgroundColor: WidgetStatePropertyAll(
+                                      send ? null : ThemaMain.grey)),
+                              icon: Icon(LineIcons.fileDownload, size: 20.sp),
+                              onPressed: () async {
+                                if (send) {
+                                  setState(() {
+                                    descarga = false;
+                                    send = false;
+                                    proceso = "En proceso";
+                                  });
+                                  final result = await Dropbox.getAccountName();
+                                  setState(() {
+                                    proceso = "Bienvenido a dropbox $result";
+                                  });
+                                  final url = await Dropbox.listFolder('');
+                                  setState(() {
+                                    proceso =
+                                        "Se ingreso a su carpeta de respaldo $url";
+                                  });
+                                  setState(() {
+                                    proceso = "Buscando archivo de respaldo";
+                                  });
+                                  final respaldo =
+                                      await Dropbox.getTemporaryLink(
+                                          '/respaldo_CG.zip');
+                                  log("resplado $respaldo");
+                                  if (respaldo!
+                                      .toString()
+                                      .contains("not_found")) {
+                                    showToast(
+                                        "No se encontro archivo de respaldo");
+                                  } else {
+                                    final direccion =
+                                        await getDownloadsDirectory();
+                                    final filepath =
+                                        '${direccion?.path}/respaldo_CG.zip';
+                                    final result = await Dropbox.download(
+                                        "/respaldo_CG.zip",
+                                        filepath,
+                                        (downloaded, total) => setState(() {
+                                              proceso =
+                                                  "Descarga: ${filesize(downloaded)} / ${filesize(total)}";
+                                            }));
+                                    showToast("Descarga de resplado con exito");
+                                    debugPrint("$result");
+                                  }
+                                  setState(() {
+                                    descarga = true;
+                                    send = true;
+                                    proceso = "Sin proceso";
+                                  });
+                                } else {
+                                  showToast("Descarga en proceso");
+                                }
+                              },
+                              label: Text("Descargar",
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: ThemaMain.darkBlue))),
+                          Text("${backOnline?.serverModified}")
+                        ],
+                      )
                     ]),
                 Text(proceso,
                     textAlign: TextAlign.center,

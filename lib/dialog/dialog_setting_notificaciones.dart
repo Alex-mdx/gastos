@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:gastos/utilities/background.dart';
 import 'package:gastos/utilities/notificaciones_fun.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
@@ -18,6 +19,7 @@ class DialogSettingNotificaciones extends StatefulWidget {
 
 class _DialogSettingNotificacionesState
     extends State<DialogSettingNotificaciones> {
+  final now = DateTime.now();
   late bool act1;
   late bool act2;
 
@@ -36,8 +38,8 @@ class _DialogSettingNotificacionesState
         Preferences.recordatorio1.split(":").map((e) => int.parse(e)).toList();
     List<int> obj2 =
         Preferences.recordatorio2.split(":").map((e) => int.parse(e)).toList();
-    hora1 = DateTime(0, 0, 0, obj1[0], obj1[1], 0);
-    hora2 = DateTime(0, 0, 0, obj2[0], obj2[1], 0);
+    hora1 = DateTime(now.year, now.month, now.day, obj1[0], obj1[1], 0);
+    hora2 = DateTime(now.year, now.month, now.day, obj2[0], obj2[1], 0);
     horaPreferencia1 = Textos.fechaHM(fecha: hora1);
     horaPreferencia2 = Textos.fechaHM(fecha: hora2);
   }
@@ -92,6 +94,12 @@ class _DialogSettingNotificacionesState
                                       onTimeChange: (time) => setState(() {
                                             horaPreferencia1 =
                                                 Textos.fechaHM(fecha: time);
+                                            hora1 = DateTime(
+                                                now.year,
+                                                now.month,
+                                                now.day,
+                                                time.hour,
+                                                time.minute);
                                           }))
                                 ]))),
                     Container(
@@ -128,6 +136,12 @@ class _DialogSettingNotificacionesState
                                       onTimeChange: (time) => setState(() {
                                             horaPreferencia2 =
                                                 Textos.fechaHM(fecha: time);
+                                            hora2 = DateTime(
+                                                now.year,
+                                                now.month,
+                                                now.day,
+                                                time.hour,
+                                                time.minute);
                                           }))
                                 ]))),
                     Divider(),
@@ -139,19 +153,31 @@ class _DialogSettingNotificacionesState
                             loadingTitle:
                                 "aplicacion configuracion de notificaciones",
                             onAcceptPressed: (context) async {
-                              await NotificacionesFun.cancel(20);
-                              await NotificacionesFun.cancel(30);
+                              int id1 = 20;
+                              int id2 = 30;
+                              await Background.cancelBackgroundTask(
+                                  "task_$id1");
+                              await Background.cancelBackgroundTask(
+                                  "task_$id2");
                               Preferences.recordatorioAct1 = act1;
                               Preferences.recordatorioAct2 = act2;
                               Preferences.recordatorio1 = horaPreferencia1;
                               Preferences.recordatorio2 = horaPreferencia2;
                               if (act1) {
-                                await NotificacionesFun.periodico(
-                                    20, horaPreferencia1);
+                                await Background.scheduleDailyBackgroundTask(
+                                    hour: hora1.hour,
+                                    minute: hora1.minute,
+                                    taskId: "task_$id1",
+                                    taskFunction: () async =>
+                                        await NotificacionesFun.show(id1));
                               }
                               if (act2) {
-                                await NotificacionesFun.periodico(
-                                    30, horaPreferencia2);
+                                await Background.scheduleDailyBackgroundTask(
+                                    hour: hora2.hour,
+                                    minute: hora2.minute,
+                                    taskId: "task_$id2",
+                                    taskFunction: () async =>
+                                        await NotificacionesFun.show(id2));
                               }
                             }),
                         child:

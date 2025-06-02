@@ -1,7 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 class NotificacionesFun {
   static List<String> names = [
@@ -46,63 +45,7 @@ class NotificacionesFun {
       // Manejar cuando se toca la notificación
     });
   }
-
-  static Future<void> periodico(int id, String time) async {
-    // Configurar detalles de la notificación para Android
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'channel_periodic', 'Notificaciones instantáneas',
-            enableVibration: true,
-            importance: Importance.high,
-            priority: Priority.high,
-            showWhen: true,
-            color: LightTheme.green,
-            colorized: true,
-            channelShowBadge: true,
-            setAsGroupSummary: true,
-            styleInformation: BigTextStyleInformation('',
-                htmlFormatContentTitle: true,
-                htmlFormatBigText: true,
-                summaryText: 'Resumen',
-                htmlFormatSummaryText: true),
-            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
-            icon: '@mipmap/ic_launcher');
-
-    // Configurar detalles para iOS
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails();
-
-    // Configuración completa
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);
-
-    // Programar notificación diaria a las 9:00 AM
-    names.shuffle();
-    await flutterLocalNotificationsPlugin.zonedSchedule(id, 'Control de Gastos',
-        names.first, nextTime(time), platformChannelSpecifics,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        matchDateTimeComponents: DateTimeComponents.time);
-  }
-
-  static Future<void> cancel(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
-  }
-
-  static tz.TZDateTime nextTime(String hora) {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    List<int> time = hora.split(":").map((e) => int.parse(e)).toList();
-    tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, time[0], time[1]);
-
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    
-
-    return scheduledDate;
-  }
-
-  Future<void> show() async {
+  static Future<void> show(int id) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'instant_channel_id', 'Notificaciones instantáneas',
@@ -126,6 +69,6 @@ class NotificacionesFun {
         NotificationDetails(android: androidPlatformChannelSpecifics);
     names.shuffle();
     await flutterLocalNotificationsPlugin.show(
-        1, 'Notificación instantánea', names.first, platformChannelSpecifics);
+        id, 'Notificación instantánea', names.first, platformChannelSpecifics);
   }
 }
