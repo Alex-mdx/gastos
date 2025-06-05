@@ -4,12 +4,16 @@ import 'dart:io';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/controllers/metodo_gasto_controller.dart';
+import 'package:gastos/controllers/presupuesto_controller.dart';
+import 'package:gastos/models/bidones_model.dart';
 import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/models/metodo_pago_model.dart';
+import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,6 +26,7 @@ class GenerateExcel {
       showToast("Generando csv de gastos");
       var excel = Excel.createExcel();
       Sheet sheet1 = excel['Gastos'];
+
       var gastos = await GastosController.getAll();
       sheet1.appendRow(gastos.first
           .toJson()
@@ -63,6 +68,37 @@ class GenerateExcel {
             .map((i) => TextCellValue(i.toString()))
             .toList());
       }
+
+      var presupuesto = await PresupuestoController.getItem();
+      if (presupuesto != null) {
+        Sheet sheet4 = excel['Presupuesto'];
+        sheet4.appendRow(presupuesto
+            .toJson()
+            .keys
+            .map((e) => TextCellValue(e.toString()))
+            .toList());
+
+        sheet4.appendRow(presupuesto
+            .toJson()
+            .values
+            .map((i) => TextCellValue(i.toString()))
+            .toList());
+      }
+
+      Sheet sheet5 = excel['BidonesPresupuesto'];
+      var bidones = await BidonesController.getItems();
+      sheet5.appendRow(bidones.first
+          .toJson()
+          .keys
+          .map((e) => TextCellValue(e.toString()))
+          .toList());
+      for (var element in bidones) {
+        sheet5.appendRow(element
+            .toJson()
+            .values
+            .map((i) => TextCellValue(i.toString()))
+            .toList());
+      }
       final direccion = await getDownloadsDirectory();
       showToast("Guardando respaldo generado");
       log("$direccion");
@@ -78,8 +114,7 @@ class GenerateExcel {
   }
 
   static Future<bool> compartidoGlobal(File file) async {
-    final params =
-        ShareParams(text: 'Evidencia', files: [XFile(file.path)]);
+    final params = ShareParams(text: 'Evidencia', files: [XFile(file.path)]);
 
     final result = await SharePlus.instance.share(params);
     if (result.status == ShareResultStatus.success) {
@@ -227,6 +262,112 @@ class GenerateExcel {
                           : ThemaMain.primary);
                   log("${metodoGasto.toJson()}");
                   await MetodoGastoController.insert(metodoGasto);
+                }
+              }
+            } else {
+              showToast(
+                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
+            }
+            break;
+          case "Presupuesto":
+            if (excel.tables[table]!.rows.length > 1) {
+              await PresupuestoController.deleteAll();
+              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                row = excel.tables[table]!.rows[i];
+                maximo = row.length;
+                if (i != 0) {
+                  ///ni me acuerdo para que servia el periodo
+                  PresupuestoModel presupuesto = PresupuestoModel(
+                      activo: 0 < maximo
+                          ? int.tryParse(row[0]!.value.toString())!
+                          : 0,
+                      presupuesto: 1 < maximo
+                          ? double.parse(row[1]!.value.toString())
+                          : null,
+                      lunes: 2 < maximo
+                          ? double.parse(row[2]!.value.toString())
+                          : null,
+                      martes: 3 < maximo
+                          ? double.parse(row[3]!.value.toString())
+                          : null,
+                      miercoles: 4 < maximo
+                          ? double.parse(row[4]!.value.toString())
+                          : null,
+                      jueves: 5 < maximo
+                          ? double.parse(row[5]!.value.toString())
+                          : null,
+                      viernes: 6 < maximo
+                          ? double.parse(row[6]!.value.toString())
+                          : null,
+                      sabado: 7 < maximo
+                          ? double.parse(row[7]!.value.toString())
+                          : null,
+                      domingo: 8 < maximo
+                          ? double.parse(row[8]!.value.toString())
+                          : null,
+                      periodo: 9 < maximo
+                          ? int.tryParse(row[9]!.value.toString())
+                          : null);
+                  await PresupuestoController.insert(presupuesto);
+                }
+              }
+            } else {
+              showToast(
+                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
+            }
+            break;
+          case "BidonesPresupuesto":
+            if (excel.tables[table]!.rows.length > 1) {
+              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                row = excel.tables[table]!.rows[i];
+                maximo = row.length;
+                if (i != 0) {
+                  BidonesModel bidon = BidonesModel(
+                      id: 0 < maximo
+                          ? int.tryParse(row[0]!.value.toString())!
+                          : 1,
+                      identificador: row[1]!.value.toString(),
+                      nombre: row[2]!.value.toString(),
+                      montoInicial: 3 < maximo
+                          ? double.parse(row[3]!.value.toString())
+                          : 0,
+                      montoFinal: 4 < maximo
+                          ? double.parse(row[4]!.value.toString())
+                          : 0,
+                      metodoPago: 5 < maximo
+                          ? row[5]!.value.toString() == "null"
+                              ? []
+                              : List<int>.from(jsonDecode(row[5]!.value.toString())
+                                  .map((x) => x.toString()))
+                          : [],
+                      categoria: 6 < maximo
+                          ? row[6]!.value.toString() == "null"
+                              ? []
+                              : List<int>.from(jsonDecode(row[6]!.value.toString())
+                                  .map((x) => x.toString()))
+                          : [],
+                      diasEfecto: 7 < maximo
+                          ? row[7]!.value.toString() == "null"
+                              ? []
+                              : List<int>.from(jsonDecode(row[7]!.value.toString())
+                                  .map((x) => x.toString()))
+                          : [],
+                      fechaInicio: DateTime.parse(row[8]!.value.toString()),
+                      fechaFinal: DateTime.parse(row[9]!.value.toString()),
+                      cerrado: 10 < maximo
+                          ? int.parse(row[10]!.value.toString())
+                          : 0,
+                      inhabilitado: 11 < maximo
+                          ? int.parse(row[11]!.value.toString())
+                          : 0,
+                      gastos: 12 < maximo
+                          ? row[12]!.value.toString() == "null"
+                              ? []
+                              : List<int>.from(
+                                  jsonDecode(row[12]!.value.toString())
+                                      .map((x) => x.toString()))
+                          : []);
+                  await BidonesController.insert(bidon);
                 }
               }
             } else {

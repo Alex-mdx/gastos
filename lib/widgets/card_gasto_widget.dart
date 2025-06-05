@@ -105,7 +105,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   noResultFoundText: "Sin resultados",
                                   controller: controller,
                                   closedHeaderPadding: EdgeInsets.symmetric(
-                                      horizontal: 1.w, vertical: 0),
+                                      horizontal: 1.w, vertical: 1.h),
                                   decoration: CustomDropdownDecoration(
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
                                           color: ThemaMain.green, size: 20.sp),
@@ -118,21 +118,20 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                               icon: Icon(Icons.close_rounded,
                                                   size: 20.sp))
                                           : null),
-                                  headerBuilder:
-                                      (context, selectedItem, enabled) => Text(
-                                          selectedItem.nombre,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.bold)),
+                                  headerBuilder: (context, selectedItem, enabled) => Text(selectedItem.nombre,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 15.sp,
+                                          fontWeight: FontWeight.bold)),
                                   hintText: 'Categoria de Gasto',
                                   items: widget.provider.listaCategoria,
                                   itemsListPadding: const EdgeInsets.all(0),
                                   listItemPadding: const EdgeInsets.all(0),
-                                  listItemBuilder: (context, item, isSelected,
-                                          onItemSelect) =>
+                                  listItemBuilder: (context, item, isSelected, onItemSelect) =>
                                       ListTile(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 1.w, vertical: 0),
                                           dense: true,
                                           title: Text(item.nombre,
                                               maxLines: 2,
@@ -289,6 +288,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             controller: widget.provider.notas,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
+                                fillColor: ThemaMain.white,
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: .5.h, horizontal: 2.w),
                                 hintText: "Notas de gasto")))

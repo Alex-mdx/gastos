@@ -20,7 +20,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/categoria_controller.dart';
 import '../controllers/gastos_controller.dart';
 import '../controllers/metodo_gasto_controller.dart';
@@ -129,6 +129,55 @@ class _DialogDropboxState extends State<DialogDropbox> {
     }
   }
 
+  Future<void> descargaData(
+      GastoProvider provider, Function(String) procesar) async {
+    procesar("Buscando archivo de respaldo");
+    final respaldo = await Dropbox.getTemporaryLink('/respaldo_CG.zip');
+    log("resplado $respaldo");
+    if (respaldo!.toString().contains("not_found")) {
+      showToast("No se encontro archivo de respaldo");
+    } else {
+      final direccion = await getDownloadsDirectory();
+      final filepath = '${direccion?.path}/respaldo_CG.zip';
+      var descargado = 0;
+      var totalizado = 0;
+
+      final result = await Dropbox.download(
+          "/respaldo_CG.zip",
+          filepath,
+          (downloaded, total) => setState(() {
+                descargado = downloaded;
+                totalizado = total;
+                procesar(
+                    "Descarga: ${filesize(downloaded)} / ${filesize(total)}");
+              }));
+      print(
+          "${(descargado != 0 && totalizado != 0)} ${(descargado == totalizado)}");
+      if ((descargado != 0 && totalizado != 0) && (descargado == totalizado)) {
+        showToast("Archivo descargado");
+        procesar("Descomprimiendo archivo zip...");
+        var files = await ZipFuncion.unZip(File(filepath));
+        procesar("Guardando datos en la memoria interna");
+        await DetectionMime.operacion(files);
+        procesar("Guardando gastos");
+        provider.listaGastos = await GastosController.getConfigurado();
+        setState(() {
+          proceso = "Guardando categorias";
+        });
+        provider.listaCategoria = await CategoriaController.getItems();
+        procesar("Guardando metodo de gasto");
+        provider.metodo = await MetodoGastoController.getItems();
+        log("${provider.metodo.map((e) => e.toJson()).toList()}");
+        provider.metodoSelect =
+            provider.metodo.firstWhereOrNull((element) => element.id == 1);
+      } else {
+        showToast("Error en la descarga de archivo");
+      }
+
+      debugPrint("descarga: $result");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
@@ -139,23 +188,15 @@ class _DialogDropboxState extends State<DialogDropbox> {
           Row(mainAxisSize: MainAxisSize.min, children: [
             Text("Dropbox", style: TextStyle(fontSize: 18.sp)),
             Icon(LineIcons.dropbox, size: 24.sp),
+            if (data != null)
+              SizedBox(
+                  height: 22.sp,
+                  width: 22.sp,
+                  child: ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(60),
+                      child: Image.network(data!.profilePhotoUrl,
+                          filterQuality: FilterQuality.low)))
           ]),
-          if (data != null)
-            Row(
-              children: [
-                SizedBox(
-                    height: 22.sp,
-                    width: 22.sp,
-                    child: ClipRRect(
-                        borderRadius: BorderRadiusGeometry.circular(60),
-                        child: Image.network(data!.profilePhotoUrl,
-                            filterQuality: FilterQuality.low))),
-                TextButton.icon(
-                    icon: Icon(Icons.open_in_new, size: 22.sp),
-                    onPressed: () {},
-                    label: Text("Ir", style: TextStyle(fontSize: 16.sp)))
-              ],
-            ),
           Divider(),
           Column(children: [
             if (Preferences.tokenDropbox == "")
@@ -197,28 +238,41 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                 size: 20.sp, color: ThemaMain.green),
                             onPressed: () async {
                               try {
-                                if (carga) {
-                                  setState(() {
-                                    send = false;
-                                    carga = false;
-                                    proceso = "En proceso";
-                                  });
-                                  await cargaData(
-                                      provider,
-                                      (p0) => setState(() {
-                                            proceso = p0;
-                                          }));
-                                  setState(() {
-                                    send = true;
-                                    carga = true;
-                                    proceso = "Sin proceso";
-                                  });
+                                bool aceptar = false;
+                                await Dialogs.showMorph(
+                                    title: "Enviar datos locales",
+                                    description:
+                                        "Se enviaran sus datos a la nube, esta operacion sobre escribira los archivos de la nube por los que tiene localmente",
+                                    loadingTitle: "cargando...",
+                                    onAcceptPressed: (context) async =>
+                                        aceptar = true);
+                                if (aceptar) {
+                                  if (carga) {
+                                    setState(() {
+                                      send = false;
+                                      carga = false;
+                                      proceso = "En proceso";
+                                    });
+                                    await cargaData(
+                                        provider,
+                                        (p0) => setState(() {
+                                              proceso = p0;
+                                            }));
+                                    setState(() {
+                                      send = true;
+                                      carga = true;
+                                      proceso = "Sin proceso";
+                                    });
+                                  }
                                 }
                               } catch (e) {
                                 Preferences.tokenDropbox = "";
                                 setState(() {
-                                  send = false;
+                                  send = true;
+                                  carga = true;
+                                  proceso = "Sin proceso";
                                 });
+                                showToast("error: $e");
                                 debugPrint("$e");
                               }
                             },
@@ -244,99 +298,42 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                     send ? null : ThemaMain.grey)),
                             icon: Icon(LineIcons.fileDownload, size: 20.sp),
                             onPressed: () async {
-                              if (send) {
-                                setState(() {
-                                  descarga = false;
-                                  send = false;
-                                  proceso = "En proceso";
-                                });
-                                /* final result = await Dropbox.getAccountName();
-                                setState(() {
-                                  proceso = "Bienvenido a dropbox $result";
-                                });
-                                final url = await Dropbox.listFolder('');
-                                setState(() {
-                                  proceso =
-                                      "Se ingreso a su carpeta de respaldo $url";
-                                });
-                                setState(() {
-                                  proceso = "Buscando archivo de respaldo";
-                                });
-                                final respaldo = await Dropbox.getTemporaryLink(
-                                    '/respaldo_CG.zip');
-                                log("resplado $respaldo");
-                                if (respaldo!
-                                    .toString()
-                                    .contains("not_found")) {
-                                  showToast(
-                                      "No se encontro archivo de respaldo");
-                                } else {
-                                  final direccion =
-                                      await getDownloadsDirectory();
-                                  final filepath =
-                                      '${direccion?.path}/respaldo_CG.zip';
-                                  var descargado = 0;
-                                  var totalizado = 0;
-
-                                  final result = await Dropbox.download(
-                                      "/respaldo_CG.zip",
-                                      filepath,
-                                      (downloaded, total) => setState(() {
-                                            descargado = downloaded;
-                                            totalizado = total;
-                                            proceso =
-                                                "Descarga: ${filesize(downloaded)} / ${filesize(total)}";
-                                          }));
-                                  print(
-                                      "${(descargado != 0 && totalizado != 0)} ${(descargado == totalizado)}");
-                                  if ((descargado != 0 && totalizado != 0) &&
-                                      (descargado == totalizado)) {
-                                    showToast("Archivo descargado");
+                              try {
+                                bool aceptar = false;
+                                await Dialogs.showMorph(
+                                    title: "Descarga datos Dropbox",
+                                    description:
+                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
+                                    loadingTitle: "cargando...",
+                                    onAcceptPressed: (context) async =>
+                                        aceptar = true);
+                                if (aceptar) {
+                                  if (descarga) {
                                     setState(() {
-                                      proceso =
-                                          "Descomprimiendo archivo zip...";
+                                      descarga = false;
+                                      send = false;
+                                      proceso = "En proceso";
                                     });
-                                    var files =
-                                        await ZipFuncion.unZip(File(filepath));
+                                    await descargaData(
+                                        provider,
+                                        (p0) => setState(() {
+                                              proceso = p0;
+                                            }));
                                     setState(() {
-                                      proceso =
-                                          "Guardando datos en la memoria interna";
+                                      descarga = true;
+                                      send = true;
+                                      proceso = "Sin proceso";
                                     });
-                                    await DetectionMime.operacion(files);
-                                    setState(() {
-                                      proceso = "Guardando gastos";
-                                    });
-                                    provider.listaGastos =
-                                        await GastosController.getConfigurado();
-                                    setState(() {
-                                      proceso = "Guardando categorias";
-                                    });
-                                    provider.listaCategoria =
-                                        await CategoriaController.getItems();
-                                    setState(() {
-                                      proceso = "Guardando metodo de gasto";
-                                    });
-                                    provider.metodo =
-                                        await MetodoGastoController.getItems();
-                                    log("${provider.metodo.map((e) => e.toJson()).toList()}");
-                                    provider.metodoSelect = provider.metodo
-                                        .firstWhereOrNull(
-                                            (element) => element.id == 1);
                                   } else {
-                                    showToast(
-                                        "Error en la descarga de archivo");
+                                    showToast("Descarga en proceso");
                                   }
-
-                                  debugPrint("descarga: $result");
-                                } */
-
+                                }
+                              } catch (e) {
                                 setState(() {
                                   descarga = true;
                                   send = true;
                                   proceso = "Sin proceso";
                                 });
-                              } else {
-                                showToast("Descarga en proceso");
                               }
                             },
                             label: descarga == true

@@ -69,6 +69,6 @@ class NotificacionesFun {
         NotificationDetails(android: androidPlatformChannelSpecifics);
     names.shuffle();
     await flutterLocalNotificationsPlugin.show(
-        id, 'Notificación instantánea', names.first, platformChannelSpecifics);
+        id, 'Control de Gastos', names.first, platformChannelSpecifics);
   }
 }
