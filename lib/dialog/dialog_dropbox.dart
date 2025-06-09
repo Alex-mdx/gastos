@@ -161,15 +161,14 @@ class _DialogDropboxState extends State<DialogDropbox> {
         await DetectionMime.operacion(files);
         procesar("Guardando gastos");
         provider.listaGastos = await GastosController.getConfigurado();
-        setState(() {
-          proceso = "Guardando categorias";
-        });
+        procesar("Guardando categorias");
         provider.listaCategoria = await CategoriaController.getItems();
         procesar("Guardando metodo de gasto");
         provider.metodo = await MetodoGastoController.getItems();
         log("${provider.metodo.map((e) => e.toJson()).toList()}");
         provider.metodoSelect =
             provider.metodo.firstWhereOrNull((element) => element.id == 1);
+        await file();
       } else {
         showToast("Error en la descarga de archivo");
       }
@@ -299,42 +298,42 @@ class _DialogDropboxState extends State<DialogDropbox> {
                             icon: Icon(LineIcons.fileDownload, size: 20.sp),
                             onPressed: () async {
                               try {
-                                bool aceptar = false;
-                                await Dialogs.showMorph(
-                                    title: "Descarga datos Dropbox",
-                                    description:
-                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
-                                    loadingTitle: "cargando...",
-                                    onAcceptPressed: (context) async =>
-                                        aceptar = true);
-                                if (aceptar) {
-                                  if (descarga) {
-                                    setState(() {
-                                      descarga = false;
-                                      send = false;
-                                      proceso = "En proceso";
-                                    });
-                                    await descargaData(
-                                        provider,
-                                        (p0) => setState(() {
-                                              proceso = p0;
-                                            }));
-                                    setState(() {
-                                      descarga = true;
-                                      send = true;
-                                      proceso = "Sin proceso";
-                                    });
-                                  } else {
-                                    showToast("Descarga en proceso");
-                                  }
+                              bool aceptar = false;
+                              await Dialogs.showMorph(
+                                  title: "Descarga datos Dropbox",
+                                  description:
+                                      "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
+                                  loadingTitle: "cargando...",
+                                  onAcceptPressed: (context) async =>
+                                      aceptar = true);
+                              if (aceptar) {
+                                if (descarga) {
+                                  setState(() {
+                                    descarga = false;
+                                    send = false;
+                                    proceso = "En proceso";
+                                  });
+                                  await descargaData(
+                                      provider,
+                                      (p0) => setState(() {
+                                            proceso = p0;
+                                          }));
+                                  setState(() {
+                                    descarga = true;
+                                    send = true;
+                                    proceso = "Sin proceso";
+                                  });
+                                } else {
+                                  showToast("Descarga en proceso");
                                 }
+                              }
                               } catch (e) {
                                 setState(() {
                                   descarga = true;
                                   send = true;
                                   proceso = "Sin proceso";
                                 });
-                              }
+                              } 
                             },
                             label: descarga == true
                                 ? Text("Descargar",

@@ -1,12 +1,14 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/dialog/dialog_bidones.dart';
 import 'package:gastos/dialog/dialog_dropbox.dart';
 import 'package:gastos/dialog/dialog_setting_notificaciones.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
@@ -46,14 +48,27 @@ class _SettingViewState extends State<SettingView> {
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [
                   OverflowBar(spacing: 1.w, children: [
-                    if (kDebugMode)
-                      IconButton.filled(
-                          iconSize: 22.sp,
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  DialogSettingNotificaciones()),
-                          icon: Icon(LineIcons.bell, color: ThemaMain.yellow)),
+                    ElevatedButton.icon(
+                        icon: Icon(
+                            Preferences.thema ? LineIcons.sun : LineIcons.moon,
+                            size: 20.sp),
+                        onPressed: () => Dialogs.showMorph(
+                            title: "Cambiar tema",
+                            description:
+                                "La aplicacion requerira un reinicio para aplicar este cambio",
+                            loadingTitle: "Saliendo",
+                            onAcceptPressed: (context) async {
+                              Preferences.thema = !Preferences.thema;
+                              Phoenix.rebirth(context);
+                            }),
+                        label: Text("Tema", style: TextStyle(fontSize: 14.sp))),
+                    IconButton.filled(
+                        iconSize: 22.sp,
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) =>
+                                DialogSettingNotificaciones()),
+                        icon: Icon(LineIcons.bell, color: ThemaMain.yellow)),
                     IconButton.filled(
                         iconSize: 22.sp,
                         onPressed: () async => showDialog(

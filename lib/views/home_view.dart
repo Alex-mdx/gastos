@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,13 @@ class _MyWidgetState extends State<HomeView> {
   Widget build(BuildContext context) {
     final navigator = Provider.of<NavigationProvider>(context);
     return PopScope(
-        canPop: true,
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) => Dialogs.showMorph(
+            title: "Salir",
+            description: "¿Desea salir de la app?",
+            loadingTitle: "Saliendo",
+            onAcceptPressed: (context) async =>
+                SystemNavigator.pop(animated: true)),
         child: Scaffold(
             body: Consumer<GastoProvider>(
                 builder: (context, provider, child) =>

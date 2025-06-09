@@ -144,6 +144,7 @@ class GenerateExcel {
     if (csv != null) {
       var bytes = csv.readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
+      log("${excel.tables.keys}");
       for (var table in excel.tables.keys) {
         List<Data?> row = [];
         var maximo = 0;
@@ -203,7 +204,6 @@ class GenerateExcel {
                       metodoPagoId: 12 < maximo
                           ? int.tryParse(row[12]!.value.toString())
                           : null);
-                  log("${gasto.toJson()}");
                   await GastosController.insert(gasto);
                 }
               }
@@ -226,7 +226,6 @@ class GenerateExcel {
                           : null,
                       nombre: 0 < maximo ? row[1]!.value.toString() : "",
                       descripcion: 0 < maximo ? row[2]!.value.toString() : "");
-                  log("${cateogoria.toJson()}");
                   await CategoriaController.insert(cateogoria);
                 }
               }
@@ -260,7 +259,6 @@ class GenerateExcel {
                       color: 6 < maximo
                           ? Color(int.parse(row[6]!.value.toString()))
                           : ThemaMain.primary);
-                  log("${metodoGasto.toJson()}");
                   await MetodoGastoController.insert(metodoGasto);
                 }
               }
@@ -321,6 +319,7 @@ class GenerateExcel {
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
                 maximo = row.length;
+                log("bPre: ${row.map((e) => e!.value.toString())} ${i != 0}");
                 if (i != 0) {
                   BidonesModel bidon = BidonesModel(
                       id: 0 < maximo
@@ -337,20 +336,20 @@ class GenerateExcel {
                       metodoPago: 5 < maximo
                           ? row[5]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[5]!.value.toString())
-                                  .map((x) => x.toString()))
+                              : List<int>.from(jsonDecode(row[5]?.value.toString() ?? "[]")
+                                  .map((x) => int.parse(x.toString())))
                           : [],
                       categoria: 6 < maximo
                           ? row[6]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[6]!.value.toString())
-                                  .map((x) => x.toString()))
+                              : List<int>.from(jsonDecode(row[6]?.value.toString()?? "[]")
+                                  .map((x) =>int.parse(x.toString())))
                           : [],
                       diasEfecto: 7 < maximo
                           ? row[7]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[7]!.value.toString())
-                                  .map((x) => x.toString()))
+                              : List<int>.from(jsonDecode(row[7]?.value.toString()?? "[]")
+                                  .map((x) => int.parse(x.toString())))
                           : [],
                       fechaInicio: DateTime.parse(row[8]!.value.toString()),
                       fechaFinal: DateTime.parse(row[9]!.value.toString()),
@@ -364,9 +363,10 @@ class GenerateExcel {
                           ? row[12]!.value.toString() == "null"
                               ? []
                               : List<int>.from(
-                                  jsonDecode(row[12]!.value.toString())
-                                      .map((x) => x.toString()))
+                                  jsonDecode(row[12]?.value.toString() ?? "[]")
+                                      .map((x) => int.parse(x.toString())))
                           : []);
+                  log("${bidon.toJson()}");
                   await BidonesController.insert(bidon);
                 }
               }
