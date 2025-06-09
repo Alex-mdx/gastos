@@ -40,12 +40,12 @@ class _HistorialViewState extends State<HistorialView> {
   Future<List<GastoModelo>> obtenerFechas() async {
     var data = await GastosController.obtenerFechasEnRangoMes(first, last);
     if (mounted) {
-    setState(() {
-      lista = data;
-    });
-  } else {
-    debugPrint('Widget no montado, omitiendo setState()');
-  }
+      setState(() {
+        lista = data;
+      });
+    } else {
+      debugPrint('Widget no montado, omitiendo setState()');
+    }
 
     return data;
   }
@@ -59,8 +59,9 @@ class _HistorialViewState extends State<HistorialView> {
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
-        appBar:
-            AppBar(title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
+        appBar: AppBar(
+            backgroundColor: ThemaMain.primary,
+            title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
             view: CalendarView.month,
             onViewChanged: (viewChangedDetails) async {
@@ -81,6 +82,7 @@ class _HistorialViewState extends State<HistorialView> {
             showDatePickerButton: true,
             allowViewNavigation: true,
             showWeekNumber: false,
+            backgroundColor: ThemaMain.second,
             showNavigationArrow: true,
             showTodayButton: true,
             showCurrentTimeIndicator: true,
@@ -105,7 +107,7 @@ class _HistorialViewState extends State<HistorialView> {
                                 ? BoxDecoration(
                                     borderRadius:
                                         BorderRadius.circular(borderRadius),
-                                    color: ThemaMain.grey)
+                                    color: ThemaMain.white)
                                 : null,
                             child: Align(
                                 alignment: Alignment.topCenter,
@@ -123,7 +125,11 @@ class _HistorialViewState extends State<HistorialView> {
             dataSource:
                 _getCalendarDataSource(provider: provider, lista: lista),
             viewHeaderHeight: 2.h,
-            firstDayOfWeek:1,
+            firstDayOfWeek: 1,
+            todayTextStyle: TextStyle(color: ThemaMain.green),
+            cellBorderColor: ThemaMain.white,
+            cellEndPadding: 1,
+            viewHeaderStyle: ViewHeaderStyle(backgroundColor: ThemaMain.white),
             headerHeight: 4.h,
             appointmentBuilder: (context, calendarAppointmentDetails) {
               final Appointment appointment =
@@ -182,7 +188,7 @@ Widget historial(
     required Future<void> Function() fun}) {
   return bd.Badge(
       badgeAnimation: bd.BadgeAnimation.fade(),
-      badgeStyle: bd.BadgeStyle(badgeColor: ThemaMain.darkBlue),
+      badgeStyle: bd.BadgeStyle(badgeColor: ThemaMain.second),
       badgeContent:
           Icon(LineIcons.imageFile, size: 18.sp, color: ThemaMain.green),
       position: bd.BadgePosition.topEnd(end: -3, top: -3),
@@ -216,7 +222,8 @@ Widget historial(
                     Text("${appointment.id}.- ${appointment.subject}",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16.sp)),
+                        style: TextStyle(
+                            fontSize: 16.sp, color: ThemaMain.second)),
                     SubstringHighlight(
                         text:
                             "${Textos.fechaHMS(fecha: appointment.startTime)} - Metodo de pago: ${provider.metodo.firstWhereOrNull((element) => element.id == int.parse(appointment.notes!))?.nombre ?? "Desconocido"}",
@@ -229,14 +236,16 @@ Widget historial(
                             "Desconocido",
                         textStyle: TextStyle(
                             fontSize: (16).sp,
-                            color: Colors.black,
+                            color: ThemaMain.second,
                             fontWeight: FontWeight.bold),
                         textStyleHighlight: TextStyle(
                             background: Paint(),
                             color: provider.metodo
-                                .firstWhereOrNull((element) =>
-                                    element.id == int.parse(appointment.notes!))
-                                ?.color,
+                                    .firstWhereOrNull((element) =>
+                                        element.id ==
+                                        int.parse(appointment.notes!))
+                                    ?.color ??
+                                ThemaMain.second,
                             fontSize: (16).sp,
                             fontWeight: FontWeight.bold))
                   ]))));

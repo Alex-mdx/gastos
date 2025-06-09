@@ -21,6 +21,7 @@ class GastosView extends StatelessWidget {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
         appBar: AppBar(
+            backgroundColor: ThemaMain.primary,
             toolbarHeight: 6.h,
             title: Text('Gastos',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
@@ -38,14 +39,12 @@ class GastosView extends StatelessWidget {
                       onPressed: () => showDialog(
                           context: context,
                           builder: (context) => DialogGaleria()),
-                      icon: Icon(LineIcons.imagesAlt,
-                          color: ThemaMain.second)),
+                      icon: Icon(LineIcons.imagesAlt, color: ThemaMain.second)),
                   IconButton(
                       iconSize: 24.sp,
                       onPressed: () async =>
                           await Navigation.pushNamed(route: AppRoutes.opciones),
-                      icon:
-                          Icon(Icons.settings, color: ThemaMain.second))
+                      icon: Icon(Icons.settings, color: ThemaMain.second))
                 ])
               ])
             ]),

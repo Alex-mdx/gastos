@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:gastos/utilities/funcion_parser.dart' as pr;
 import 'package:gastos/utilities/preferences.dart';
 import 'package:oktoast/oktoast.dart';
@@ -77,7 +78,7 @@ class GastosController {
             final file = File(filePath);
             await file.writeAsBytes(bytes);
           } else {
-            print("mal parseo: ${element.evidencia[i]}");
+            debugPrint("mal parseo: ${element.evidencia[i]}");
           }
         }
         var newModel = element.copyWith(evidencia: evidencia);
@@ -85,7 +86,7 @@ class GastosController {
       }
       showToast("Evidencias guardadas en el dispositivo");
     } catch (e) {
-      print("Error al guardar la imagen: $e");
+      debugPrint("Error al guardar la imagen: $e");
     }
   }
 

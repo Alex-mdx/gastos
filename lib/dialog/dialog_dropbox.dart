@@ -12,7 +12,6 @@ import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/textos.dart';
-import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/utils.dart';
 import 'package:line_icons/line_icons.dart';
@@ -20,7 +19,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../controllers/categoria_controller.dart';
 import '../controllers/gastos_controller.dart';
 import '../controllers/metodo_gasto_controller.dart';
@@ -70,7 +68,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
 
   Future<void> file() async {
     var data = await DropboxGen.infoFile(name: "respaldo_CG.zip");
-    print("${data?.toJson()}");
+    debugPrint("${data?.toJson()}");
     if (mounted) {
       setState(() {
         backOnline = data;
@@ -80,7 +78,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
 
   Future<void> fileData() async {
     var data = await ImageGen.find("respaldo_CG.zip");
-    print("$data");
+    debugPrint("$data");
     if (mounted) {
       setState(() {
         backData = data;
@@ -151,7 +149,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
                 procesar(
                     "Descarga: ${filesize(downloaded)} / ${filesize(total)}");
               }));
-      print(
+      debugPrint(
           "${(descargado != 0 && totalizado != 0)} ${(descargado == totalizado)}");
       if ((descargado != 0 && totalizado != 0) && (descargado == totalizado)) {
         showToast("Archivo descargado");
@@ -278,8 +276,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
                             label: carga == true
                                 ? Text("Guardar",
                                     style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: ThemaMain.darkBlue,
+                                        fontSize: 15.sp,
                                         fontWeight: FontWeight.bold))
                                 : CircularProgressIndicator()),
                         Text(
@@ -298,49 +295,49 @@ class _DialogDropboxState extends State<DialogDropbox> {
                             icon: Icon(LineIcons.fileDownload, size: 20.sp),
                             onPressed: () async {
                               try {
-                              bool aceptar = false;
-                              await Dialogs.showMorph(
-                                  title: "Descarga datos Dropbox",
-                                  description:
-                                      "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
-                                  loadingTitle: "cargando...",
-                                  onAcceptPressed: (context) async =>
-                                      aceptar = true);
-                              if (aceptar) {
-                                if (descarga) {
-                                  setState(() {
-                                    descarga = false;
-                                    send = false;
-                                    proceso = "En proceso";
-                                  });
-                                  await descargaData(
-                                      provider,
-                                      (p0) => setState(() {
-                                            proceso = p0;
-                                          }));
-                                  setState(() {
-                                    descarga = true;
-                                    send = true;
-                                    proceso = "Sin proceso";
-                                  });
-                                } else {
-                                  showToast("Descarga en proceso");
+                                bool aceptar = false;
+                                await Dialogs.showMorph(
+                                    title: "Descarga datos Dropbox",
+                                    description:
+                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
+                                    loadingTitle: "cargando...",
+                                    onAcceptPressed: (context) async =>
+                                        aceptar = true);
+                                if (aceptar) {
+                                  if (descarga) {
+                                    setState(() {
+                                      descarga = false;
+                                      send = false;
+                                      proceso = "En proceso";
+                                    });
+                                    await descargaData(
+                                        provider,
+                                        (p0) => setState(() {
+                                              proceso = p0;
+                                            }));
+                                    setState(() {
+                                      descarga = true;
+                                      send = true;
+                                      proceso = "Sin proceso";
+                                    });
+                                  } else {
+                                    showToast("Descarga en proceso");
+                                  }
                                 }
-                              }
                               } catch (e) {
                                 setState(() {
                                   descarga = true;
                                   send = true;
                                   proceso = "Sin proceso";
                                 });
-                              } 
+                              }
                             },
                             label: descarga == true
                                 ? Text("Descargar",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: ThemaMain.darkBlue))
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold))
                                 : CircularProgressIndicator()),
                         Text(
                             backOnline?.serverModified == null

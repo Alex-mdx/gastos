@@ -63,6 +63,8 @@ class Main extends StatelessWidget {
                   ],
                   debugShowCheckedModeBanner: false,
                   title: 'Gastos',
+                  themeMode:
+                      Preferences.thema ? ThemeMode.light : ThemeMode.dark,
                   theme: Preferences.thema ? light : dark,
                   navigatorKey: NavigationKey.navigatorKey,
                   initialRoute: AppRoutes.initialRoute,

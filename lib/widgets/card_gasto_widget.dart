@@ -86,18 +86,20 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       .toString());
                               widget.provider.gastoActual = modelTemp;
                             },
-                            icon: Icon(Icons.edit_calendar, size: 22.sp),
+                            icon: Icon(Icons.edit_calendar,
+                                size: 22.sp, color: ThemaMain.darkBlue),
                             label: Text(
                                 "Fecha de ingreso\n${Textos.fechaYMD(fecha: widget.provider.selectFecha ?? now)}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
+                                    color: ThemaMain.darkBlue,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.sp)))),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
-                              width: 70.w,
+                              width: 75.w,
                               child: CustomDropdown.searchRequest(
                                   futureRequest: (p0) async =>
                                       await CategoriaController.buscar(p0),
@@ -105,8 +107,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   noResultFoundText: "Sin resultados",
                                   controller: controller,
                                   closedHeaderPadding: EdgeInsets.symmetric(
-                                      horizontal: 1.w, vertical: 1.h),
+                                      horizontal: 1.w, vertical: 1.5.h),
                                   decoration: CustomDropdownDecoration(
+                                      expandedFillColor: ThemaMain.background,
+                                      closedFillColor: ThemaMain.background,
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
                                           color: ThemaMain.green, size: 20.sp),
                                       closedSuffixIcon: controller.value != null
@@ -116,12 +120,14 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                                     controller.clear();
                                                   }),
                                               icon: Icon(Icons.close_rounded,
+                                                  color: ThemaMain.red,
                                                   size: 20.sp))
                                           : null),
                                   headerBuilder: (context, selectedItem, enabled) => Text(selectedItem.nombre,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
+                                          color: ThemaMain.grey,
                                           fontSize: 15.sp,
                                           fontWeight: FontWeight.bold)),
                                   hintText: 'Categoria de Gasto',
@@ -137,12 +143,13 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
+                                                  color: ThemaMain.darkBlue,
                                                   fontSize: 14.sp,
                                                   fontWeight: FontWeight.bold)),
                                           subtitle: Text(item.descripcion,
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(fontSize: 14.sp)),
+                                              style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp)),
                                           trailing: IconButton(
                                               onPressed: () => Dialogs.showMorph(
                                                   title: "Eliminar",
@@ -173,18 +180,30 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       log("${widget.provider.gastoActual.toJson()}");
                                     }
                                   })),
-                          IconButton.filled(
-                              onPressed: () => showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      const Dialog(child: DialogCategorias())),
-                              icon:
-                                  Stack(alignment: Alignment.center, children: [
-                                Icon(LineIcons.wavyMoneyBill,
-                                    color: Colors.white, size: 20.sp),
-                                Icon(Icons.add,
-                                    size: 22.sp, color: Colors.white)
-                              ]))
+                          badges.Badge(
+                              badgeStyle: badges.BadgeStyle(
+                                  badgeColor: ThemaMain.primary),
+                              showBadge:
+                                  widget.provider.imagenesActual.isNotEmpty,
+                              badgeContent: Text(
+                                  "${widget.provider.imagenesActual.length}",
+                                  style: TextStyle(
+                                      color: ThemaMain.second,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold)),
+                              child: IconButton.filled(
+                                  onPressed: () => showDialog(
+                                      context: context,
+                                      builder: (context) => const Dialog(
+                                          child: DialogCategorias())),
+                                  icon: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Icon(LineIcons.wavyMoneyBill,
+                                            color: Colors.white, size: 20.sp),
+                                        Icon(Icons.add,
+                                            size: 22.sp, color: Colors.white)
+                                      ])))
                         ]),
                     OverflowBar(
                         overflowAlignment: OverflowBarAlignment.center,
@@ -205,13 +224,15 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       signed: false),
                                   value: widget.provider.gastoActual.monto ?? 0,
                                   decimals: 1,
-                                  textStyle: TextStyle(fontSize: 16.sp),
+                                  textStyle: TextStyle(
+                                      fontSize: 16.sp,
+                                      color: ThemaMain.darkBlue),
                                   incrementIcon:
                                       Icon(LineIcons.plusCircle, size: 22.sp),
                                   decrementIcon:
                                       Icon(LineIcons.minusCircle, size: 22.sp),
                                   decoration: InputDecoration(
-                                      fillColor: ThemaMain.white,
+                                      fillColor: ThemaMain.background,
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 2.w, vertical: 1.h),
                                       icon: Icon(Icons.attach_money,
@@ -232,25 +253,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                         .provider.gastoActual
                                         .copyWith(monto: value);
                                     widget.provider.gastoActual = tempModel;
-                                  })),
-                          badges.Badge(
-                              badgeStyle: badges.BadgeStyle(
-                                  badgeColor: ThemaMain.primary),
-                              showBadge:
-                                  widget.provider.imagenesActual.isNotEmpty,
-                              badgeContent: Text(
-                                  "${widget.provider.imagenesActual.length}",
-                                  style: TextStyle(
-                                      color: ThemaMain.second,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold)),
-                              child: IconButton.filled(
-                                  onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          const DialogFotoGasto()),
-                                  icon: Icon(LineIcons.imageFile,
-                                      size: 22.sp, color: Colors.white)))
+                                  }))
                         ]),
                     TextButton(
                         onPressed: () => showDialog(
@@ -259,20 +262,9 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         child: Text(
                             "Metodo de pago: ${widget.provider.metodoSelect?.nombre ?? "Sin metodo valido"}",
                             style: TextStyle(
-                                fontSize: 15.sp, fontWeight: FontWeight.bold))),
-                    /* if (kDebugMode)
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: ElevatedButton.icon(
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => DialogPeriodoGasto(
-                                          provider: widget.provider));
-                                },
-                                label: Text('Gasto Cronologico',
-                                    style: TextStyle(fontSize: 15.sp)),
-                                icon: const Icon(Icons.calendar_month))), */
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                                color: ThemaMain.darkBlue))),
                     SizedBox(
                         height: 6.h,
                         child: TextField(
@@ -284,11 +276,13 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             autofocus: false,
                             expands: true,
                             maxLines: null,
-                            style: TextStyle(fontSize: 15.sp),
+                            style: TextStyle(
+                                fontSize: 15.sp, color: ThemaMain.darkGrey),
                             controller: widget.provider.notas,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                fillColor: ThemaMain.white,
+                                hintStyle: TextStyle(color: ThemaMain.grey),
+                                fillColor: ThemaMain.background,
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: .5.h, horizontal: 2.w),
                                 hintText: "Notas de gasto")))

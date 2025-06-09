@@ -32,8 +32,7 @@ class DialogMetodoPago extends StatelessWidget {
                       MetodoPagoModel metodo = provider.metodo[index];
                       return Column(children: [
                         ListTile(
-                            selectedTileColor:
-                                tipo ? ThemaMain.grey : null,
+                            selectedTileColor: tipo ? ThemaMain.grey : null,
                             onTap: () {
                               if (tipo) {
                                 provider.metodoSelect = metodo;
@@ -63,7 +62,7 @@ class DialogMetodoPago extends StatelessWidget {
                                 term: "Color",
                                 textStyle: TextStyle(
                                     fontSize: (14).sp,
-                                    color: Colors.black,
+                                    color: ThemaMain.darkBlue,
                                     fontWeight: FontWeight.bold),
                                 textStyleHighlight: TextStyle(
                                     color: metodo.color,
@@ -72,7 +71,9 @@ class DialogMetodoPago extends StatelessWidget {
                             subtitle: !tipo
                                 ? Text(
                                     "\$${metodo.cambio} - ${metodo.denominacion}",
-                                    style: TextStyle(fontSize: 14.sp))
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: ThemaMain.darkBlue))
                                 : null,
                             trailing: metodo.defecto == 0
                                 ? OverflowBar(children: [

@@ -54,6 +54,6 @@ class MetodoPagoModel {
         "denominacion": denominacion,
         "status": status,
         "defecto": defecto,
-        "color": color.value
+        "color": color.toARGB32()
       };
 }

@@ -35,6 +35,7 @@ class _MyWidgetState extends State<HomeView> {
             bottomNavigationBar: BottomNavigationBar(
                 showUnselectedLabels: false,
                 currentIndex: navigator.index,
+                type: BottomNavigationBarType.fixed,
                 unselectedItemColor: ThemaMain.darkBlue,
                 selectedItemColor: ThemaMain.second,
                 backgroundColor: ThemaMain.primary,

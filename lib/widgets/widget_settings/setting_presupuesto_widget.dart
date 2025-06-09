@@ -64,7 +64,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                     keyboardType:
                         const TextInputType.numberWithOptions(signed: false),
                     decoration: InputDecoration(
-                        fillColor: ThemaMain.white,
+                        fillColor: ThemaMain.dialogbackground,
                         labelText: "Monto limite para esta semana"))),
             Expanded(
                 flex: 1,

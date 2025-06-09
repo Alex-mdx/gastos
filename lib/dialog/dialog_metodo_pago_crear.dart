@@ -108,7 +108,7 @@ class _DialogMetodoPagoCrearState extends State<DialogMetodoPagoCrear> {
                               status: 1,
                               color: coloreado,
                               defecto: 0);
-                          print(await MetodoGastoController.lastId());
+                          debugPrint("${await MetodoGastoController.lastId()}");
                           final result =
                               await MetodoGastoController.find(metodoPago);
                           if (result != null) {

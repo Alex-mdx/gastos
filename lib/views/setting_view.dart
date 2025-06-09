@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gastos/controllers/bidones_controller.dart';
@@ -58,8 +57,12 @@ class _SettingViewState extends State<SettingView> {
                                 "La aplicacion requerira un reinicio para aplicar este cambio",
                             loadingTitle: "Saliendo",
                             onAcceptPressed: (context) async {
-                              Preferences.thema = !Preferences.thema;
-                              Phoenix.rebirth(context);
+                              setState(() {
+                                Preferences.thema = !Preferences.thema;
+                              });
+
+                              await Phoenix.rebirth(context);
+                              
                             }),
                         label: Text("Tema", style: TextStyle(fontSize: 14.sp))),
                     IconButton.filled(

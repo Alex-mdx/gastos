@@ -53,7 +53,7 @@ class _DialogGaleriaState extends State<DialogGaleria> {
                       itemBuilder: (context, index) {
                         File tipo = snapshot.data![index];
                         return GestureDetector(
-                          onTap: () => print(tipo),
+                          onTap: () => debugPrint("$tipo"),
                           child: Card(
                               child: ClipRRect(
                                   borderRadius:

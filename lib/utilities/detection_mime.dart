@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/generate_excel.dart';
 import 'package:gastos/utilities/zip_funcion.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 class DetectionMime {
   static Future<void> operacion(List<File> files) async {
@@ -15,14 +16,14 @@ class DetectionMime {
 
       switch (mimeType) {
         case 'application/pdf':
-          print('El archivo es un PDF.');
+          debugPrint('El archivo es un PDF.');
           // Procesar PDF
           break;
 
         case 'image/jpeg':
           final direccion = await getDownloadsDirectory();
           // Obtener el nombre base del archivo con su extesnion
-          String name = path.basename(file.path);
+          String name = p.basename(file.path);
           // Crear la nueva ruta del archivo en la carpeta destino
           final filePath = "${direccion!.path}/$name";
           // Leer los bytes del archivo original
@@ -30,24 +31,24 @@ class DetectionMime {
           // Escribir los bytes en la nueva ubicación
           final newFile = File(filePath);
           await newFile.writeAsBytes(fileBytes);
-          print('Archivo guardado en: $filePath');
+          debugPrint('Archivo guardado en: $filePath');
           // Procesar JPG
           break;
 
         case 'application/zip':
-          print('El archivo es un ZIP genérico.');
+          debugPrint('El archivo es un ZIP genérico.');
           var descompreso = await ZipFuncion.unZip(file);
           await operacion(descompreso); //ojito con la recursividad
 
           break;
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-          print("el archivo es un xlsx");
+          debugPrint("el archivo es un xlsx");
           await GenerateExcel.read(file);
           await GastosController.base64tojpeg();
           break;
 
         default:
-          print('Tipo de archivo desconocido: $mimeType');
+          debugPrint('Tipo de archivo desconocido: $mimeType');
         // Manejar otros casos
       }
     }
@@ -58,7 +59,7 @@ class DetectionMime {
 
     switch (mimeType) {
       case 'application/pdf':
-        print('El archivo es un PDF.');
+        debugPrint('El archivo es un PDF.');
         return "pdf";
 
       case 'image/jpeg':

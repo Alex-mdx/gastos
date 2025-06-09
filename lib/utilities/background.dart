@@ -67,9 +67,9 @@ class Background {
   static Future<void> cancelBackgroundTask(String taskId) async {
     try {
       await BackgroundFetch.stop(taskId);
-      print('🛑 [Background Task] Tarea $taskId cancelada');
+      debugPrint('🛑 [Background Task] Tarea $taskId cancelada');
     } catch (e) {
-      print('❌ [Background Task] Error al cancelar: $e');
+      debugPrint('❌ [Background Task] Error al cancelar: $e');
       rethrow;
     }
   }

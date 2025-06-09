@@ -32,7 +32,11 @@ class _SettingsRangoState extends State<SettingsRango> {
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
       CustomDropdown(
           controller: controller,
+          closedHeaderPadding:
+              EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.5.h),
           decoration: CustomDropdownDecoration(
+              closedFillColor: ThemaMain.dialogbackground,
+              expandedFillColor: ThemaMain.dialogbackground,
               prefixIcon: Icon(LineIcons.calendarPlusAlt,
                   color: ThemaMain.green, size: 22.sp)),
           headerBuilder: (context, selectedItem, enabled) {
@@ -40,7 +44,10 @@ class _SettingsRangoState extends State<SettingsRango> {
                 rangos.indexWhere((element) => element.contains(selectedItem));
             return Text(
                 "$selectedItem\n${rango == 0 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 31)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 1 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 60)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 2 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 91)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : rango == 3 ? "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 183)))} - ${Textos.fechaYMD(fecha: DateTime.now())}" : "${Textos.fechaYMD(fecha: DateTime.now().subtract(Duration(days: 365)))} - ${Textos.fechaYMD(fecha: DateTime.now())}"}",
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold));
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ThemaMain.darkBlue));
           },
           hintText: 'Seleccione rango de calculo de gasto',
           items: rangos,
