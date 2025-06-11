@@ -3,7 +3,7 @@
 Proyecto personal para el manejo de gastos personales, usando datos locales partiendo del SQLite, para persistencia de datos, y calculo de gastos partiendo de rango de fechas, presupuesto por semana y/o por día, así como evidencia fotográfica y uso de calendario para la mejor visualización de estos mismos, para un mejor y excelente control de gastos por persona.
 
 ## Change Log
-### Versión 0.1.4
+### Versión 0.1.4 (actualización próxima)
 #### Correcciones 🔧
 - Fecha de ingreso corregida, ahora cuando seleccione una fecha diferente a la actual, tomara siempre la hora actual, evitando que guarde a la hora 00:00:00.
 - Tabla de evidencias en el guardado de gastos para una persistencia de datos.
