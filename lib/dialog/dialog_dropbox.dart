@@ -299,7 +299,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                 await Dialogs.showMorph(
                                     title: "Descarga datos Dropbox",
                                     description:
-                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de resplado en la nube",
+                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de respaldo en la nube",
                                     loadingTitle: "cargando...",
                                     onAcceptPressed: (context) async =>
                                         aceptar = true);

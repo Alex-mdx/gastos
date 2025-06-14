@@ -3,7 +3,6 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
-import 'package:gastos/dialog/dialog_foto_gasto.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/image_gen.dart';
@@ -180,6 +179,23 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       log("${widget.provider.gastoActual.toJson()}");
                                     }
                                   })),
+                          IconButton.filled(
+                              onPressed: () => showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      const Dialog(child: DialogCategorias())),
+                              icon:
+                                  Stack(alignment: Alignment.center, children: [
+                                Icon(LineIcons.wavyMoneyBill,
+                                    color: Colors.white, size: 20.sp),
+                                Icon(Icons.add,
+                                    size: 22.sp, color: Colors.white)
+                              ]))
+                        ]),
+                    OverflowBar(
+                        overflowAlignment: OverflowBarAlignment.center,
+                        alignment: MainAxisAlignment.spaceAround,
+                        children: [
                           badges.Badge(
                               badgeStyle: badges.BadgeStyle(
                                   badgeColor: ThemaMain.primary),
@@ -188,33 +204,14 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               badgeContent: Text(
                                   "${widget.provider.imagenesActual.length}",
                                   style: TextStyle(
-                                      color: ThemaMain.second,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.bold)),
+                                      fontSize: 14.sp, color: ThemaMain.white)),
                               child: IconButton.filled(
                                   onPressed: () => showDialog(
                                       context: context,
-                                      builder: (context) => const Dialog(
-                                          child: DialogCategorias())),
-                                  icon: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Icon(LineIcons.wavyMoneyBill,
-                                            color: Colors.white, size: 20.sp),
-                                        Icon(Icons.add,
-                                            size: 22.sp, color: Colors.white)
-                                      ])))
-                        ]),
-                    OverflowBar(
-                        overflowAlignment: OverflowBarAlignment.center,
-                        alignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          IconButton.filled(
-                              onPressed: () => showDialog(
-                                  context: context,
-                                  builder: (context) => const DialogCamara()),
-                              icon: Icon(Icons.add_photo_alternate,
-                                  size: 22.sp, color: Colors.white)),
+                                      builder: (context) =>
+                                          const DialogCamara()),
+                                  icon: Icon(Icons.add_photo_alternate,
+                                      size: 22.sp, color: Colors.white))),
                           SizedBox(
                               width: 45.w,
                               child: SpinBox(

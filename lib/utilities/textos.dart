@@ -53,9 +53,18 @@ class Textos {
     return formatoFechaHora;
   }
 
-  static DateTime parseCompact(String dateStr) {
-    return DateFormat('yyyyMMdd HHmmss').parse(dateStr);
+  static String obtenerMes(int numeroMes) {
+  if (numeroMes < 1 || numeroMes > 12) {
+    return "Mes inválido";
   }
+
+  const meses = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+
+  return meses[numeroMes - 1]; // Restamos 1 porque los arreglos empiezan en 0
+}
 
   static String randomWord(int? number) {
     final random = math.Random();

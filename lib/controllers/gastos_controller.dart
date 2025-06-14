@@ -206,6 +206,19 @@ class GastosController {
     return modelo;
   }
 
+  static Future<double> getCategoriaByMes(
+      {required int categoriaId, required int mes}) async {
+    final db = await database();
+    await SqlGenerator.existColumna(
+        add: "metodo_pago_id", database: database, nombreDB: nombreDB);
+    final resultados =
+        await db.rawQuery('''SELECT AVG(CAST(monto AS REAL)) as promedio
+          FROM $nombreDB
+          where mes = $mes AND categoria_id = $categoriaId''');
+
+    return double.tryParse(resultados.first["promedio"].toString()) ?? 0;
+  }
+
   static Future<List<GastoModelo>> obtenerFechasEnRangoMes(
       DateTime fechaInicio, DateTime fechaFinal) async {
     final db = await database();
