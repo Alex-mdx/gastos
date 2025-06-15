@@ -214,7 +214,7 @@ class GastosController {
     final resultados =
         await db.rawQuery('''SELECT AVG(CAST(monto AS REAL)) as promedio
           FROM $nombreDB
-          where mes = $mes AND categoria_id = $categoriaId''');
+          where mes = ? AND categoria_id = ?''', [mes, categoriaId]);
 
     return double.tryParse(resultados.first["promedio"].toString()) ?? 0;
   }
