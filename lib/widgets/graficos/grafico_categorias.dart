@@ -71,8 +71,7 @@ class _GraficoCategoriasState extends State<GraficoCategorias> {
                 final promedios = shot.data!;
                 return SfCartesianChart(
                     backgroundColor: ThemaMain.dialogbackground,
-                    primaryXAxis: CategoryAxis(),
-                    // Chart title
+                    primaryXAxis: DateTimeAxis(),
                     title: ChartTitle(
                         text: 'Rendimiento de gasto por categoria y mes',
                         textStyle: TextStyle(
