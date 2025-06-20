@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gastos/utilities/preferences.dart';
 
 class ThemaMain {
-  static Color primary =
-      (Preferences.thema ? LightTheme.primary : DarkTheme.primary);
+  static Color primary =  LightTheme.primary;
   static Color second =
       (Preferences.thema ? LightTheme.second : DarkTheme.second);
   static Color white = Colors.white;

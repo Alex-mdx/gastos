@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
+import 'package:gastos/models/categoria_model.dart';
+import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
@@ -20,128 +23,165 @@ class GraficoCategorias extends StatefulWidget {
 
 class _GraficoCategoriasState extends State<GraficoCategorias> {
   late TooltipBehavior _tooltipBehavior;
-  List<int> meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  DateTime ahora = DateTime.now();
+  /* List<Map<String, dynamic>> datos = [
+    {
+      "fecha": "2024-05-01 11:00:55",
+      "categoria_id": 1,
+      "nombre": "ropa",
+      "monto": 20
+    },
+    {
+      "fecha": "2024-09-01 21:00:55",
+      "categoria_id": 1,
+      "nombre": "ropa",
+      "monto": 209
+    },
+    {
+      "fecha": "2023-01-09 11:00:40",
+      "categoria_id": 2,
+      "nombre": "bebidas",
+      "monto": 20
+    },
+    {
+      "fecha": "2024-02-01 14:20:25",
+      "categoria_id": 3,
+      "nombre": "lavanderia",
+      "monto": 89
+    },
+    {
+      "fecha": "2024-02-02 19:00:05",
+      "categoria_id": 3,
+      "nombre": "lavanderia",
+      "monto": 71
+    },
+    {
+      "fecha": "2023-09-01 10:00:05",
+      "categoria_id": 2,
+      "nombre": "bebidas",
+      "monto": 34
+    },
+    {
+      "fecha": "2024-06-20 20:00:55",
+      "categoria_id": 4,
+      "nombre": "despensa",
+      "monto": 220
+    },
+    {
+      "fecha": "2024-06-21 21:00:00",
+      "categoria_id": 4,
+      "nombre": "despensa",
+      "monto": 130
+    }
+  ]; */
+
+  late ZoomPanBehavior _zoomPanBehavior;
+  late DateTimeAxis _primaryXAxis;
 
   @override
   void initState() {
-    _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
+    _tooltipBehavior = TooltipBehavior(animationDuration: 350, enable: true);
+
+    _primaryXAxis =
+        DateTimeAxis(intervalType: DateTimeIntervalType.months, interval: 1);
+    _zoomPanBehavior = ZoomPanBehavior(
+        enablePinching: true,
+        enableDoubleTapZooming: true,
+        enablePanning: true,
+        zoomMode: ZoomMode.x);
   }
 
-  Future<List<Map<String, dynamic>>> getData(
-      {required List<int> categorias}) async {
-    List<Map<String, dynamic>> datas = [];
-    for (var cate in categorias) {
-      var sales = meses.map((e) async {
-        double monto =
-            await GastosController.getCategoriaByMes(categoriaId: cate, mes: e);
-        return {"year": Textos.obtenerMes(e), "sales": monto};
-      }).toList();
-      var newSales = await Future.wait(sales);
-      datas.add({"categoria_id": cate, "sales": newSales});
+  Future<List<LineSeries<DatosGrafico, DateTime>>> _crearSeries(
+      DateTime fechaI, DateTime fechaF) async {
+    Map<int, List<GastoModelo>> datosPorCategoria = {};
+
+    List<LineSeries<DatosGrafico, DateTime>> series = [];
+    var datos =
+        await GastosController.obtenerFechasEnRangoOnlyMF(fechaI, fechaF);
+
+    for (var dato in datos) {
+      int categoriaId = dato.categoriaId!;
+      if (!datosPorCategoria.containsKey(categoriaId)) {
+        datosPorCategoria[categoriaId] = [];
+      }
+      datosPorCategoria[categoriaId]!.add(dato);
     }
-    return datas;
+    List<CategoriaModel> cates = await CategoriaController.getItems();
+
+    datosPorCategoria.forEach((categoriaId, datosCategoria) {
+      String nombreCategoria = cates
+              .firstWhereOrNull((element) => element.id == categoriaId)
+              ?.nombre ??
+          "Sin nombre";
+      // Convertir los datos en una lista de DatosGrafico
+      List<DatosGrafico> puntos = datosCategoria
+          .map((dato) => DatosGrafico(
+              fecha: DateTime.parse(dato.fecha!),
+              monto: dato.monto ?? 0,
+              nombreCategoria: nombreCategoria))
+          .toList();
+
+      // Ordenar por fecha
+      puntos.sort((a, b) => a.fecha.compareTo(b.fecha));
+
+      // Crear la serie para esta categoría
+      series.add(LineSeries<DatosGrafico, DateTime>(
+          name: nombreCategoria,
+          dataSource: puntos,
+          xValueMapper: (DatosGrafico dato, _) => dato.fecha,
+          yValueMapper: (DatosGrafico dato, _) => dato.monto));
+    });
+
+    return series;
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<GastoProvider>(context);
     return FutureBuilder(
-        future: CategoriaController.getItems(),
+        future: _crearSeries(ahora.subtract(Duration(days: 30 * 2)), ahora),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return SizedBox(
+                height: 60.h,
+                child: Expanded(
+                    child: SfCartesianChart(
+                        backgroundColor: ThemaMain.dialogbackground,
+                        primaryXAxis: _primaryXAxis,
+                        primaryYAxis: NumericAxis(
+                            majorGridLines: MajorGridLines(width: 1)),
+                        title: ChartTitle(
+                            text: 'Rendimiento de gasto por categoria y mes',
+                            textStyle: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: ThemaMain.darkBlue)),
+                        legend: Legend(isVisible: true),
+                        selectionGesture: ActivationMode.singleTap,
+                        tooltipBehavior: _tooltipBehavior,
+                        zoomPanBehavior: _zoomPanBehavior,
+                        series: snapshot.data!)));
+          } else if (snapshot.hasError) {
+            return Text("Se encontro un error\n${snapshot.error}",
+                style: TextStyle(fontSize: 14.sp));
+          } else {
             return Column(children: [
-              Text("Cargando Categorias"),
+              Text("Cargando datos", style: TextStyle(fontSize: 14.sp)),
               CircularProgressIndicator()
             ]);
           }
-          final categorias = snapshot.data!;
-          return FutureBuilder(
-              future:
-                  getData(categorias: categorias.map((e) => e.id!).toList()),
-              builder: (context, shot) {
-                if (!shot.hasData) {
-                  return Column(children: [
-                    Text("Cargando Gastos"),
-                    CircularProgressIndicator()
-                  ]);
-                } else if (shot.hasError) {
-                  return Text("${shot.error}");
-                }
-                final promedios = shot.data!;
-                return SfCartesianChart(
-                    backgroundColor: ThemaMain.dialogbackground,
-                    primaryXAxis: DateTimeAxis(),
-                    title: ChartTitle(
-                        text: 'Rendimiento de gasto por categoria y mes',
-                        textStyle: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: ThemaMain.darkBlue)),
-                    legend: Legend(isVisible: true),
-                    selectionGesture: ActivationMode.singleTap,
-                    tooltipBehavior: _tooltipBehavior,
-                    series: categorias.map((e) {
-                      return LineSeries(
-                          dataSource: promedios
-                              .firstWhere((element) =>
-                                  element["categoria_id"] == e.id!)["sales"]
-                              .map((mes) {
-                            return SalesData(mes["year"] ?? "1",
-                                double.parse(mes["sales"].toString()));
-                          }).toList(),
-                          xValueMapper: (SalesData sales, _) => sales.year,
-                          name: e.nombre,
-                          yValueMapper: (SalesData sales, _) => sales.sales,
-                          dataLabelSettings: DataLabelSettings(
-                              textStyle: TextStyle(
-                                  fontSize: 13.sp, color: ThemaMain.darkGrey),
-                              isVisible: true));
-                    }).toList());
-              });
         });
   }
 }
 
-class SalesData {
-  SalesData(this.year, this.sales);
-  final String year;
-  final double sales;
-}
+class DatosGrafico {
+  final DateTime fecha;
+  final double monto;
+  final String nombreCategoria;
 
-/*
-provider.listaCategoria
-            .map((e) => LineSeries(
-                dataSource: meses.map((mes) =>  SalesData(
-                          Textos.obtenerMes(mes),))
-                    .toList(),
-                xValueMapper: (SalesData sales, _) => sales.year,
-                name: e.nombre,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-                dataLabelSettings: DataLabelSettings(
-                    textStyle:
-                        TextStyle(fontSize: 13.sp, color: ThemaMain.darkGrey),
-                    isVisible: true)))
-            .toList()
- LineSeries<SalesData, String>(
-              dataSource: <SalesData>[
-                SalesData('Enero', 35),
-                SalesData('Febrero', 28),
-                SalesData('Marzo', 34),
-                SalesData('Abril', 32),
-                SalesData('Mayo', 40),
-                SalesData('Junio', 40),
-                SalesData('Julio', 40),
-                SalesData('Agosto', 40),
-                SalesData('Septiebre', 40),
-                SalesData('Octubre', 40),
-                SalesData('Noviembre', 40),
-                SalesData('Diciembre', 40)
-              ],
-              xValueMapper: (SalesData sales, _) => sales.year,
-              name: "Gas",
-              yValueMapper: (SalesData sales, _) => sales.sales,
-              dataLabelSettings: DataLabelSettings(
-                  textStyle:
-                      TextStyle(fontSize: 13.sp, color: ThemaMain.darkGrey),
-                  isVisible: true)) */
+  DatosGrafico(
+      {required this.fecha,
+      required this.monto,
+      required this.nombreCategoria});
+}

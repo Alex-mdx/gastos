@@ -90,82 +90,6 @@ class GastosController {
     }
   }
 
-  static Future<double> montoFechaDia({required int diaSemana}) async {
-    final db = await database();
-    int tipo = 0;
-
-    switch (Preferences.calculo) {
-      case "Mensual":
-        tipo = 31;
-        break;
-      case "Bimestral":
-        tipo = 61;
-        break;
-      case "Trimestral":
-        tipo = 92;
-        break;
-      case "Semestral":
-        tipo = 182;
-        break;
-      case "Anual":
-        tipo = 365;
-        break;
-      default:
-        tipo = 31;
-    }
-    final resultados = await db.rawQuery('''
-    SELECT 
-      SUM(CAST(monto AS REAL)) as total
-    FROM $nombreDB
-    WHERE 
-      fecha BETWEEN ? AND ?
-    AND CAST(strftime('%w', fecha) AS INTEGER) = ?
-''', [
-      (DateTime.now().subtract(Duration(days: tipo))).toString(),
-      (DateTime.now()).toString(),
-      diaSemana
-    ]);
-    double total = resultados.first['total'] as double? ?? 0.0;
-    return total;
-  }
-
-  static Future<int> contarDiasUnicosPorDiaSemana(int diaSemana) async {
-    final db = await database();
-    int tipo = 0;
-
-    switch (Preferences.calculo) {
-      case "Mensual":
-        tipo = 31;
-        break;
-      case "Bimestral":
-        tipo = 61;
-        break;
-      case "Trimestral":
-        tipo = 92;
-        break;
-      case "Semestral":
-        tipo = 182;
-        break;
-      case "Anual":
-        tipo = 365;
-        break;
-      default:
-        tipo = 31;
-    }
-    final resultado = await db.rawQuery('''
-    SELECT COUNT(DISTINCT fecha) as total_dias
-    FROM $nombreDB
-    WHERE fecha BETWEEN ? AND ?
-    AND ((CAST(strftime('%w', fecha) AS INTEGER) + 6) % 7) = ?
-  ''', [
-      (DateTime.now().subtract(Duration(days: tipo))).toString(),
-      (DateTime.now()).toString(),
-      diaSemana
-    ]);
-
-    return int.tryParse(resultado.first['total_dias'].toString()) ?? 1;
-  }
-
   static Future<List<GastoModelo>> getConfigurado() async {
     final db = await database();
 
@@ -198,7 +122,8 @@ class GastosController {
       (DateTime.now().subtract(Duration(days: tipo))).toString(),
       (DateTime.now()).toString()
     ], columns: [
-      "monto,fecha"
+      "monto",
+      "fecha"
     ]);
     for (var element in resultados) {
       modelo.add(GastoModelo.fromJson(element));
@@ -206,17 +131,20 @@ class GastosController {
     return modelo;
   }
 
-  static Future<double> getCategoriaByMes(
-      {required int categoriaId, required int mes}) async {
+  static Future<List<GastoModelo>> obtenerFechasEnRangoOnlyMF(
+      DateTime fechaInicio, DateTime fechaFinal) async {
     final db = await database();
+    List<GastoModelo> modelo = [];
     await SqlGenerator.existColumna(
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
-    final resultados =
-        await db.rawQuery('''SELECT AVG(CAST(monto AS REAL)) as promedio
-          FROM $nombreDB
-          where mes = ? AND categoria_id = ?''', [mes, categoriaId]);
-
-    return double.tryParse(resultados.first["promedio"].toString()) ?? 0;
+    final resultados = await db.query(nombreDB,
+        where: 'fecha BETWEEN ? AND ?',
+        columns: ["monto", "fecha", "categoria_id"],
+        whereArgs: [fechaInicio.toString(), fechaFinal.toString()]);
+    for (var element in resultados) {
+      modelo.add(GastoModelo.fromJson(element));
+    }
+    return modelo;
   }
 
   static Future<List<GastoModelo>> obtenerFechasEnRangoMes(
