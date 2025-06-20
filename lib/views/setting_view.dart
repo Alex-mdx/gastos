@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter/services.dart';
 import 'package:gastos/controllers/bidones_controller.dart';
 import 'package:gastos/controllers/presupuesto_controller.dart';
 import 'package:gastos/dialog/dialog_bidones.dart';
@@ -60,9 +60,7 @@ class _SettingViewState extends State<SettingView> {
                               setState(() {
                                 Preferences.thema = !Preferences.thema;
                               });
-
-                              await Phoenix.rebirth(context);
-                              
+                              await SystemNavigator.pop();
                             }),
                         label: Text("Tema", style: TextStyle(fontSize: 14.sp))),
                     IconButton.filled(

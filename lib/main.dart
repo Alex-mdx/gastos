@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-///import 'package:dropbox_client/dropbox_client.dart';
 import 'utilities/apis/rutas_app.dart';
 import 'utilities/navegacion_provider.dart';
 import 'utilities/notificaciones_fun.dart';
@@ -45,8 +42,7 @@ Future<void> main() async {
 class Main extends StatelessWidget {
   const Main({super.key});
   @override
-  Widget build(BuildContext context) => Phoenix(
-      child: Sizer(
+  Widget build(BuildContext context) => Sizer(
           builder: (context, orientation, deviceType) => OKToast(
               dismissOtherOnShow: true,
               position: ToastPosition.bottom,
@@ -68,5 +64,5 @@ class Main extends StatelessWidget {
                   theme: Preferences.thema ? light : dark,
                   navigatorKey: NavigationKey.navigatorKey,
                   initialRoute: AppRoutes.initialRoute,
-                  routes: AppRoutes.routes))));
+                  routes: AppRoutes.routes)));
 }
