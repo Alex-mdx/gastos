@@ -52,7 +52,10 @@ class _DialogCamaraState extends State<DialogCamara> {
                                     '¿Desea eliminar esta foto seleccionada?',
                                 loadingTitle: 'Eliminando',
                                 onAcceptPressed: (context) async {
-                                  provider.imagenesActual.remove(e);
+                                  setState(() {
+                                    provider.imagenesActual.remove(e);
+                                  });
+
                                   Navigation.pop();
                                 }),
                             icon: const Icon(Icons.delete, color: Colors.red)),
@@ -78,8 +81,11 @@ class _DialogCamaraState extends State<DialogCamara> {
                                                           .indexWhere(
                                                               (element) =>
                                                                   element == e);
-                                                      provider.imagenesActual[
-                                                          index] = bytes;
+                                                      setState(() {
+                                                        provider.imagenesActual[
+                                                            index] = bytes;
+                                                      });
+
                                                       Navigation.popTwice();
                                                       showToast(
                                                           "Salga y vuelva a entrar para que se efectuen los cambios");

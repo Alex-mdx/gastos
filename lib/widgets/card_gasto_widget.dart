@@ -106,7 +106,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   noResultFoundText: "Sin resultados",
                                   controller: controller,
                                   closedHeaderPadding: EdgeInsets.symmetric(
-                                      horizontal: 1.w, vertical: 1.5.h),
+                                      horizontal: 1.w, vertical: 0),
                                   decoration: CustomDropdownDecoration(
                                       expandedFillColor: ThemaMain.background,
                                       closedFillColor: ThemaMain.background,
@@ -121,7 +121,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                               icon: Icon(Icons.close_rounded,
                                                   color: ThemaMain.red,
                                                   size: 20.sp))
-                                          : null),
+                                          : SizedBox()),
                                   headerBuilder: (context, selectedItem, enabled) => Text(selectedItem.nombre,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,

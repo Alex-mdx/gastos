@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timelines_plus/timelines_plus.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HistorialSemanalWidget extends StatefulWidget {
   final GastoProvider provider;
@@ -45,7 +46,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                   contentsAlign: ContentsAlign.reverse,
                   indicatorStyle: IndicatorStyle.outlined,
                   contentsBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 1.w),
+                      padding: EdgeInsets.symmetric(horizontal: .5.w),
                       child: Text(dias[index],
                           style: TextStyle(
                               fontSize: dias[index].toLowerCase().contains(
@@ -57,14 +58,16 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                   ? FontWeight.bold
                                   : FontWeight.normal))),
                   oppositeContentsBuilder: (context, index) => SizedBox(
-                        width: 14.w,
+                        width: 14.5.w,
                         height: 6.h,
                         child: Card(
                             child: Padding(
                                 padding: EdgeInsets.all(4.sp),
                                 child: AnimatedDefaultTextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     style: TextStyle(
-                                        fontSize: 15.sp,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: widget.provider.presupuesto?.activo == 1
                                             ? widget.provider.porcentualColor(
@@ -73,13 +76,13 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                                     widget.provider
                                                         .promediarDiaSemana(
                                                             index)))
-                                            : Colors.black),
+                                            : ThemaMain.second),
                                     duration: Duration(seconds: 1),
                                     child: AnimatedFlipCounter(
                                         value: widget.provider
                                             .promediarDiaSemana(index),
                                         duration: Durations.long3,
-                                        fractionDigits: 0,
+                                        fractionDigits: 1,
                                         prefix: "\$")))),
                       ),
                   itemCount: dias.length))),
@@ -138,13 +141,22 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
           Expanded(
               flex: 5,
               child: Column(children: [
-                LinearProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation(ThemaMain.primary),
-                    value: widget.provider.promedioTotalSemana() /
-                        widget.provider.presupuesto!.presupuesto!,
-                    borderRadius: BorderRadius.circular(borderRadius),
-                    minHeight: (.65).h),
+                LinearPercentIndicator(
+                    width: 33.w,
+                    animation: true,
+                    animateFromLastPercent: true,
+                    backgroundColor: ThemaMain.dialogbackground,
+                    barRadius: Radius.circular(borderRadius),
+                    lineHeight: 1.2.h,
+                    percent: ((widget.provider.promedioTotalSemana()) /
+                                widget.provider.presupuesto!.presupuesto!) >
+                            1
+                        ? 1
+                        : (widget.provider.promedioTotalSemana()) /
+                            widget.provider.presupuesto!.presupuesto!,
+                    progressColor: widget.provider.porcentualColor(
+                        (100 * widget.provider.promedioTotalSemana()) /
+                            widget.provider.presupuesto!.presupuesto!)),
                 AnimatedDefaultTextStyle(
                     style: TextStyle(
                         fontSize: 18.sp,
@@ -169,4 +181,3 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     ]);
   }
 }
-                              

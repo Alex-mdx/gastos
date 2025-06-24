@@ -50,7 +50,7 @@ class _DialogSettingNotificacionesState
         child: Padding(
             padding: EdgeInsets.all(8.sp),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Text("Configuraciones de notificaciones",
+              Text("Configuraciones de notificaciones (Beta)",
                   style:
                       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
               Divider(),
@@ -63,7 +63,9 @@ class _DialogSettingNotificacionesState
                     Container(
                         margin: EdgeInsets.all(10.sp),
                         decoration: BoxDecoration(
-                            color: act1 ? ThemaMain.white : ThemaMain.grey,
+                            color: act1
+                                ? ThemaMain.background
+                                : ThemaMain.darkGrey,
                             borderRadius: BorderRadius.circular(borderRadius)),
                         child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -105,7 +107,9 @@ class _DialogSettingNotificacionesState
                     Container(
                         margin: EdgeInsets.all(10.sp),
                         decoration: BoxDecoration(
-                            color: act2 ? ThemaMain.white : ThemaMain.grey,
+                            color: act2
+                                ? ThemaMain.background
+                                : ThemaMain.darkGrey,
                             borderRadius: BorderRadius.circular(borderRadius)),
                         child: Padding(
                             padding: EdgeInsets.symmetric(
