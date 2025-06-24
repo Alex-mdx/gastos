@@ -97,14 +97,14 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
             widget.provider.presupuesto?.activo == 1)
           Expanded(
               flex: 5,
-              child: Text('Gasto Limite',
+              child: Text('Presupuesto Limite',
                   textAlign: TextAlign.center,
                   style:
                       TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold))),
         if (widget.provider.presupuesto?.presupuesto != null &&
             widget.provider.presupuesto?.activo == 1)
           Expanded(
-              flex: 5,
+              flex: 6,
               child: TextButton.icon(
                   onPressed: () => setState(() {
                         change = !change;
@@ -139,11 +139,12 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
         if (widget.provider.presupuesto?.presupuesto != null &&
             widget.provider.presupuesto?.activo == 1)
           Expanded(
-              flex: 5,
+              flex: 6,
               child: Column(children: [
                 LinearPercentIndicator(
-                    width: 33.w,
+                    width: 37.w,
                     animation: true,
+                    addAutomaticKeepAlive: false,
                     animateFromLastPercent: true,
                     backgroundColor: ThemaMain.dialogbackground,
                     barRadius: Radius.circular(borderRadius),

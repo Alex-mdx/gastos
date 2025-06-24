@@ -111,7 +111,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       expandedFillColor: ThemaMain.background,
                                       closedFillColor: ThemaMain.background,
                                       prefixIcon: Icon(LineIcons.wavyMoneyBill,
-                                          color: ThemaMain.green, size: 20.sp),
+                                          color: ThemaMain.green, size: 22.sp),
+                                      searchFieldDecoration:
+                                          SearchFieldDecoration(
+                                              fillColor:
+                                                  ThemaMain.dialogbackground),
                                       closedSuffixIcon: controller.value != null
                                           ? IconButton(
                                               iconSize: 20.sp,
@@ -121,53 +125,50 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                               icon: Icon(Icons.close_rounded,
                                                   color: ThemaMain.red,
                                                   size: 20.sp))
-                                          : SizedBox()),
-                                  headerBuilder: (context, selectedItem, enabled) => Text(selectedItem.nombre,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: ThemaMain.grey,
-                                          fontSize: 15.sp,
-                                          fontWeight: FontWeight.bold)),
+                                          : Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 1.h),
+                                              child: Icon(
+                                                  Icons
+                                                      .keyboard_double_arrow_down,
+                                                  color: ThemaMain.primary,
+                                                  size: 20.sp))),
+                                  headerBuilder:
+                                      (context, selectedItem, enabled) => Text(
+                                          selectedItem.nombre,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: ThemaMain.grey,
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.bold)),
                                   hintText: 'Categoria de Gasto',
                                   items: widget.provider.listaCategoria,
                                   itemsListPadding: const EdgeInsets.all(0),
                                   listItemPadding: const EdgeInsets.all(0),
-                                  listItemBuilder: (context, item, isSelected, onItemSelect) =>
-                                      ListTile(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 1.w, vertical: 0),
-                                          dense: true,
-                                          title: Text(item.nombre,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: ThemaMain.darkBlue,
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.bold)),
-                                          subtitle: Text(item.descripcion,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp)),
-                                          trailing: IconButton(
-                                              onPressed: () => Dialogs.showMorph(
-                                                  title: "Eliminar",
-                                                  description: "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
-                                                  loadingTitle: "Eliminando",
-                                                  onAcceptPressed: (context) async {
+                                  listItemBuilder: (context, item, isSelected, onItemSelect) => ListTile(
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
+                                      minVerticalPadding: 5,
+                                      title: Text(item.nombre, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp)),
+                                      subtitle: Text(item.descripcion, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 13.sp)),
+                                      trailing: IconButton(
+                                          onPressed: () => Dialogs.showMorph(
+                                              title: "Eliminar",
+                                              description: "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
+                                              loadingTitle: "Eliminando",
+                                              onAcceptPressed: (context) async {
+                                                await CategoriaController
+                                                    .deleteItem(item.id!);
+                                                final data =
                                                     await CategoriaController
-                                                        .deleteItem(item.id!);
-                                                    final data =
-                                                        await CategoriaController
-                                                            .getItems();
-                                                    setState(() {
-                                                      controller.clear();
-                                                      widget.provider
-                                                              .listaCategoria =
-                                                          data;
-                                                    });
-                                                  }),
-                                              icon: Icon(Icons.delete, size: 18.sp, color: ThemaMain.red))),
+                                                        .getItems();
+                                                setState(() {
+                                                  controller.clear();
+                                                  widget.provider
+                                                      .listaCategoria = data;
+                                                });
+                                              }),
+                                          icon: Icon(Icons.delete, size: 18.sp, color: ThemaMain.red))),
                                   overlayHeight: 50.h,
                                   onChanged: (value) {
                                     if (value != null) {
@@ -215,12 +216,12 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           SizedBox(
                               width: 45.w,
                               child: SpinBox(
-                                  min: .5,
+                                  min: 0,
                                   max: 10000,
                                   keyboardType: TextInputType.numberWithOptions(
                                       signed: false),
                                   value: widget.provider.gastoActual.monto ?? 0,
-                                  decimals: 1,
+                                  decimals: 2,
                                   textStyle: TextStyle(
                                       fontSize: 16.sp,
                                       color: ThemaMain.darkBlue),

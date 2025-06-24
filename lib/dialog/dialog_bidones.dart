@@ -117,317 +117,33 @@ class _DialogBidonesState extends State<DialogBidones> {
                       child: Text("Bidon Deshabilitado",
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 14.sp)))))
-          : Container(
-              constraints: BoxConstraints(maxHeight: 45.h),
-              child: Scrollbar(
-                  child: SingleChildScrollView(
-                      child: Padding(
-                          padding: EdgeInsets.all(8.sp),
-                          child: Card(
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                TextField(
-                                    controller: nombre,
-                                    keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
-                                        hintText: "Nombre del bidon")),
-                                Text(
-                                    "Dias que se rellenara de manera automatica\n(Si no se selecciona ninguna, se rellenara de manera automatica hasta el que bidon este vacio)",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold)),
-                                Wrap(
-                                    spacing: .5.w,
-                                    alignment: WrapAlignment.spaceAround,
-                                    runAlignment: WrapAlignment.spaceAround,
-                                    children: [
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 0)) {
-                                                fechas.remove(0);
-                                              } else {
-                                                fechas.add(0);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 0),
-                                          label: Text("Lunes",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp))),
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 1)) {
-                                                fechas.remove(1);
-                                              } else {
-                                                fechas.add(1);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 1),
-                                          label: Text("Martes",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp))),
-                                      ChoiceChip.elevated(
-                                        onSelected: (value) {
-                                          setState(() {
-                                            if (fechas.any(
-                                                (element) => element == 2)) {
-                                              fechas.remove(2);
-                                            } else {
-                                              fechas.add(2);
-                                            }
-                                          });
-                                        },
-                                        selected: fechas
-                                            .any((element) => element == 2),
-                                        label: Text("Miercoles",
-                                            style: TextStyle(fontSize: 14.sp)),
-                                      ),
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 3)) {
-                                                fechas.remove(3);
-                                              } else {
-                                                fechas.add(3);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 3),
-                                          label: Text("Jueves",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp))),
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 4)) {
-                                                fechas.remove(4);
-                                              } else {
-                                                fechas.add(4);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 4),
-                                          label: Text("Viernes",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp))),
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 5)) {
-                                                fechas.remove(5);
-                                              } else {
-                                                fechas.add(5);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 5),
-                                          label: Text("Sabado",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp))),
-                                      ChoiceChip.elevated(
-                                          onSelected: (value) {
-                                            setState(() {
-                                              if (fechas.any(
-                                                  (element) => element == 6)) {
-                                                fechas.remove(6);
-                                              } else {
-                                                fechas.add(6);
-                                              }
-                                            });
-                                          },
-                                          selected: fechas
-                                              .any((element) => element == 6),
-                                          label: Text("Domingo",
-                                              style:
-                                                  TextStyle(fontSize: 14.sp)))
-                                    ]),
-                                Text(
-                                    "Categorias que afectara este bidon de presupuesto",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold)),
-                                CustomDropdown.searchRequest(
-                                    futureRequest: (p0) async =>
-                                        await CategoriaController.buscar(p0),
-                                    hintText: 'Categorias',
-                                    controller: categoria,
-                                    items: provider.listaCategoria,
-                                    itemsListPadding: EdgeInsets.all(0),
-                                    listItemPadding: EdgeInsets.all(0),
-                                    headerBuilder: (context, selectedItem, enabled) =>
-                                        Text(selectedItem.nombre,
-                                            style: TextStyle(
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.bold)),
-                                    listItemBuilder: (context, item, isSelected,
-                                            onItemSelect) =>
-                                        ListTile(
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: 0, horizontal: 1.w),
-                                            title: Text(item.nombre,
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.bold)),
-                                            subtitle: Text(item.descripcion, maxLines: 2, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold))),
-                                    onChanged: (p0) {
-                                      if (p0 != null) {
-                                        if (!categoriaId
-                                            .contains(categoria.value!.id!)) {
-                                          setState(() {
-                                            categoriaId
-                                                .add(categoria.value!.id!);
-                                          });
-                                        } else {
-                                          showToast(
-                                              "Ya ha ingresado este elemento");
-                                        }
-                                      }
-                                    }),
-                                Wrap(
-                                    runSpacing: 0,
-                                    spacing: 1.w,
-                                    children: categoriaId
-                                        .map((e) => Chip(
-                                            onDeleted: () => setState(() {
-                                                  categoriaId.remove(e);
-                                                }),
-                                            label: FutureBuilder(
-                                                future:
-                                                    CategoriaController.getItem(
-                                                        id: e),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                        snapshot.data!.nombre,
-                                                        style: TextStyle(
-                                                            fontSize: 13.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold));
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return Text(
-                                                        "${snapshot.error}",
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp));
-                                                  } else {
-                                                    return SizedBox(
-                                                        height: 4.w,
-                                                        width: 4.w,
-                                                        child:
-                                                            CircularProgressIndicator());
-                                                  }
-                                                })))
-                                        .toList()),
-                                Divider(),
-                                Text(
-                                    "Metodos de pago que afectara este bidon de presupuesto",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold)),
-                                CustomDropdown.searchRequest(
-                                    futureRequest: (p0) async =>
-                                        await MetodoGastoController.buscar(p0),
-                                    hintText: 'Metodo de pago',
-                                    controller: metodo,
-                                    itemsListPadding: EdgeInsets.all(0),
-                                    listItemPadding: EdgeInsets.all(0),
-                                    headerBuilder: (context, selectedItem,
-                                            enabled) =>
-                                        Text(selectedItem.nombre,
-                                            style: TextStyle(
-                                                fontSize: 15.sp,
-                                                fontWeight: FontWeight.bold)),
-                                    listItemBuilder: (context, item, isSelected,
-                                            onItemSelect) =>
-                                        ListTile(
-                                            title: Text(item.nombre,
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold))),
-                                    items: provider.metodo,
-                                    onChanged: (p0) {
-                                      if (p0 != null) {
-                                        if (!metodoId
-                                            .contains(metodo.value!.id)) {
-                                          setState(() {
-                                            metodoId.add(metodo.value!.id);
-                                          });
-                                        } else {
-                                          showToast(
-                                              "Ya ha ingresado este elemento");
-                                        }
-                                      }
-                                    }),
-                                Wrap(
-                                    spacing: 1.w,
-                                    children: metodoId
-                                        .map((e) => Chip(
-                                            onDeleted: () => setState(() {
-                                                  metodoId.remove(e);
-                                                }),
-                                            label: FutureBuilder(
-                                                future: MetodoGastoController
-                                                    .getItem(id: e),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.hasData) {
-                                                    return Text(
-                                                        snapshot.data!.nombre,
-                                                        style: TextStyle(
-                                                            fontSize: 13.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold));
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return Text(
-                                                        "${snapshot.error}",
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp));
-                                                  } else {
-                                                    return SizedBox(
-                                                        height: 4.w,
-                                                        width: 4.w,
-                                                        child:
-                                                            CircularProgressIndicator());
-                                                  }
-                                                })))
-                                        .toList()),
-                                Divider(),
-                                TextField(
-                                    controller: monto,
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true, signed: false),
-                                    decoration: InputDecoration(
-                                        hintText: "Monto Inicial",
-                                        prefixIcon: Icon(Icons.monetization_on,
-                                            color: ThemaMain.green)))
-                              ])))))),
+          : Column(children: [
+              TextField(
+                  controller: nombre,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 2.w, vertical: 0),
+                      fillColor: ThemaMain.background,
+                      hintText: "Nombre del bidon")),
+              tarjetaCateMet(provider),
+              TextField(
+                  controller: monto,
+                  keyboardType: TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
+                  decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 2.w, vertical: 0),
+                      fillColor: ThemaMain.background,
+                      hintText: "Monto Inicial",
+                      prefixIcon:
+                          Icon(Icons.monetization_on, color: ThemaMain.green)))
+            ]),
       ElevatedButton.icon(
           icon: Icon(Icons.group_work,
               size: 20.sp,
-              color: widget.bidon == null
-                  ? ThemaMain.primary
-                  : ThemaMain.green),
+              color:
+                  widget.bidon == null ? ThemaMain.primary : ThemaMain.green),
           onPressed: () async {
             if (widget.bidon?.inhabilitado == 1) {
               showToast("Bidon inhablitado");
@@ -490,5 +206,273 @@ class _DialogBidonesState extends State<DialogBidones> {
                       : "Actualizar",
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)))
     ]));
+  }
+
+  Widget tarjetaCateMet(GastoProvider provider) {
+    return Card(
+        child: Padding(
+            padding: EdgeInsets.all(10.sp),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 38.h),
+              child: ListView(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  children: [
+                    Text(
+                        "Dias que se rellenara de manera automatica\n(Si no se selecciona ningun dia, se rellenara de manera automatica cuando se vacie el bidon)",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                    Wrap(
+                        spacing: .5.w,
+                        runSpacing: 0,
+                        alignment: WrapAlignment.spaceAround,
+                        runAlignment: WrapAlignment.spaceAround,
+                        children: [
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 0)) {
+                                    fechas.remove(0);
+                                  } else {
+                                    fechas.add(0);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 0),
+                              label: Text("Lunes",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 1)) {
+                                    fechas.remove(1);
+                                  } else {
+                                    fechas.add(1);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 1),
+                              label: Text("Martes",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 2)) {
+                                    fechas.remove(2);
+                                  } else {
+                                    fechas.add(2);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 2),
+                              label: Text("Miercoles",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 3)) {
+                                    fechas.remove(3);
+                                  } else {
+                                    fechas.add(3);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 3),
+                              label: Text("Jueves",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 4)) {
+                                    fechas.remove(4);
+                                  } else {
+                                    fechas.add(4);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 4),
+                              label: Text("Viernes",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 5)) {
+                                    fechas.remove(5);
+                                  } else {
+                                    fechas.add(5);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 5),
+                              label: Text("Sabado",
+                                  style: TextStyle(fontSize: 14.sp))),
+                          ChoiceChip.elevated(
+                              labelPadding: EdgeInsets.all(4.sp),
+                              onSelected: (value) {
+                                setState(() {
+                                  if (fechas.any((element) => element == 6)) {
+                                    fechas.remove(6);
+                                  } else {
+                                    fechas.add(6);
+                                  }
+                                });
+                              },
+                              selected: fechas.any((element) => element == 6),
+                              label: Text("Domingo",
+                                  style: TextStyle(fontSize: 14.sp)))
+                        ]),
+                    Divider(),
+                    Text("Categorias que afectara este bidon de presupuesto",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                    CustomDropdown.searchRequest(
+                        futureRequest: (p0) async =>
+                            await CategoriaController.buscar(p0),
+                        hintText: 'Categorias',
+                        controller: categoria,
+                        items: provider.listaCategoria,
+                        itemsListPadding: EdgeInsets.all(0),
+                        listItemPadding: EdgeInsets.all(0),
+                        closedHeaderPadding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.h),
+                        headerBuilder: (context, selectedItem, enabled) =>
+                            Text(selectedItem.nombre,
+                                style: TextStyle(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold)),
+                        listItemBuilder:
+                            (context, item, isSelected, onItemSelect) => ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 1.w),
+                                title: Text(item.nombre,
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text(item.descripcion,
+                                    maxLines: 2,
+                                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold))),
+                        onChanged: (p0) {
+                          if (p0 != null) {
+                            if (!categoriaId.contains(categoria.value!.id!)) {
+                              setState(() {
+                                categoriaId.add(categoria.value!.id!);
+                              });
+                            } else {
+                              showToast("Ya ha ingresado este elemento");
+                            }
+                            categoria.clear();
+                          }
+                        }),
+                    Wrap(
+                        runSpacing: 0,
+                        spacing: 1.w,
+                        children: categoriaId
+                            .map((e) => Chip(
+                                labelPadding: EdgeInsets.all(4.sp),
+                                onDeleted: () => setState(() {
+                                      categoriaId.remove(e);
+                                    }),
+                                label: FutureBuilder(
+                                    future:
+                                        CategoriaController.getItem(id: e),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(snapshot.data!.nombre,
+                                            style: TextStyle(
+                                                fontSize: 13.sp,
+                                                fontWeight: FontWeight.bold));
+                                      } else if (snapshot.hasError) {
+                                        return Text("${snapshot.error}",
+                                            style:
+                                                TextStyle(fontSize: 12.sp));
+                                      } else {
+                                        return SizedBox(
+                                            height: 4.w,
+                                            width: 4.w,
+                                            child:
+                                                CircularProgressIndicator());
+                                      }
+                                    })))
+                            .toList()),
+                    Divider(),
+                    Text(
+                        "Metodos de pago que afectara este bidon de presupuesto",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                    CustomDropdown.searchRequest(
+                        futureRequest: (p0) async =>
+                            await MetodoGastoController.buscar(p0),
+                        hintText: 'Metodo de pago',
+                        controller: metodo,
+                        closedHeaderPadding: EdgeInsets.symmetric(
+                            horizontal: 2.w, vertical: 1.h),
+                        itemsListPadding: EdgeInsets.all(0),
+                        listItemPadding: EdgeInsets.all(0),
+                        headerBuilder: (context, selectedItem, enabled) =>
+                            Text(selectedItem.nombre,
+                                style: TextStyle(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold)),
+                        listItemBuilder:
+                            (context, item, isSelected, onItemSelect) =>
+                                ListTile(
+                                    title: Text(item.nombre,
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.bold))),
+                        items: provider.metodo,
+                        onChanged: (p0) {
+                          if (p0 != null) {
+                            if (!metodoId.contains(metodo.value!.id)) {
+                              setState(() {
+                                metodoId.add(metodo.value!.id);
+                              });
+                            } else {
+                              showToast("Ya ha ingresado este elemento");
+                            }
+                            metodo.clear();
+                          }
+                        }),
+                    Wrap(
+                        spacing: 1.w,
+                        children: metodoId
+                            .map((e) => Chip(
+                                labelPadding: EdgeInsets.all(4.sp),
+                                onDeleted: () => setState(() {
+                                      metodoId.remove(e);
+                                    }),
+                                label: FutureBuilder(
+                                    future:
+                                        MetodoGastoController.getItem(id: e),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Text(snapshot.data!.nombre,
+                                            style: TextStyle(
+                                                fontSize: 13.sp,
+                                                fontWeight: FontWeight.bold));
+                                      } else if (snapshot.hasError) {
+                                        return Text("${snapshot.error}",
+                                            style:
+                                                TextStyle(fontSize: 12.sp));
+                                      } else {
+                                        return SizedBox(
+                                            height: 4.w,
+                                            width: 4.w,
+                                            child:
+                                                CircularProgressIndicator());
+                                      }
+                                    })))
+                            .toList())
+                  ]),
+            )));
   }
 }

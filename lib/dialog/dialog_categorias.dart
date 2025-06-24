@@ -8,6 +8,7 @@ import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class DialogCategorias extends StatelessWidget {
   const DialogCategorias({super.key});
@@ -20,18 +21,27 @@ class DialogCategorias extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Text('Ingresar Tipo de Gasto'),
-          TextField(
+          Text('Ingresar Tipo de Gasto',
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          TextField(maxLines: 2,
+              minLines: 1,
               controller: tipoGasto,
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
-              decoration: const InputDecoration(hintText: 'Tipo de gasto')),
+              decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
+                  hintText: 'Tipo de gasto')),
           const Divider(),
           TextField(
               controller: descripcion,
+              maxLines: 6,
+              minLines: 1,
               textCapitalization: TextCapitalization.sentences,
               keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
                   hintText: 'Descripcion de tipo de gasto')),
           ElevatedButton(
               onPressed: () async {
@@ -44,7 +54,7 @@ class DialogCategorias extends StatelessWidget {
                       loadingTitle: 'Ingresando...',
                       onAcceptPressed: (context) async {
                         var id = (await CategoriaController.getLastId());
-                        log("${id+1}");
+                        log("${id + 1}");
                         CategoriaModel objeto = CategoriaModel(
                             id: id + 1,
                             nombre: tipoGasto.text,
