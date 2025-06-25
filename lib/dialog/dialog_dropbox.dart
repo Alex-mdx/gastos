@@ -26,6 +26,7 @@ import '../controllers/metodo_gasto_controller.dart';
 import '../utilities/detection_mime.dart';
 import '../utilities/dropbox_gen.dart';
 import '../utilities/generate_excel.dart';
+import '../utilities/services/navigation_services.dart';
 import '../utilities/zip_funcion.dart';
 
 class DialogDropbox extends StatefulWidget {
@@ -379,7 +380,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
                         setState(() {
                           send = true;
                         });
-                        //Navigation.pop();
+                        Navigation.pop();
                       } else {
                         showToast("Proceso en curso");
                       }
