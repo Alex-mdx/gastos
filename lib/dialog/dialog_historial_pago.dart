@@ -40,7 +40,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
     final provider = Provider.of<GastoProvider>(context);
     return Dialog(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-      AppBar(
+      AppBar(backgroundColor: ThemaMain.primary,
           title: Text("Historial Detalle", style: TextStyle(fontSize: 18.sp)),
           centerTitle: true,
           actions: [

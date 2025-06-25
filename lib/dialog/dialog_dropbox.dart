@@ -7,6 +7,7 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/models/dropbox_model.dart';
 import 'package:gastos/models/user_dropbox_model.dart';
+import 'package:gastos/utilities/ad_fun.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/preferences.dart';
@@ -167,6 +168,7 @@ class _DialogDropboxState extends State<DialogDropbox> {
         provider.metodoSelect =
             provider.metodo.firstWhereOrNull((element) => element.id == 1);
         await file();
+        await fileData();
       } else {
         showToast("Error en la descarga de archivo");
       }
@@ -239,11 +241,15 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                 await Dialogs.showMorph(
                                     title: "Enviar datos locales",
                                     description:
-                                        "Se enviaran sus datos a la nube, esta operacion sobre escribira los archivos de la nube por los que tiene localmente",
+                                        "Se enviaran sus datos a la nube, esta operacion sobre escribira los archivos de la nube por los que tiene localmente\n(Se reproducira un anuncio)",
                                     loadingTitle: "cargando...",
                                     onAcceptPressed: (context) async =>
                                         aceptar = true);
                                 if (aceptar) {
+                                  await AdFun.loadAd();
+                                  if (AdFun.interstitialAd != null) {
+                                    await AdFun.interstitialAd!.show();
+                                  }
                                   if (carga) {
                                     setState(() {
                                       send = false;
@@ -299,17 +305,22 @@ class _DialogDropboxState extends State<DialogDropbox> {
                                 await Dialogs.showMorph(
                                     title: "Descarga datos Dropbox",
                                     description:
-                                        "Se descargaran sus datos de la nube, esta operacion sobre escribira los archivos que tenga localmente por aquellos que tenga de respaldo en la nube",
+                                        "Se descargaran sus datos de la nube, esta operacion sobre-escribira los archivos que tenga localmente por los almacenados en la nube\n(Se reproducira un anuncio)",
                                     loadingTitle: "cargando...",
                                     onAcceptPressed: (context) async =>
                                         aceptar = true);
                                 if (aceptar) {
+                                  await AdFun.loadAd();
+                                  if (AdFun.interstitialAd != null) {
+                                    await AdFun.interstitialAd!.show();
+                                  }
                                   if (descarga) {
                                     setState(() {
                                       descarga = false;
                                       send = false;
                                       proceso = "En proceso";
                                     });
+
                                     await descargaData(
                                         provider,
                                         (p0) => setState(() {
@@ -364,9 +375,11 @@ class _DialogDropboxState extends State<DialogDropbox> {
                         });
 
                         await Dropbox.authorize();
+
                         setState(() {
                           send = true;
                         });
+                        //Navigation.pop();
                       } else {
                         showToast("Proceso en curso");
                       }
