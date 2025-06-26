@@ -41,7 +41,6 @@ class _SettingViewState extends State<SettingView> {
         },
         child: Scaffold(
             appBar: AppBar(
-                backgroundColor: ThemaMain.primary,
                 toolbarHeight: 6.h,
                 title: Text("Opciones", style: TextStyle(fontSize: 18.sp)),
                 actions: [

@@ -2,11 +2,22 @@
 ## Descripción
 Proyecto personal para el manejo de gastos personales, usando datos locales partiendo del SQLite, para persistencia de datos, y calculo de gastos partiendo de rango de fechas, presupuesto por semana y/o por día, así como evidencia fotográfica y uso de calendario para la mejor visualización de estos mismos, para un mejor y excelente control de gastos por persona.
 
-## Change Log
-### Versión 0.1.4 (actualización próxima)
+## Changelog
+### Versión 0.2.0
+#### Correcciones 🔧
+- Se corrigió los colores de la barra de la app.
+- Colores arreglados.
+- Crasheo al abrir teclado en Android 13+
+- Permisos de notificaciones en Android 13+.
+- Conversión de imagen 0.1.4 corregida.
+#### Implementaciones 🆕
+  - Reparar imagen individual
+---
+### Versión 0.1.4
 #### Correcciones 🔧
 - Fecha de ingreso corregida, ahora cuando seleccione una fecha diferente a la actual, tomara siempre la hora actual, evitando que guarde a la hora 00:00:00.
 - Tabla de evidencias en el guardado de gastos para una persistencia de datos.
+- Ventana emergente de salida, evita que salgas de la aplicación por accidente bloqueando el botón de *atrás* usando  dicha ventana y solo permitiendo la salida de la app hasta que se presione aceptar.
 #### Mejoras 📈
 - Interfaz grafica reordenada
 - Colorizado de interfaz mejorado.

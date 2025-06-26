@@ -3,6 +3,7 @@ import 'package:gastos/utilities/preferences.dart';
 
 class ThemaMain {
   static Color primary =  LightTheme.primary;
+  static Color appbar =  const Color.fromARGB(255, 18, 107, 223);
   static Color second =
       (Preferences.thema ? LightTheme.second : DarkTheme.second);
   static Color white = Colors.white;
@@ -38,7 +39,7 @@ class LightTheme {
   static const purple = Color.fromARGB(255, 106, 20, 218);
 
   static const background = Color.fromARGB(255, 238, 244, 245);
-  static const dialogbackground = Color.fromARGB(255, 224, 241, 239);
+  static const dialogbackground = Color.fromARGB(255, 216, 233, 231);
   static const darkGrey = Color.fromARGB(255, 119, 122, 133);
   static const darkBlue = Color.fromARGB(255, 0, 36, 84);
 
@@ -55,7 +56,7 @@ class DarkTheme {
   static const purple = Color.fromARGB(255, 156, 80, 255);
 
   static const background = Color.fromARGB(255, 20, 20, 20);
-  static const dialogbackground = Color.fromARGB(255, 29, 31, 31);
+  static const dialogbackground = Color.fromARGB(255, 38, 41, 41);
   static const darkGrey = Color.fromARGB(255, 220, 221, 224);
   static const darkBlue = Color.fromARGB(255, 172, 198, 233);
 

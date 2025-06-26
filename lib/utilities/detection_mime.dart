@@ -44,7 +44,8 @@ class DetectionMime {
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           debugPrint("el archivo es un xlsx");
           await GenerateExcel.read(file);
-          await GastosController.base64tojpeg();
+          var fotos = await GastosController.getItemsOnlyEvidencia(null);
+          await GastosController.base64tojpeg(gasto: fotos);
           break;
 
         default:

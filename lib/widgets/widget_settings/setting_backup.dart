@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/metodo_gasto_controller.dart';
 import 'package:gastos/utilities/detection_mime.dart';
@@ -85,6 +86,7 @@ class BackupManual extends StatelessWidget {
                   style:
                       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
               icon: Icon(LineIcons.fileImport, size: 22.sp)),
+              if(kDebugMode)
           ElevatedButton.icon(
               onPressed: () async {
                 Dialogs.showMorph(

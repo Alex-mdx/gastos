@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:gastos/utilities/background.dart';
 import 'package:gastos/utilities/notificaciones_fun.dart';
+import 'package:gastos/utilities/permisos.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
 
 class DialogSettingNotificaciones extends StatefulWidget {
@@ -159,29 +161,35 @@ class _DialogSettingNotificacionesState
                             onAcceptPressed: (context) async {
                               int id1 = 20;
                               int id2 = 30;
-                              await Background.cancelBackgroundTask(
-                                  "task_$id1");
-                              await Background.cancelBackgroundTask(
-                                  "task_$id2");
-                              Preferences.recordatorioAct1 = act1;
-                              Preferences.recordatorioAct2 = act2;
-                              Preferences.recordatorio1 = horaPreferencia1;
-                              Preferences.recordatorio2 = horaPreferencia2;
-                              if (act1) {
-                                await Background.scheduleDailyBackgroundTask(
-                                    hour: hora1.hour,
-                                    minute: hora1.minute,
-                                    taskId: "task_$id1",
-                                    taskFunction: () async =>
-                                        await NotificacionesFun.show(id1));
-                              }
-                              if (act2) {
-                                await Background.scheduleDailyBackgroundTask(
-                                    hour: hora2.hour,
-                                    minute: hora2.minute,
-                                    taskId: "task_$id2",
-                                    taskFunction: () async =>
-                                        await NotificacionesFun.show(id2));
+                              var result = await Permisos.notificacion();
+                              if (result) {
+                                await Background.cancelBackgroundTask(
+                                    "task_$id1");
+                                await Background.cancelBackgroundTask(
+                                    "task_$id2");
+                                Preferences.recordatorioAct1 = act1;
+                                Preferences.recordatorioAct2 = act2;
+                                Preferences.recordatorio1 = horaPreferencia1;
+                                Preferences.recordatorio2 = horaPreferencia2;
+                                if (act1) {
+                                  await Background.scheduleDailyBackgroundTask(
+                                      hour: hora1.hour,
+                                      minute: hora1.minute,
+                                      taskId: "task_$id1",
+                                      taskFunction: () async =>
+                                          await NotificacionesFun.show(id1));
+                                }
+                                if (act2) {
+                                  await Background.scheduleDailyBackgroundTask(
+                                      hour: hora2.hour,
+                                      minute: hora2.minute,
+                                      taskId: "task_$id2",
+                                      taskFunction: () async =>
+                                          await NotificacionesFun.show(id2));
+                                }
+                              } else {
+                                showToast(
+                                    "No tiene los permisos para habilitar las notificaciones");
                               }
                             }),
                         child:

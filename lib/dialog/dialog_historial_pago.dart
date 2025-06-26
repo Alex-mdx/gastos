@@ -40,7 +40,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
     final provider = Provider.of<GastoProvider>(context);
     return Dialog(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-      AppBar(backgroundColor: ThemaMain.primary,
+      AppBar(
           title: Text("Historial Detalle", style: TextStyle(fontSize: 18.sp)),
           centerTitle: true,
           actions: [
@@ -101,7 +101,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                               showDialog(
                                   context: context,
                                   builder: (context) =>
-                                      DialogHistorialPagoFoto(file: file));
+                                      DialogHistorialPagoFoto(file: file, idGasto : widget.gasto.id!));
                             });
                       }).toList())
               ]))),

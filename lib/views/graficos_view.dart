@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
 import 'package:sizer/sizer.dart';
 
@@ -12,7 +11,6 @@ class GraficosView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: ThemaMain.primary,
             toolbarHeight: 6.h,
             title: Text("Graficos", style: TextStyle(fontSize: 20.sp))),
         body: Center(

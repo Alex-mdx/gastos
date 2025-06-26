@@ -47,27 +47,29 @@ class GastosController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<List<GastoModelo>> getItemsOnlyEvidencia() async {
+  static Future<List<GastoModelo>> getItemsOnlyEvidencia(int? id) async {
     final db = await database();
     List<GastoModelo> modelo = [];
+    String gastoId = (id == null ? "" : "id = $id AND");
     final data = (await db.query(nombreDB,
-        where: 'evidencia IS NOT NULL AND evidencia != ? AND evidencia != ?',
+        where:
+            '$gastoId evidencia IS NOT NULL AND evidencia != ? AND evidencia != ?',
         whereArgs: ['', '[]']));
+    log("Listo");
     for (var element in data) {
       modelo.add(GastoModelo.fromJson(element));
     }
     return modelo;
   }
 
-  static Future<void> base64tojpeg() async {
+  static Future<void> base64tojpeg({required List<GastoModelo> gasto}) async {
     try {
-      var nuevo = await getItemsOnlyEvidencia();
-      log("${nuevo.length}");
+      log("${gasto.length}");
       final direccion = await getDownloadsDirectory();
-      if (nuevo.isNotEmpty) {
+      if (gasto.isNotEmpty) {
         showToast("Generando imagenes desde las evidencias");
       }
-      for (var element in nuevo) {
+      for (var element in gasto) {
         List<String> evidencia = [];
         for (var i = 0; i < element.evidencia.length; i++) {
           var bytes = pr.Parser.toUint8List(element.evidencia[i]);

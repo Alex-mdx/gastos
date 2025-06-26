@@ -40,7 +40,7 @@ ThemeData light = ThemeData(
     appBarTheme: AppBarTheme(
         elevation: 0,
         actionsIconTheme: const IconThemeData(color: LightTheme.second),
-        backgroundColor: ThemaMain.primary,
+        backgroundColor: ThemaMain.appbar,
         iconTheme: IconThemeData(color: LightTheme.second, size: 24.sp),
         titleTextStyle: const TextStyle(
             color: LightTheme.second,
@@ -112,10 +112,10 @@ ThemeData dark = ThemeData(
     radioTheme: RadioThemeData(
         fillColor: WidgetStateProperty.all<Color>(DarkTheme.primary)),
     primaryIconTheme: const IconThemeData(color: DarkTheme.primary),
-    appBarTheme: AppBarTheme(
+    appBarTheme: AppBarTheme(color: ThemaMain.appbar,
         elevation: 0,
         actionsIconTheme: const IconThemeData(color: DarkTheme.second),
-        backgroundColor: ThemaMain.primary,
+        backgroundColor: ThemaMain.appbar,
         iconTheme: IconThemeData(color: DarkTheme.second, size: 24.sp),
         titleTextStyle: const TextStyle(
             color: DarkTheme.second,

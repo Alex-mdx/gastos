@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:gastos/utilities/apis/rutas_app.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/notificaciones_fun.dart';
+import 'package:gastos/utilities/permisos.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/addMobile/banner.dart';
@@ -21,18 +23,21 @@ class GastosView extends StatelessWidget {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: ThemaMain.primary,
             toolbarHeight: 6.h,
             title: Text('Gastos',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
             actions: [
               Column(children: [
                 OverflowBar(spacing: 1.w, children: [
-                  IconButton(
-                      onPressed: () async {
-                        await NotificacionesFun.show(1);
-                      },
-                      icon: Icon(Icons.precision_manufacturing_sharp)),
+                  if (kDebugMode)
+                    IconButton(
+                        onPressed: () async {
+                          var result =await Permisos.notificacion();
+                          if (result) {
+                            await NotificacionesFun.show(1);
+                          }
+                        },
+                        icon: Icon(Icons.precision_manufacturing_sharp)),
                   const ButtonPromedioWidget(),
                   IconButton(
                       iconSize: 24.sp,

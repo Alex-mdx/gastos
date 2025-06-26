@@ -76,12 +76,12 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                                     widget.provider
                                                         .promediarDiaSemana(
                                                             index)))
-                                            : ThemaMain.second),
+                                            : ThemaMain.primary),
                                     duration: Duration(seconds: 1),
                                     child: AnimatedFlipCounter(
                                         value: widget.provider
                                             .promediarDiaSemana(index),
-                                        duration: Durations.long3,
+                                        duration: Durations.long1,
                                         fractionDigits: 1,
                                         prefix: "\$")))),
                       ),

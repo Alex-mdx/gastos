@@ -59,7 +59,7 @@ class _HistorialViewState extends State<HistorialView> {
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
-        appBar: AppBar(backgroundColor: ThemaMain.primary,
+        appBar: AppBar(
             toolbarHeight: 6.h,
             title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
