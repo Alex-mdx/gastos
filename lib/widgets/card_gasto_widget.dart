@@ -64,7 +64,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       lastDate: now)) ??
                                   now;
                               final modelTemp = widget.provider.gastoActual.copyWith(
-                                  fecha: Textos.fechaHMS(
+                                  fecha: Textos.fechaYMDHMS(
                                       fecha: widget.provider.selectFecha
                                               ?.copyWith(
                                                   year: widget.provider
@@ -83,6 +83,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   mes: (widget.provider.selectFecha?.month ??
                                           now.month)
                                       .toString());
+                              debugPrint(modelTemp.fecha);
                               widget.provider.gastoActual = modelTemp;
                             },
                             icon: Icon(Icons.edit_calendar,
@@ -139,7 +140,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              color: ThemaMain.grey,
+                                              color: ThemaMain.darkGrey,
                                               fontSize: 15.sp,
                                               fontWeight: FontWeight.bold)),
                                   hintText: 'Categoria de Gasto',
@@ -149,7 +150,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   listItemBuilder: (context, item, isSelected, onItemSelect) => ListTile(
                                       contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
                                       minVerticalPadding: 5,
-                                      title: Text(item.nombre, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp)),
+                                      title: Text(item.nombre, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp, fontWeight: FontWeight.bold)),
                                       subtitle: Text(item.descripcion, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 13.sp)),
                                       trailing: IconButton(
                                           onPressed: () => Dialogs.showMorph(
@@ -169,7 +170,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                                 });
                                               }),
                                           icon: Icon(Icons.delete, size: 18.sp, color: ThemaMain.red))),
-                                  overlayHeight: 50.h,
+                                  overlayHeight: 52.h,
                                   onChanged: (value) {
                                     if (value != null) {
                                       log("$value");

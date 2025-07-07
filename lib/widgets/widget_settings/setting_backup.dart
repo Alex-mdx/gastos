@@ -39,16 +39,20 @@ class BackupManual extends StatelessWidget {
                       "Se generara un respaldo de sus gastos en formato ZIP\nNota1: Evite modificar dicho archivo desde programas externos para evitar futuros errores\nNota2: Se comprimiran sus evidencias fotograficas, el proceso podria tardar en funcion a la cantidad de evidencias",
                   loadingTitle: "Exportando",
                   onAcceptPressed: (context) async {
-                    List<File> archivos = [];
-                    var csv = await GenerateExcel.backUp();
-                    if (csv != null) {
-                      archivos.add(csv);
-                    
+                    try {
+                      List<File> archivos = [];
+                      var csv = await GenerateExcel.backUp();
+                      if (csv != null) {
+                        archivos.add(csv);
 
-                    var imagenes = await ImageGen.obtenerImagenesEvidencia();
-                    archivos.addAll(imagenes);
-                    var file = await ZipFuncion.toZip(archivos);
-                    await GenerateExcel.compartidoGlobal(file!);
+                        var imagenes =
+                            await ImageGen.obtenerImagenesEvidencia();
+                        archivos.addAll(imagenes);
+                        var file = await ZipFuncion.toZip(archivos);
+                        await GenerateExcel.compartidoGlobal(file!);
+                      }
+                    } catch (e) {
+                      showToast("Error\n$e");
                     }
                   }),
               label: Text("Exportacion datos",
@@ -56,7 +60,7 @@ class BackupManual extends StatelessWidget {
                       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
               icon: Icon(LineIcons.fileExport, size: 22.sp)),
           ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
                 Dialogs.showMorph(
                     title: "Importacion de datos",
                     description:
@@ -65,60 +69,65 @@ class BackupManual extends StatelessWidget {
                     loadingDescription:
                         "Es proceso podria tardar unos minutos en funcion a la cantidad de datos almacenados",
                     onAcceptPressed: (context) async {
-                      File? archivo = await GenerateExcel.importarGlobal();
-                      if (archivo != null) {
-                        await DetectionMime.operacion([archivo]);
-                      } else {
-                        showToast("No se pudo obtener el archivo");
-                      }
+                      try {
+                        File? archivo = await GenerateExcel.importarGlobal();
+                        if (archivo != null) {
+                          await DetectionMime.operacion([archivo]);
+                        } else {
+                          showToast("No se pudo obtener el archivo");
+                        }
 
-                      provider.listaGastos =
-                          await GastosController.getConfigurado();
-                      provider.listaCategoria =
-                          await CategoriaController.getItems();
-                      provider.metodo = await MetodoGastoController.getItems();
-                      log("${provider.metodo.map((e) => e.toJson()).toList()}");
-                      provider.metodoSelect = provider.metodo
-                          .firstWhereOrNull((element) => element.id == 1);
+                        provider.listaGastos =
+                            await GastosController.getConfigurado();
+                        provider.listaCategoria =
+                            await CategoriaController.getItems();
+                        provider.metodo =
+                            await MetodoGastoController.getItems();
+                        log("${provider.metodo.map((e) => e.toJson()).toList()}");
+                        provider.metodoSelect = provider.metodo
+                            .firstWhereOrNull((element) => element.id == 1);
+                      } catch (e) {
+                        showToast("error\n$e");
+                      }
                     });
               },
               label: Text("Importar datos",
                   style:
                       TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
               icon: Icon(LineIcons.fileImport, size: 22.sp)),
-              if(kDebugMode)
-          ElevatedButton.icon(
-              onPressed: () async {
-                Dialogs.showMorph(
-                    title: 'Eliminar datos',
-                    description:
-                        "¿Esta seguro de eliminar sus datos?\nSe pedira acceso a sus datos biometricos para asegurar su identidad",
-                    loadingTitle: "Validando",
-                    onAcceptPressed: (context) async {
-                      final result = await Auth.obtener();
-                      if (result) {
-                        await ImageGen.limpiar();
-                        await GastosController.deleteAll();
-                        await CategoriaController.deleteAll();
-                        await PresupuestoController.deleteAll();
-                        await MetodoGastoController.deleteAll();
-                        provider.listaGastos.clear();
-                        provider.listaCategoria.clear();
-                        provider.metodo.clear();
-                        await MetodoGastoController.generarObtencion();
-                        provider.metodo =
-                            await MetodoGastoController.getItems();
-                        provider.metodoSelect = provider.metodo
-                            .firstWhereOrNull(
-                                (element) => element.defecto == 1);
-                        provider.presupuesto = null;
-                      }
-                    });
-              },
-              label: Text("Eliminar datos",
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold)),
-              icon: Icon(LineIcons.trash, size: 18.sp))
+          if (kDebugMode)
+            ElevatedButton.icon(
+                onPressed: () async {
+                  Dialogs.showMorph(
+                      title: 'Eliminar datos',
+                      description:
+                          "¿Esta seguro de eliminar sus datos?\nSe pedira acceso a sus datos biometricos para asegurar su identidad",
+                      loadingTitle: "Validando",
+                      onAcceptPressed: (context) async {
+                        final result = await Auth.obtener();
+                        if (result) {
+                          await ImageGen.limpiar();
+                          await GastosController.deleteAll();
+                          await CategoriaController.deleteAll();
+                          await PresupuestoController.deleteAll();
+                          await MetodoGastoController.deleteAll();
+                          provider.listaGastos.clear();
+                          provider.listaCategoria.clear();
+                          provider.metodo.clear();
+                          await MetodoGastoController.generarObtencion();
+                          provider.metodo =
+                              await MetodoGastoController.getItems();
+                          provider.metodoSelect = provider.metodo
+                              .firstWhereOrNull(
+                                  (element) => element.defecto == 1);
+                          provider.presupuesto = null;
+                        }
+                      });
+                },
+                label: Text("Eliminar datos",
+                    style: TextStyle(
+                        fontSize: 14.sp, fontWeight: FontWeight.bold)),
+                icon: Icon(LineIcons.trash, size: 18.sp))
         ]);
   }
 }

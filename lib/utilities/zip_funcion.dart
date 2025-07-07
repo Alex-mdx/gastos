@@ -49,7 +49,7 @@ class ZipFuncion {
     }
     // Comprime el archivo ZIP
     final zipEncoder = ZipEncoder();
-    final zipFileBytes = zipEncoder.encode(archive);
+    final zipFileBytes = zipEncoder.encode(archive,level: 9);
     final direccion = await getDownloadsDirectory();
     // Guarda el archivo ZIP en el sistema de archivos
     final outputFile = File("${direccion!.path}/respaldo_CG.zip");

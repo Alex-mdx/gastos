@@ -43,26 +43,28 @@ class Main extends StatelessWidget {
   const Main({super.key});
   @override
   Widget build(BuildContext context) => Sizer(
-          builder: (context, orientation, deviceType) => OKToast(
-              dismissOtherOnShow: true,
-              position: ToastPosition.bottom,
-              duration: const Duration(seconds: 4),
-              textStyle: TextStyle(fontSize: 15.sp, color: Colors.white),
-              child: MaterialApp(
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate
-                  ],
-                  supportedLocales: const [
-                    Locale('es')
-                  ],
-                  debugShowCheckedModeBanner: false,
-                  title: 'Gastos',
-                  themeMode:
-                      Preferences.thema ? ThemeMode.light : ThemeMode.dark,
-                  theme: Preferences.thema ? light : dark,
-                  navigatorKey: NavigationKey.navigatorKey,
-                  initialRoute: AppRoutes.initialRoute,
-                  routes: AppRoutes.routes)));
+      builder: (context, orientation, deviceType) => OKToast(
+          dismissOtherOnShow: true,
+          position: ToastPosition.bottom,
+          duration: const Duration(seconds: 4),
+          backgroundColor: Preferences.thema ? Colors.black : Colors.white,
+          textStyle: TextStyle(
+              fontSize: 15.sp,
+              color: Preferences.thema ? Colors.white : Colors.black),
+          child: MaterialApp(
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate
+              ],
+              supportedLocales: const [
+                Locale('es')
+              ],
+              debugShowCheckedModeBanner: false,
+              title: 'Gastos',
+              themeMode: Preferences.thema ? ThemeMode.light : ThemeMode.dark,
+              theme: Preferences.thema ? light : dark,
+              navigatorKey: NavigationKey.navigatorKey,
+              initialRoute: AppRoutes.initialRoute,
+              routes: AppRoutes.routes)));
 }

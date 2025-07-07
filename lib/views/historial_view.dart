@@ -115,7 +115,10 @@ class _HistorialViewState extends State<HistorialView> {
                                     style: TextStyle(fontSize: 16.sp))))),
                     if (montoDay != 0)
                       Center(
-                          child: Text("\$${Textos.moneda(moneda: montoDay)}",
+                          child: Text(
+                              "\$${Textos.moneda(moneda: montoDay, digito: 1)}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold)))
@@ -196,7 +199,7 @@ Widget historial(
       child: InkWell(
           onTap: () async {
             final modelado = await GastosController.find(
-                int.parse(appointment.id.toString()));
+                int.parse(appointment.id.toString()), null);
             if (modelado != null) {
               showDialog(
                       // ignore: use_build_context_synchronously

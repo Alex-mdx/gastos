@@ -29,8 +29,9 @@ class _DialogCamaraState extends State<DialogCamara> {
             borderRadius: BorderRadius.circular(borderRadius),
             child: Image.memory(e,
                 fit: BoxFit.cover,
-                height: 28.sp,
-                width: 28.sp,
+                gaplessPlayback: true,
+                height: 15.w,
+                width: 15.w,
                 filterQuality: FilterQuality.low)),
         onPressed: () => showDialog(
             context: context,
@@ -61,35 +62,24 @@ class _DialogCamaraState extends State<DialogCamara> {
                             icon: const Icon(Icons.delete, color: Colors.red)),
                         IconButton(
                             iconSize: 24.sp,
-                            onPressed: () => Navigator.push(
+                            onPressed: () async => await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProImageEditor.memory(
-                                        e,
-                                        callbacks: ProImageEditorCallbacks(
-                                            onImageEditingComplete: (Uint8List
-                                                    bytes) async =>
-                                                Dialogs.showMorph(
-                                                    title: "Guardar imagen",
-                                                    description:
-                                                        "¿Esta seguro de guardar esta imagen?\nReemplazara la imagen original por esta edicion",
-                                                    loadingTitle: "Guardando",
-                                                    onAcceptPressed:
-                                                        (context) async {
-                                                      int index = provider
-                                                          .imagenesActual
-                                                          .indexWhere(
-                                                              (element) =>
-                                                                  element == e);
-                                                      setState(() {
-                                                        provider.imagenesActual[
-                                                            index] = bytes;
-                                                      });
-
-                                                      Navigation.popTwice();
-                                                      showToast(
-                                                          "Salga y vuelva a entrar para que se efectuen los cambios");
-                                                    }))))),
+                                    builder: (context) =>
+                                        ProImageEditor.memory(e, callbacks:
+                                            ProImageEditorCallbacks(
+                                                onImageEditingComplete:
+                                                    (Uint8List bytes) async {
+                                          int index = provider.imagenesActual
+                                              .indexWhere(
+                                                  (element) => element == e);
+                                          setState(() {
+                                            provider.imagenesActual[index] =
+                                                bytes;
+                                          });
+                                          showToast("Evidencia editada");
+                                          Navigation.popTwice();
+                                        })))),
                             icon: Icon(Icons.edit))
                       ])
                 ])));
@@ -150,10 +140,10 @@ class _DialogCamaraState extends State<DialogCamara> {
                             style: TextStyle(fontSize: 15.sp),
                             textAlign: TextAlign.center))
                     : Wrap(
+                        spacing: 0,
+                        runSpacing: 0,
                         children: provider.imagenesActual
-                            .map((e) => Stack(children: [
-                                  iconEvidencia(context, e, provider)
-                                ]))
+                            .map((e) => iconEvidencia(context, e, provider))
                             .toList())
               ])
             ])));

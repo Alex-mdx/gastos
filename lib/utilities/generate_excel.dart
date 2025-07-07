@@ -28,45 +28,51 @@ class GenerateExcel {
       Sheet sheet1 = excel['Gastos'];
 
       var gastos = await GastosController.getAll();
-      sheet1.appendRow(gastos.first
-          .toJson()
-          .keys
-          .map((e) => TextCellValue(e.toString()))
-          .toList());
-      for (var element in gastos) {
-        log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
-        sheet1.appendRow(
-            element.toJson().values.map((i) => TextCellValue("$i")).toList());
+      if (gastos.isNotEmpty) {
+        sheet1.appendRow(gastos.first
+            .toJson()
+            .keys
+            .map((e) => TextCellValue(e.toString()))
+            .toList());
+        for (var element in gastos) {
+          log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
+          sheet1.appendRow(
+              element.toJson().values.map((i) => TextCellValue("$i")).toList());
+        }
       }
 
       Sheet sheet2 = excel['Categorias'];
       var categorias = await CategoriaController.getItems();
-      sheet2.appendRow(categorias.first
-          .toJson()
-          .keys
-          .map((e) => TextCellValue(e.toString()))
-          .toList());
-      for (var element in categorias) {
-        sheet2.appendRow(element
+      if (categorias.isNotEmpty) {
+        sheet2.appendRow(categorias.first
             .toJson()
-            .values
-            .map((i) => TextCellValue(i.toString()))
+            .keys
+            .map((e) => TextCellValue(e.toString()))
             .toList());
+        for (var element in categorias) {
+          sheet2.appendRow(element
+              .toJson()
+              .values
+              .map((i) => TextCellValue(i.toString()))
+              .toList());
+        }
       }
 
       Sheet sheet3 = excel['MetodoPago'];
       var metodoPago = await MetodoGastoController.getItems();
-      sheet3.appendRow(metodoPago.first
-          .toJson()
-          .keys
-          .map((e) => TextCellValue(e.toString()))
-          .toList());
-      for (var element in metodoPago) {
-        sheet3.appendRow(element
+      if (metodoPago.isNotEmpty) {
+        sheet3.appendRow(metodoPago.first
             .toJson()
-            .values
-            .map((i) => TextCellValue(i.toString()))
+            .keys
+            .map((e) => TextCellValue(e.toString()))
             .toList());
+        for (var element in metodoPago) {
+          sheet3.appendRow(element
+              .toJson()
+              .values
+              .map((i) => TextCellValue(i.toString()))
+              .toList());
+        }
       }
 
       var presupuesto = await PresupuestoController.getItem();
@@ -87,18 +93,21 @@ class GenerateExcel {
 
       Sheet sheet5 = excel['BidonesPresupuesto'];
       var bidones = await BidonesController.getItems();
-      sheet5.appendRow(bidones.first
-          .toJson()
-          .keys
-          .map((e) => TextCellValue(e.toString()))
-          .toList());
-      for (var element in bidones) {
-        sheet5.appendRow(element
+      if (bidones.isNotEmpty) {
+        sheet5.appendRow(bidones.first
             .toJson()
-            .values
-            .map((i) => TextCellValue(i.toString()))
+            .keys
+            .map((e) => TextCellValue(e.toString()))
             .toList());
+        for (var element in bidones) {
+          sheet5.appendRow(element
+              .toJson()
+              .values
+              .map((i) => TextCellValue(i.toString()))
+              .toList());
+        }
       }
+
       final direccion = await getDownloadsDirectory();
       showToast("Guardando respaldo generado");
       log("$direccion");
@@ -130,7 +139,7 @@ class GenerateExcel {
         allowMultiple: false,
         type: FileType.custom,
         dialogTitle: "Ingrese los datos de sus gastos",
-        allowedExtensions: ['xlsx', 'zip']);
+        allowedExtensions: ['xlsx', 'zip', 'rar']);
     if (pick != null) {
       var file = File(pick.files.first.path!);
       return file;
@@ -141,7 +150,9 @@ class GenerateExcel {
   }
 
   static Future<bool> read(File? csv) async {
+    //try {
     if (csv != null) {
+      showToast("Leyendo datos");
       var bytes = csv.readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
       log("${excel.tables.keys}");
@@ -151,6 +162,7 @@ class GenerateExcel {
         switch (table) {
           case "Gastos":
             if (excel.tables[table]!.rows.length > 1) {
+              showToast("Leyendo Gastos");
               await GastosController.deleteAll();
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
@@ -206,6 +218,7 @@ class GenerateExcel {
                           : null);
                   await GastosController.insert(gasto);
                 }
+                showToast("Guardado de gastos");
               }
             } else {
               showToast(
@@ -215,6 +228,7 @@ class GenerateExcel {
             break;
           case "Categorias":
             if (excel.tables[table]!.rows.length > 1) {
+              showToast("Leyendo Categorias");
               await CategoriaController.deleteAll();
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
@@ -229,6 +243,7 @@ class GenerateExcel {
                   await CategoriaController.insert(cateogoria);
                 }
               }
+              showToast("Guardado de Categorias");
             } else {
               showToast(
                   "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
@@ -237,6 +252,7 @@ class GenerateExcel {
 
           case "MetodoPago":
             if (excel.tables[table]!.rows.length > 1) {
+              showToast("Leyendo Metodos de Pago");
               await MetodoGastoController.deleteAll();
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
@@ -262,6 +278,7 @@ class GenerateExcel {
                   await MetodoGastoController.insert(metodoGasto);
                 }
               }
+              showToast("Guardado de Metodo de Pago");
             } else {
               showToast(
                   "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
@@ -269,6 +286,7 @@ class GenerateExcel {
             break;
           case "Presupuesto":
             if (excel.tables[table]!.rows.length > 1) {
+              showToast("Leyendo Presupuesto");
               await PresupuestoController.deleteAll();
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
@@ -309,6 +327,7 @@ class GenerateExcel {
                   await PresupuestoController.insert(presupuesto);
                 }
               }
+              showToast("Guardo Presupuesto");
             } else {
               showToast(
                   "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
@@ -316,6 +335,9 @@ class GenerateExcel {
             break;
           case "BidonesPresupuesto":
             if (excel.tables[table]!.rows.length > 1) {
+              debugPrint("leyendo");
+              await BidonesController.deleteAll();
+              showToast("Guardo Bidones de Presupuesto");
               for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
                 row = excel.tables[table]!.rows[i];
                 maximo = row.length;
@@ -336,20 +358,23 @@ class GenerateExcel {
                       metodoPago: 5 < maximo
                           ? row[5]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[5]?.value.toString() ?? "[]")
-                                  .map((x) => int.parse(x.toString())))
+                              : List<int>.from(
+                                  jsonDecode(row[5]?.value.toString() ?? "[]")
+                                      .map((x) => int.parse(x.toString())))
                           : [],
                       categoria: 6 < maximo
                           ? row[6]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[6]?.value.toString()?? "[]")
-                                  .map((x) =>int.parse(x.toString())))
+                              : List<int>.from(
+                                  jsonDecode(row[6]?.value.toString() ?? "[]")
+                                      .map((x) => int.parse(x.toString())))
                           : [],
                       diasEfecto: 7 < maximo
                           ? row[7]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(jsonDecode(row[7]?.value.toString()?? "[]")
-                                  .map((x) => int.parse(x.toString())))
+                              : List<int>.from(
+                                  jsonDecode(row[7]?.value.toString() ?? "[]")
+                                      .map((x) => int.parse(x.toString())))
                           : [],
                       fechaInicio: DateTime.parse(row[8]!.value.toString()),
                       fechaFinal: DateTime.parse(row[9]!.value.toString()),
@@ -362,13 +387,12 @@ class GenerateExcel {
                       gastos: 12 < maximo
                           ? row[12]!.value.toString() == "null"
                               ? []
-                              : List<int>.from(
-                                  jsonDecode(row[12]?.value.toString() ?? "[]")
-                                      .map((x) => int.parse(x.toString())))
+                              : List<int>.from(jsonDecode(row[12]?.value.toString() ?? "[]").map((x) => int.parse(x.toString())))
                           : []);
                   log("${bidon.toJson()}");
                   await BidonesController.insert(bidon);
                 }
+                showToast("Guardo Bidones de Presupuesto");
               }
             } else {
               showToast(
@@ -383,6 +407,10 @@ class GenerateExcel {
     } else {
       showToast("No se encontro ningun archivo");
     }
+    /* } catch (e) {
+      showToast("Error al leer datos\n$e");
+      return false;
+    } */
 
     return true;
   }

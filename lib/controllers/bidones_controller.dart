@@ -1,4 +1,5 @@
 import 'package:gastos/models/bidones_model.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class BidonesController {
@@ -55,7 +56,19 @@ class BidonesController {
     final db = await database();
     List<BidonesModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =
-        await db.query(nombreDB,where: "cerrado = 0", orderBy: "nombre ASC");
+        await db.query(nombreDB, where: "cerrado = 0", orderBy: "nombre ASC");
+    for (var element in categoria) {
+      categoriaModelo.add(BidonesModel.fromJson(element));
+    }
+    return categoriaModelo;
+  }
+
+  static Future<List<BidonesModel>> getItemsByPersonalizado(
+      {required String query, required List<String> args}) async {
+    final db = await database();
+    List<BidonesModel> categoriaModelo = [];
+    List<Map<String, dynamic>> categoria =
+        await db.query(nombreDB, where: query, whereArgs: args);
     for (var element in categoria) {
       categoriaModelo.add(BidonesModel.fromJson(element));
     }
@@ -73,6 +86,29 @@ class BidonesController {
     return categoriaModelo;
   }
 
+  static Future<BidonesModel?> getItem({required int id}) async {
+    final db = await database();
+    final categoria = (await db.query(nombreDB,
+            where: "id = ?", whereArgs: [id], orderBy: "nombre ASC", limit: 1))
+        .firstOrNull;
+    return categoria == null ? null : BidonesModel.fromJson(categoria);
+  }
+
+  static Future<BidonesModel?> getItemByGasto({required int gastoid}) async {
+    final db = await database();
+    final categoria = (await db.query(nombreDB,
+        where: "gastos LIKE ? ",
+        whereArgs: ['%$gastoid%'],
+        orderBy: "nombre ASC"));
+    List<BidonesModel> bidonNew = [];
+    for (var element in categoria) {
+      bidonNew.add(BidonesModel.fromJson(element));
+    }
+    var newBdion = bidonNew.firstWhereOrNull((element) =>
+        element.gastos.firstWhereOrNull((gId) => gId == gastoid) != null);
+    return newBdion;
+  }
+
   static Future<List<BidonesModel>> buscarCoincidencia(
       int metodoPagoId, int categoriaId) async {
     final db = await database();
@@ -83,7 +119,20 @@ class BidonesController {
     for (var element in data) {
       modelado.add(BidonesModel.fromJson(element));
     }
-    return modelado;
+    return modelado
+        .where((element) =>
+            element.metodoPago
+                    .firstWhereOrNull((mpId) => mpId == metodoPagoId) !=
+                null ||
+            element.categoria
+                    .firstWhereOrNull((catId) => catId == categoriaId) !=
+                null)
+        .toList();
+  }
+
+  static Future<void> deleteId(int id) async {
+    final db = await database();
+    await db.delete(nombreDB, where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<void> deleteItem(int identificador) async {

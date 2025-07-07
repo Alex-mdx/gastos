@@ -164,11 +164,14 @@ class GastosController {
     return modelo;
   }
 
-  static Future<GastoModelo?> find(int id) async {
+  static Future<GastoModelo?> find(int id, List<String>? column) async {
     final db = await database();
     await SqlGenerator.existColumna(
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
-    final data = (await db.query(nombreDB, where: "id = ?", whereArgs: [id]))
+    final data = (await db.query(nombreDB,
+            where: "id = ?",
+            whereArgs: [id],
+            columns: column))
         .firstOrNull;
     GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
     return modelo;

@@ -9,6 +9,7 @@ import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
 class DialogSettingNotificaciones extends StatefulWidget {
@@ -187,6 +188,9 @@ class _DialogSettingNotificacionesState
                                       taskFunction: () async =>
                                           await NotificacionesFun.show(id2));
                                 }
+                                await Permission.ignoreBatteryOptimizations
+                                    .request();
+                                    
                               } else {
                                 showToast(
                                     "No tiene los permisos para habilitar las notificaciones");
@@ -198,3 +202,4 @@ class _DialogSettingNotificacionesState
             ])));
   }
 }
+

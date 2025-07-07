@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SqlGenerator {
@@ -43,5 +44,10 @@ class SqlGenerator {
       debugPrint('no existe $actual');
       return false;
     }
+  }
+
+  static Future<void> logout() async {
+    await GastosController.deleteAll();
+    
   }
 }

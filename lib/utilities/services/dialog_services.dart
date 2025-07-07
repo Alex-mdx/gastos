@@ -15,7 +15,7 @@ class Dialogs {
     required String description,
     required String loadingTitle,
     String loadingDescription = 'Espere un momento...',
-    required OnAcceptPressedCallback onAcceptPressed,
+    required Function onAcceptPressed,
     String errorToastMessage = 'Ocurrió un error',
     String acceptText = 'Aceptar',
     String cancelText = 'Cancelar',
@@ -35,7 +35,7 @@ class Dialogs {
                   loadingTitle: loadingTitle,
                   onAcceptPressed: (BuildContext context) async {
                     isLocked = false;
-                    await onAcceptPressed.call(context);
+                    await onAcceptPressed(context);
                     isLocked = true;
                     Navigation.pop();
                   },

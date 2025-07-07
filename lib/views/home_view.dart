@@ -7,6 +7,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../utilities/ad_fun.dart';
 import '../utilities/navegacion_provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -67,6 +68,7 @@ class PaginadoState extends State<Paginado> {
   void initState() {
     super.initState();
     widget.provider.obtenerDato();
+    AdFun.loadAd();
     InternetConnection().onStatusChange.listen((InternetStatus status) {
       switch (status) {
         case InternetStatus.connected:

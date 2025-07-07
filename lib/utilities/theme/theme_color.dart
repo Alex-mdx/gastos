@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gastos/utilities/preferences.dart';
 
 class ThemaMain {
-  static Color primary =  LightTheme.primary;
-  static Color appbar =  const Color.fromARGB(255, 18, 107, 223);
+  static Color primary = LightTheme.primary;
+  static Color appbar = const Color.fromARGB(255, 18, 107, 223);
   static Color second =
       (Preferences.thema ? LightTheme.second : DarkTheme.second);
   static Color white = Colors.white;
@@ -13,6 +13,7 @@ class ThemaMain {
   static Color red = (Preferences.thema ? LightTheme.red : DarkTheme.red);
   static Color yellow =
       (Preferences.thema ? LightTheme.yellow : DarkTheme.yellow);
+  static Color pink = (Preferences.thema ? LightTheme.pink : DarkTheme.pink);
   static Color purple =
       (Preferences.thema ? LightTheme.purple : DarkTheme.purple);
 
@@ -34,12 +35,13 @@ class LightTheme {
   static const second = Color.fromARGB(255, 246, 247, 247);
 
   static const green = Color.fromARGB(255, 1, 207, 53);
-  static const red = Color.fromARGB(255, 231, 20, 38);
+  static const red = Color.fromARGB(255, 231, 20, 20);
   static const yellow = Color.fromARGB(255, 235, 210, 4);
+  static const pink = Color.fromARGB(255, 235, 4, 166);
   static const purple = Color.fromARGB(255, 106, 20, 218);
 
-  static const background = Color.fromARGB(255, 238, 244, 245);
-  static const dialogbackground = Color.fromARGB(255, 216, 233, 231);
+  static const background = Color.fromARGB(255, 234, 243, 245);
+  static const dialogbackground = Color.fromARGB(255, 213, 233, 231);
   static const darkGrey = Color.fromARGB(255, 119, 122, 133);
   static const darkBlue = Color.fromARGB(255, 0, 36, 84);
 
@@ -51,8 +53,9 @@ class DarkTheme {
   static const second = Color.fromARGB(255, 40, 42, 43);
 
   static const green = Color.fromARGB(255, 70, 255, 116);
-  static const red = Color.fromARGB(255, 255, 70, 86);
+  static const red = Color.fromARGB(255, 255, 76, 70);
   static const yellow = Color.fromARGB(255, 255, 252, 86);
+  static const pink = Color.fromARGB(255, 255, 86, 179);
   static const purple = Color.fromARGB(255, 156, 80, 255);
 
   static const background = Color.fromARGB(255, 20, 20, 20);

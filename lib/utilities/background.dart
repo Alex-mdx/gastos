@@ -14,12 +14,10 @@ class Background {
       final config = BackgroundFetchConfig(
           minimumFetchInterval: 15,
           stopOnTerminate: false,
-          enableHeadless: true,
-          startOnBoot: true,
-          requiredNetworkType: NetworkType.NONE);
+          enableHeadless: true);
       await BackgroundFetch.configure(config, (String taskId) async {
         final now = DateTime.now();
-        
+
         debugPrint(
             "🔔 [Background] Evento recibido a las ${now.hour}:${now.minute}");
 

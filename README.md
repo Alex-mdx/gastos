@@ -3,6 +3,35 @@
 Proyecto personal para el manejo de gastos personales, usando datos locales partiendo del SQLite, para persistencia de datos, y calculo de gastos partiendo de rango de fechas, presupuesto por semana y/o por día, así como evidencia fotográfica y uso de calendario para la mejor visualización de estos mismos, para un mejor y excelente control de gastos por persona.
 
 ## Changelog
+### Versión 0.2.4
+#### Correcciones 🔧
+- Montos en el historial mas legible.
+- Algoritmo de bidon corregido.
+- Historial de gastos (categorias).
+#### Mejoras 📈
+- Ventana de bidones (operaciones apertura, restablecimiento, historial de bidones familiares).
+- Visualizacion de graficos.
+---
+### Versión 0.2.3
+#### Correcciones 🔧
+- Calculo en bidones mejorado.
+#### Mejoras 📈
+- Ventana de detalle de gasto en el historial.
+- Visualizacion y operaciones en montos y porcentajes en bidones
+---
+### Versión 0.2.2
+#### Correcciones 🔧
+- Edicion de imagen.
+- Importacion y exportacion de datos en la nube y local.
+---
+### Versión 0.2.1
+#### Correcciones 🔧
+- Visualizacion de error al momento de exportar o importar datos locales.
+- Edicion de imagen: ya no se queda atorado el guardado.
+- Renderizado de graficas.
+- Permisos de notificaciones.
+- Fecha personalizada corregida.
+---
 ### Versión 0.2.0
 #### Correcciones 🔧
 - Se corrigió los colores de la barra de la app.

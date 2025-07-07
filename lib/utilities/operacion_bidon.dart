@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:gastos/controllers/bidones_controller.dart';
+import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -13,6 +15,7 @@ class OperacionBidon {
         await BidonesController.buscarCoincidencia(
             gasto.metodoPagoId!, gasto.categoriaId!);
     for (var bidon in coincidencias) {
+      await actualizar(id: bidon.id);
       List<int> addGasto = [...bidon.categoria, gasto.id!];
       final now = DateTime.now();
       var montoRestado = bidon.montoFinal - (resta);
@@ -71,6 +74,35 @@ class OperacionBidon {
           }
         }
       }
+    }
+  }
+
+  static Future<void> actualizar({required int id}) async {
+    final bidon = await BidonesController.getItem(id: id);
+    if (bidon != null) {
+      if (bidon.gastos.isNotEmpty) {
+        double sumador = 0.0;
+        List<int> gastosId = bidon.gastos;
+        debugPrint("gastosId");
+        var modificableGasto = gastosId.map((e) => e).toList();
+        //Verificar la existencia de cada gasto
+        for (var element in gastosId) {
+          var gasto = await GastosController.find(element, ["id", "monto"]);
+          sumador += gasto?.monto ?? 0;
+          if (gasto == null) {
+            modificableGasto.remove(element);
+          }
+        }
+        var newBidon = bidon.copyWith(
+            gastos: modificableGasto, montoFinal: bidon.montoInicial - sumador);
+        await BidonesController.update(newBidon);
+        log("${newBidon.toJson()}");
+        log("bidon actualizado");
+      } else {
+        showToast("Este bidon no tiene gastos que verificar");
+      }
+    } else {
+      showToast("No se encontro el bidon solicitado");
     }
   }
 }

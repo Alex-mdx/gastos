@@ -77,6 +77,60 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
                     icon:
                         Icon(LineIcons.commentsDollar, color: ThemaMain.green)))
           ])),
+      Text("Regla de colores por porcentaje",
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+      SizedBox(
+          width: double.infinity,
+          height: 3.h,
+          child: DefaultTextStyle(
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ThemaMain.white),
+              child: Row(children: [
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.primary,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("0%-19%"))),
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.green,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("20%-39%"))),
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.yellow,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("40%-59%"))),
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.red,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("60%-79%"))),
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.pink,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("80%-100%"))),
+                Expanded(
+                    child: Container(
+                        color: ThemaMain.purple,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: Text("101%+")))
+              ]))),
       ElevatedButton.icon(
           icon: Icon(
               widget.provider.presupuesto?.activo == 1

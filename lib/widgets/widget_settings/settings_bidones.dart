@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/services/dialog_services.dart';
+import 'package:gastos/utilities/textos.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/bidones_controller.dart';
 import '../../dialog/dialog_bidones.dart';
+import '../../utilities/operacion_bidon.dart';
 import '../../utilities/theme/theme_app.dart';
 import '../../utilities/theme/theme_color.dart';
+import 'package:badges/badges.dart' as bd;
 
 class SettingsBidones extends StatefulWidget {
   const SettingsBidones({super.key});
@@ -36,52 +41,89 @@ class _SettingsBidonesState extends State<SettingsBidones> {
                                   alignment: WrapAlignment.spaceAround,
                                   spacing: 1.w,
                                   children: snapshot.data!
-                                      .map((bidones) => SizedBox(
-                                          width: 31.w,
-                                          child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                TextButton(
-                                                    onPressed: () => showDialog(
-                                                        context: context,
-                                                        builder: (context) =>
-                                                            DialogBidones(
-                                                                bidon:
-                                                                    bidones)),
-                                                    child: Text(
-                                                        "${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : ((bidones.montoFinal) / bidones.montoInicial)) * 100)}%\n\$${bidones.montoFinal}",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 15.sp,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold))),
-                                                LinearProgressIndicator(
-                                                    minHeight: 1.h,
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation(
-                                                            bidones.inhabilitado ==
+                                      .map((bidones) => bd.Badge(
+                                            onTap: () => Dialogs.showMorph(
+                                                title: "Actualizar bidon",
+                                                description:
+                                                    "Se va a actualizar los datos del bidon",
+                                                loadingTitle: "Actualizando",
+                                                onAcceptPressed:
+                                                    (context) async {
+                                                  await OperacionBidon
+                                                      .actualizar(
+                                                          id: bidones.id);
+                                                  setState(() {
+                                                    showToast(
+                                                        "Bidon actualizado");
+                                                  });
+                                                }),
+                                            badgeStyle: bd.BadgeStyle(
+                                                badgeColor: ThemaMain.primary),
+                                            badgeContent: Icon(Icons.refresh,
+                                                size: 18.sp,
+                                                color: ThemaMain.white),
+                                            position: bd.BadgePosition.topEnd(
+                                                top: 0, end: -10),
+                                            showBadge:
+                                                bidones.gastos.isNotEmpty,
+                                            badgeAnimation:
+                                                bd.BadgeAnimation.slide(),
+                                            child: Card(
+                                              color: ThemaMain.dialogbackground,
+                                              child: SizedBox(
+                                                  width: 31.w,
+                                                  child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        TextButton(
+                                                            onPressed: () => showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder: (context) =>
+                                                                    DialogBidones(
+                                                                        bidon:
+                                                                            bidones)),
+                                                            child: Text(
+                                                                "${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : Textos.moneda(moneda: (((bidones.montoFinal) / bidones.montoInicial)) * 100, digito: 1)))}%\n\$${Textos.moneda(moneda: bidones.montoFinal)}",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold))),
+                                                        LinearProgressIndicator(
+                                                            minHeight: 1.h,
+                                                            valueColor: AlwaysStoppedAnimation(
+                                                                bidones.inhabilitado ==
+                                                                        0
+                                                                    ? ThemaMain
+                                                                        .darkBlue
+                                                                    : ThemaMain
+                                                                        .darkGrey),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        borderRadius),
+                                                            semanticsValue:
+                                                                "${bidones.montoInicial}",
+                                                            value: bidones
+                                                                        .montoFinal ==
                                                                     0
-                                                                ? ThemaMain
-                                                                    .darkBlue
-                                                                : ThemaMain
-                                                                    .darkGrey),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            borderRadius),
-                                                    semanticsValue:
-                                                        "${bidones.montoInicial}",
-                                                    value: bidones.montoFinal ==
-                                                            0
-                                                        ? 0
-                                                        : ((bidones
-                                                                .montoFinal) /
-                                                            bidones
-                                                                .montoInicial))
-                                              ])))
+                                                                ? 0
+                                                                : ((bidones
+                                                                        .montoFinal) /
+                                                                    bidones
+                                                                        .montoInicial))
+                                                      ])),
+                                            ),
+                                          ))
                                       .toList())
                               : Center(
                                   child: Text("Sin bidones creados",

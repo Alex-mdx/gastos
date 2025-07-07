@@ -6,6 +6,7 @@ import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -98,36 +99,43 @@ class _GraficoCategoriasState extends State<GraficoCategorias> {
     return SizedBox(
         height: 65.h,
         child: FutureBuilder(
-            future: _crearSeries(ahora.subtract(Duration(days: 31 * 1)), ahora),
+            future: _crearSeries(ahora.subtract(Duration(days: 30 * 1)), ahora),
             builder: (context, snapshot) {
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.done) {
-                return Expanded(
-                    child: SfCartesianChart(
-                        margin: EdgeInsets.all(0),
-                        backgroundColor: ThemaMain.dialogbackground,
-                        primaryXAxis: _primaryXAxis,
-                        primaryYAxis: NumericAxis(
-                            labelStyle: TextStyle(color: ThemaMain.darkGrey),
-                            majorGridLines: MajorGridLines(width: 1)),
-                        title: ChartTitle(
-                            text: 'Rendimiento de gasto por categoria',
-                            textStyle: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: ThemaMain.darkBlue)),
-                        legend: Legend(
-                            textStyle: TextStyle(color: ThemaMain.darkBlue),
-                            isVisible: true,
-                            itemPadding: 8,
-                            isResponsive: true,
-                            padding: 6,
-                            position: LegendPosition.top,
-                            overflowMode: LegendItemOverflowMode.wrap,
-                            shouldAlwaysShowScrollbar: true),
-                        selectionGesture: ActivationMode.singleTap,
-                        tooltipBehavior: _tooltipBehavior,
-                        series: snapshot.data!));
+                return SfCartesianChart(
+                    margin: EdgeInsets.all(10.sp),
+                    backgroundColor: ThemaMain.dialogbackground,
+                    primaryXAxis: _primaryXAxis,
+                    primaryYAxis: NumericAxis(
+                        numberFormat: NumberFormat.compactCurrency(
+                            symbol: "\$", decimalDigits: 1),
+                        labelStyle: TextStyle(
+                            color: ThemaMain.darkGrey,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.bold),
+                        majorGridLines: MajorGridLines(
+                            width: 1,
+                            color: Colors.grey.withAlpha(170),
+                            dashArray: <double>[5, 5])),
+                    title: ChartTitle(
+                        text: 'Rendimiento de gasto por categoria',
+                        textStyle: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ThemaMain.darkBlue)),
+                    legend: Legend(
+                        textStyle: TextStyle(color: ThemaMain.darkBlue),
+                        isVisible: true,
+                        itemPadding: 8,
+                        isResponsive: true,
+                        padding: 6,
+                        position: LegendPosition.top,
+                        overflowMode: LegendItemOverflowMode.wrap,
+                        shouldAlwaysShowScrollbar: true),
+                    selectionGesture: ActivationMode.singleTap,
+                    tooltipBehavior: _tooltipBehavior,
+                    series: snapshot.data!);
               } else if (snapshot.hasError) {
                 return Text("Se encontro un error\n${snapshot.error}",
                     style: TextStyle(fontSize: 14.sp));

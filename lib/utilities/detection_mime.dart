@@ -60,7 +60,6 @@ class DetectionMime {
 
     switch (mimeType) {
       case 'application/pdf':
-        debugPrint('El archivo es un PDF.');
         return "pdf";
 
       case 'image/jpeg':
