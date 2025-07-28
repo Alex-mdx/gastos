@@ -21,30 +21,38 @@ class GastosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<GastoProvider>(context);
+    final GlobalKey gastoKey = GlobalKey();
     return Scaffold(
         appBar: AppBar(
+            leading: kDebugMode? IconButton(
+                iconSize: 20.sp,
+                onPressed: () =>
+                  provider.sliderDrawerKey.currentState?.toggle(),
+                icon: Icon(Icons.menu)) : null,
             toolbarHeight: 6.h,
             title: Text('Gastos',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
             actions: [
               Column(children: [
                 OverflowBar(spacing: 1.w, children: [
                   if (kDebugMode)
                     IconButton(
                         onPressed: () async {
-                          var result =await Permisos.notificacion();
+                          var result = await Permisos.notificacion();
                           if (result) {
                             await NotificacionesFun.show(1);
                           }
                         },
                         icon: Icon(Icons.precision_manufacturing_sharp)),
                   const ButtonPromedioWidget(),
-                  IconButton(
-                      iconSize: 24.sp,
-                      onPressed: () => showDialog(
-                          context: context,
-                          builder: (context) => DialogGaleria()),
-                      icon: Icon(LineIcons.imagesAlt, color: ThemaMain.second)),
+                  if (kDebugMode)
+                    IconButton(
+                        iconSize: 24.sp,
+                        onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => DialogGaleria()),
+                        icon:
+                            Icon(LineIcons.imagesAlt, color: ThemaMain.second)),
                   IconButton(
                       iconSize: 24.sp,
                       onPressed: () async =>
@@ -60,8 +68,9 @@ class GastosView extends StatelessWidget {
                   height: 38.h,
                   child: SingleChildScrollView(
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    HistorialSemanalWidget(provider: provider),
-                    BannerExample(tipo: 0),
+                    HistorialSemanalWidget(
+                        provider: provider, gastoKey: gastoKey),
+                    BannerExample(tipo: 0)
                     /* Column(children: [
                   const Divider(),
                     Text("Recomendacion de gasto para esta semana",
@@ -72,7 +81,8 @@ class GastosView extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 1.w),
-                  child: CardGastoWidget(provider: provider)))
+                  child:
+                      CardGastoWidget(provider: provider, gastoKey: gastoKey)))
         ]));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
+
 class Textos {
   static String normalizar(String text) {
     text = text.replaceAll(
@@ -53,18 +54,22 @@ class Textos {
     return formatoFechaHora;
   }
 
-  static String obtenerMes(int numeroMes) {
-  if (numeroMes < 1 || numeroMes > 12) {
-    return "Mes inválido";
+  static int getNumeroSemana(DateTime date) {
+    DateTime firstDayOfYear = DateTime(date.year, 1, 1);
+    int dayOfYear = date.difference(firstDayOfYear).inDays + 1;
+    int weekNumber = ((dayOfYear - date.weekday + 10) / 7).floor();
+
+    // Ajuste para las primeras semanas del año
+    if (weekNumber < 1) {
+      return getNumeroSemana(DateTime(date.year - 1, 12, 31));
+    }
+    return weekNumber;
   }
 
-  const meses = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-  ];
-
-  return meses[numeroMes - 1]; // Restamos 1 porque los arreglos empiezan en 0
-}
+  static bool contieneLetras(String texto) {
+    final regex = RegExp(r'[a-zA-Z]');
+    return !regex.hasMatch(texto);
+  }
 
   static String randomWord(int? number) {
     final random = math.Random();

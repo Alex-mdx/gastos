@@ -169,9 +169,7 @@ class GastosController {
     await SqlGenerator.existColumna(
         add: "metodo_pago_id", database: database, nombreDB: nombreDB);
     final data = (await db.query(nombreDB,
-            where: "id = ?",
-            whereArgs: [id],
-            columns: column))
+            where: "id = ?", whereArgs: [id], columns: column))
         .firstOrNull;
     GastoModelo? modelo = data == null ? null : GastoModelo.fromJson(data);
     return modelo;

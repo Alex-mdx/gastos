@@ -1,12 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/services/dialog_services.dart';
-import 'package:gastos/utilities/services/navigation_services.dart';
-import 'package:gastos/utilities/textos.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -104,12 +98,12 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                     if (((year == 0) && (mes == 0) && (dia == 0))) {
                       showToast("Modifique algun campo de dia, mes o año");
                     } else {
-                      int diaYear = int.parse((year * 365).round().toString());
+                      /* int diaYear = int.parse((year * 365).round().toString());
                       int diaMes = int.parse((mes * 31).round().toString());
                       DateTime fechaModificada = DateTime.now().add(Duration(
                           days: int.parse(
-                              (dia.round() + diaMes + diaYear).toString())));
-                      provider.selectProxima = fechaModificada;
+                              (dia.round() + diaMes + diaYear).toString()))); */
+                      /* provider.selectProxima = fechaModificada;
                       await Dialogs.showMorph(
                           title: 'Guardar periodo',
                           description:
@@ -126,7 +120,7 @@ class _DialogPeriodoGastoState extends State<DialogPeriodoGasto> {
                             provider.gastoActual = tempModel;
                             log("${provider.gastoActual.toJson()}");
                             Navigation.pop();
-                          });
+                          }); */
                     }
                   },
                   label: const Text("Guardar"),

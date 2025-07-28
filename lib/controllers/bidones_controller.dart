@@ -6,7 +6,7 @@ class BidonesController {
   static String nombreDB = "bidones";
   static Future<void> createTables(sql.Database database) async {
     await database.execute("""CREATE TABLE $nombreDB(
-        id INTEGER,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         identificador INTEGER,
         nombre TEXT,
         monto_inicial INTEGER,
@@ -42,16 +42,7 @@ class BidonesController {
         whereArgs: [cate.identificador, cate.id],
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
-
-  static Future<int> getLastId() async {
-    final db = await database();
-    final data =
-        (await db.query(nombreDB, limit: 1, orderBy: 'id DESC')).firstOrNull;
-    BidonesModel? modelo = data == null ? null : BidonesModel.fromJson(data);
-
-    return ((modelo?.id) ?? 0) + 1;
-  }
-
+  
   static Future<List<BidonesModel>> getItemsByAbierto() async {
     final db = await database();
     List<BidonesModel> categoriaModelo = [];

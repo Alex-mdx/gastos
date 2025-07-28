@@ -11,7 +11,7 @@ class Preferences {
   static bool get islogin => _preferences?.getBool('islogin') ?? false;
   static set islogin(bool value) => _preferences?.setBool('islogin', value);
 
-  static bool get promedio => _preferences?.getBool('promedio') ?? false;
+  static bool get promedio => _preferences?.getBool('promedio') ?? true;
   static set promedio(bool value) => _preferences?.setBool('promedio', value);
 
   static String get calculo => _preferences?.getString('calculo') ?? "Mensual";
@@ -51,4 +51,7 @@ class Preferences {
 
   static bool get thema => _preferences?.getBool('thema') ?? true;
   static set thema(bool value) => _preferences?.setBool('thema', value);
+  
+  static bool get version => _preferences?.getBool('version') ?? true;
+  static set version(bool value) => _preferences?.setBool('version', value);
 }

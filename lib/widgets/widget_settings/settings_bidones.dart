@@ -42,33 +42,30 @@ class _SettingsBidonesState extends State<SettingsBidones> {
                                   spacing: 1.w,
                                   children: snapshot.data!
                                       .map((bidones) => bd.Badge(
-                                            onTap: () => Dialogs.showMorph(
-                                                title: "Actualizar bidon",
-                                                description:
-                                                    "Se va a actualizar los datos del bidon",
-                                                loadingTitle: "Actualizando",
-                                                onAcceptPressed:
-                                                    (context) async {
-                                                  await OperacionBidon
-                                                      .actualizar(
-                                                          id: bidones.id);
-                                                  setState(() {
-                                                    showToast(
-                                                        "Bidon actualizado");
-                                                  });
-                                                }),
-                                            badgeStyle: bd.BadgeStyle(
-                                                badgeColor: ThemaMain.primary),
-                                            badgeContent: Icon(Icons.refresh,
-                                                size: 18.sp,
-                                                color: ThemaMain.white),
-                                            position: bd.BadgePosition.topEnd(
-                                                top: 0, end: -10),
-                                            showBadge:
-                                                bidones.gastos.isNotEmpty,
-                                            badgeAnimation:
-                                                bd.BadgeAnimation.slide(),
-                                            child: Card(
+                                          onTap: () => Dialogs.showMorph(
+                                              title: "Actualizar bidon",
+                                              description:
+                                                  "Se va a actualizar los datos del bidon",
+                                              loadingTitle: "Actualizando",
+                                              onAcceptPressed: (context) async {
+                                                await OperacionGasto.actualizar(
+                                                    id: bidones.id!);
+                                                setState(() {
+                                                  showToast(
+                                                      "Bidon actualizado");
+                                                });
+                                              }),
+                                          badgeStyle: bd.BadgeStyle(
+                                              badgeColor: ThemaMain.primary),
+                                          badgeContent: Icon(Icons.refresh,
+                                              size: 18.sp,
+                                              color: ThemaMain.white),
+                                          position: bd.BadgePosition.topEnd(
+                                              top: 0, end: -10),
+                                          showBadge: bidones.gastos.isNotEmpty,
+                                          badgeAnimation:
+                                              bd.BadgeAnimation.slide(),
+                                          child: Card(
                                               color: ThemaMain.dialogbackground,
                                               child: SizedBox(
                                                   width: 31.w,
@@ -121,9 +118,7 @@ class _SettingsBidonesState extends State<SettingsBidones> {
                                                                         .montoFinal) /
                                                                     bidones
                                                                         .montoInicial))
-                                                      ])),
-                                            ),
-                                          ))
+                                                      ])))))
                                       .toList())
                               : Center(
                                   child: Text("Sin bidones creados",

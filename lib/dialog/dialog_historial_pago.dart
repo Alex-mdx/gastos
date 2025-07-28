@@ -61,7 +61,7 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                           gastoid: widget.gasto.id!);
                       await GastosController.deleteItem(widget.gasto.id!);
                       if (temp != null) {
-                        await OperacionBidon.actualizar(id: temp.id);
+                        await OperacionGasto.actualizar(id: temp.id!);
                       }
 
                       provider.listaGastos =

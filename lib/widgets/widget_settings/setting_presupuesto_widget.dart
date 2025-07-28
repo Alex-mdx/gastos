@@ -81,7 +81,7 @@ class _SettingPresupuestoWidgetState extends State<SettingPresupuestoWidget>
           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
       SizedBox(
           width: double.infinity,
-          height: 3.h,
+          height: 2.h,
           child: DefaultTextStyle(
               style: TextStyle(
                   fontSize: 14.sp,

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/controllers/metodo_gasto_controller.dart';
@@ -12,6 +13,7 @@ import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../models/categoria_model.dart';
 
@@ -37,12 +39,19 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime? _selectProxima;
+  bool _vibrarDia = false;
+  bool get vibrarDia => _vibrarDia;
+  set vibrarDia(bool valor) {
+    _vibrarDia = valor;
+    notifyListeners();
+  }
+
+  /* DateTime? _selectProxima;
   DateTime? get selectProxima => _selectProxima;
   set selectProxima(DateTime? valor) {
     _selectProxima = valor;
     notifyListeners();
-  }
+  } */
 
   GastoModelo _gastoActual = GastoModelo(
       id: null,
@@ -107,6 +116,21 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  GlobalKey<SliderDrawerState> _sliderDrawerKey =
+      GlobalKey<SliderDrawerState>();
+  GlobalKey<SliderDrawerState> get sliderDrawerKey => _sliderDrawerKey;
+  set sliderDrawerKey(GlobalKey<SliderDrawerState> valor) {
+    _sliderDrawerKey = valor;
+    notifyListeners();
+  }
+
+  PackageInfo? _paquete;
+  PackageInfo? get paquete => _paquete;
+  set paquete(PackageInfo? valor) {
+    _paquete = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getConfigurado();
@@ -114,6 +138,8 @@ class GastoProvider with ChangeNotifier {
     await MetodoGastoController.generarObtencion();
     metodo = await MetodoGastoController.getItems();
     metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
+    paquete = await PackageInfo.fromPlatform();
+    Preferences.version = Textos.contieneLetras(paquete!.version);
     //DropboxGen.verificarLogeo();
   }
 
@@ -269,7 +295,6 @@ class GastoProvider with ChangeNotifier {
       return ThemaMain.green;
     } else if (monto >= 40 && monto < 60) {
       return ThemaMain.yellow;
-      
     } else if (monto >= 60 && monto < 80) {
       return ThemaMain.red;
     } else if (monto >= 80 && monto <= 100) {

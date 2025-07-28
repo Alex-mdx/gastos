@@ -3,7 +3,9 @@ import 'package:gastos/utilities/preferences.dart';
 
 class ThemaMain {
   static Color primary = LightTheme.primary;
-  static Color appbar = const Color.fromARGB(255, 18, 107, 223);
+  static Color appbar = Preferences.version
+      ? const Color.fromARGB(255, 18, 107, 223)
+      : const Color.fromARGB(255, 7, 145, 99);
   static Color second =
       (Preferences.thema ? LightTheme.second : DarkTheme.second);
   static Color white = Colors.white;
@@ -40,8 +42,8 @@ class LightTheme {
   static const pink = Color.fromARGB(255, 235, 4, 166);
   static const purple = Color.fromARGB(255, 106, 20, 218);
 
-  static const background = Color.fromARGB(255, 234, 243, 245);
-  static const dialogbackground = Color.fromARGB(255, 213, 233, 231);
+  static const background = Color.fromARGB(255, 231, 238, 240);
+  static const dialogbackground = Color.fromARGB(255, 212, 235, 238);
   static const darkGrey = Color.fromARGB(255, 119, 122, 133);
   static const darkBlue = Color.fromARGB(255, 0, 36, 84);
 
@@ -54,14 +56,14 @@ class DarkTheme {
 
   static const green = Color.fromARGB(255, 70, 255, 116);
   static const red = Color.fromARGB(255, 255, 76, 70);
-  static const yellow = Color.fromARGB(255, 255, 252, 86);
-  static const pink = Color.fromARGB(255, 255, 86, 179);
+  static const yellow = Color.fromARGB(255, 241, 216, 73);
+  static const pink = Color.fromARGB(255, 255, 86, 185);
   static const purple = Color.fromARGB(255, 156, 80, 255);
 
-  static const background = Color.fromARGB(255, 20, 20, 20);
-  static const dialogbackground = Color.fromARGB(255, 38, 41, 41);
-  static const darkGrey = Color.fromARGB(255, 220, 221, 224);
-  static const darkBlue = Color.fromARGB(255, 172, 198, 233);
+  static const background = Color.fromARGB(255, 17, 17, 17);
+  static const dialogbackground = Color.fromARGB(255, 46, 49, 49);
+  static const darkGrey = Color.fromARGB(255, 231, 235, 235);
+  static const darkBlue = Color.fromARGB(255, 178, 206, 241);
 
-  static const grey = Color.fromARGB(255, 197, 199, 201);
+  static const grey = Color.fromARGB(255, 208, 210, 212);
 }

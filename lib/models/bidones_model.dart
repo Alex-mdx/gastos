@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class BidonesModel {
-  int id;
+  int? id;
   String identificador;
   String nombre;
   double montoInicial;
@@ -16,7 +16,7 @@ class BidonesModel {
   List<int> gastos;
 
   BidonesModel(
-      {required this.id,
+      {this.id,
       required this.identificador,
       required this.nombre,
       required this.montoInicial,

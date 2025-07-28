@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:intl/intl.dart';
@@ -8,10 +12,13 @@ import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:zo_collection_animation/zo_collection_animation.dart';
 
 class HistorialSemanalWidget extends StatefulWidget {
   final GastoProvider provider;
-  const HistorialSemanalWidget({super.key, required this.provider});
+  final GlobalKey gastoKey;
+  const HistorialSemanalWidget(
+      {super.key, required this.provider, required this.gastoKey});
 
   @override
   State<HistorialSemanalWidget> createState() => _HistorialSemanalWidget();
@@ -19,6 +26,8 @@ class HistorialSemanalWidget extends StatefulWidget {
 
 class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   bool change = false;
+  Timer? verificacion;
+
   List<String> dias = [
     "Lunes",
     "Martes",
@@ -28,64 +37,72 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     "Sábado",
     "Domingo"
   ];
-  final now = DateTime.now();
+  var now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    time();
+  }
+
+  void time() {
+    verificacion = Timer.periodic(
+        Duration(minutes: 1),
+        (timer) => setState(() {
+              now = DateTime.now();
+            }));
+  }
+
+  @override
+  void dispose() {
+    verificacion?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      Container(
-          alignment: Alignment.topCenter,
-          width: 100.w,
-          height: 16.h,
-          child: Timeline.tileBuilder(
-              padding: EdgeInsets.all(0),
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              builder: TimelineTileBuilder.fromStyle(
-                  connectorStyle: ConnectorStyle.dashedLine,
-                  contentsAlign: ContentsAlign.reverse,
-                  indicatorStyle: IndicatorStyle.outlined,
-                  contentsBuilder: (context, index) => Padding(
-                      padding: EdgeInsets.symmetric(horizontal: .5.w),
-                      child: Text(dias[index],
-                          style: TextStyle(
-                              fontSize: dias[index].toLowerCase().contains(
-                                      DateFormat('EEEE', 'es').format(now))
-                                  ? 15.sp
-                                  : 13.sp,
-                              fontWeight: dias[index].toLowerCase().contains(
-                                      DateFormat('EEEE', 'es').format(now))
-                                  ? FontWeight.bold
-                                  : FontWeight.normal))),
-                  oppositeContentsBuilder: (context, index) => SizedBox(
-                        width: 14.5.w,
-                        height: 6.h,
-                        child: Card(
-                            child: Padding(
-                                padding: EdgeInsets.all(4.sp),
-                                child: AnimatedDefaultTextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: widget.provider.presupuesto?.activo == 1
-                                            ? widget.provider.porcentualColor(
-                                                widget.provider.obtenerPorcentajeDia(
-                                                    index,
-                                                    widget.provider
-                                                        .promediarDiaSemana(
-                                                            index)))
-                                            : ThemaMain.primary),
+      Stack(alignment: Alignment.topCenter, children: [
+        SizedBox(
+            width: 100.w,
+            height: 13.h,
+            child: Align(
+                alignment: Alignment.topCenter,
+                child: Timeline.tileBuilder(
+                    padding: EdgeInsets.all(0),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    builder: TimelineTileBuilder.fromStyle(
+                        connectorStyle: ConnectorStyle.dashedLine,
+                        contentsAlign: ContentsAlign.reverse,
+                        indicatorStyle: IndicatorStyle.outlined,
+                        contentsBuilder: (context, index) => Padding(
+                            padding: EdgeInsets.symmetric(horizontal: .2.w),
+                            child: Text(dias[index],
+                                style: TextStyle(
+                                    fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                                        ? 15.sp
+                                        : 13.sp,
+                                    fontStyle: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                                        ? FontStyle.normal
+                                        : FontStyle.italic,
+                                    fontWeight: FontWeight.bold))),
+                        oppositeContentsBuilder: (context, index) => SizedBox(
+                            width: 14.5.w,
+                            height: 7.h,
+                            child: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                                ? ShakeWidget(
                                     duration: Duration(seconds: 1),
-                                    child: AnimatedFlipCounter(
-                                        value: widget.provider
-                                            .promediarDiaSemana(index),
-                                        duration: Durations.long1,
-                                        fractionDigits: 1,
-                                        prefix: "\$")))),
-                      ),
-                  itemCount: dias.length))),
+                                    shakeConstant: ShakeHorizontalConstant2(),
+                                    autoPlay: widget.provider.vibrarDia,
+                                    child: animation(index))
+                                : tarjeta(index, false)),
+                        itemCount: dias.length)))),
+        TextButton(
+            child: Text("Semana ${Textos.getNumeroSemana(now)}",
+                style: TextStyle(fontSize: 16.sp)),
+            onPressed: () {})
+      ]),
       Row(children: [
         Expanded(
             flex: 5,
@@ -132,7 +149,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
               child: AnimatedFlipCounter(
                   value: widget.provider.presupuesto!.presupuesto!,
                   duration: Durations.long3,
-                  fractionDigits: 2,
+                  fractionDigits: 1,
                   prefix: "\$",
                   textStyle:
                       TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold))),
@@ -174,11 +191,42 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                             : (100 * widget.provider.promedioTotalSemana()) /
                                 widget.provider.presupuesto!.presupuesto!,
                         duration: Durations.long3,
-                        fractionDigits: change ? 2 : 0,
+                        fractionDigits: change ? 2 : 1,
                         prefix: change ? "\$" : null,
                         suffix: change ? null : "%"))
               ]))
       ])
     ]);
+  }
+
+  Widget animation(int index) {
+    return ZoCollectionDestination(
+        key: widget.gastoKey, child: tarjeta(index, true));
+  }
+
+  Widget tarjeta(int index, bool hoy) {
+    return Card(
+        shadowColor: ThemaMain.darkGrey,
+        elevation: hoy ? 3 : 0,
+        color: hoy ? ThemaMain.dialogbackground : null,
+        child: Padding(
+            padding: EdgeInsets.all(2.sp),
+            child: AnimatedDefaultTextStyle(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: hoy ? FontWeight.bold : FontWeight.normal,
+                    color: widget.provider.presupuesto?.activo == 1
+                        ? widget.provider.porcentualColor(widget.provider
+                            .obtenerPorcentajeDia(index,
+                                widget.provider.promediarDiaSemana(index)))
+                        : ThemaMain.primary),
+                duration: Duration(seconds: 2),
+                child: AnimatedFlipCounter(
+                    value: widget.provider.promediarDiaSemana(index),
+                    duration: Durations.long1,
+                    fractionDigits: 1,
+                    prefix: "\$"))));
   }
 }

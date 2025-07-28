@@ -5,26 +5,22 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/image_gen.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
+import 'package:gastos/widgets/gasto_send_widget.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:sizer/sizer.dart';
-import '../controllers/gastos_controller.dart';
 import '../dialog/dialog_camara.dart';
 import 'package:badges/badges.dart' as badges;
-
 import '../dialog/dialog_categorias.dart';
 import '../models/categoria_model.dart';
-import '../models/gasto_model.dart';
-import '../models/periodo_model.dart';
-import '../utilities/operacion_bidon.dart';
 
 class CardGastoWidget extends StatefulWidget {
   final GastoProvider provider;
-  const CardGastoWidget({super.key, required this.provider});
+  final GlobalKey gastoKey;
+  const CardGastoWidget(
+      {super.key, required this.provider, required this.gastoKey});
 
   @override
   State<CardGastoWidget> createState() => _MyWidgetState();
@@ -63,28 +59,6 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                           const Duration(days: 365 * 15)),
                                       lastDate: now)) ??
                                   now;
-                              final modelTemp = widget.provider.gastoActual.copyWith(
-                                  fecha: Textos.fechaYMDHMS(
-                                      fecha: widget.provider.selectFecha
-                                              ?.copyWith(
-                                                  year: widget.provider
-                                                      .selectFecha?.year,
-                                                  month: widget.provider
-                                                      .selectFecha?.month,
-                                                  day: widget.provider
-                                                      .selectFecha?.day,
-                                                  hour: now.hour,
-                                                  minute: now.minute,
-                                                  second: now.second) ??
-                                          now),
-                                  dia: (widget.provider.selectFecha?.day ??
-                                          now.day)
-                                      .toString(),
-                                  mes: (widget.provider.selectFecha?.month ??
-                                          now.month)
-                                      .toString());
-                              debugPrint(modelTemp.fecha);
-                              widget.provider.gastoActual = modelTemp;
                             },
                             icon: Icon(Icons.edit_calendar,
                                 size: 22.sp, color: ThemaMain.darkBlue),
@@ -99,7 +73,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
-                              width: 75.w,
+                              width: 65.w,
                               child: CustomDropdown.searchRequest(
                                   futureRequest: (p0) async =>
                                       await CategoriaController.buscar(p0),
@@ -149,9 +123,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                   listItemPadding: const EdgeInsets.all(0),
                                   listItemBuilder: (context, item, isSelected, onItemSelect) => ListTile(
                                       contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
-                                      minVerticalPadding: 5,
                                       title: Text(item.nombre, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                                      subtitle: Text(item.descripcion, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 13.sp)),
+                                      subtitle: Text(item.descripcion, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkGrey, fontSize: 13.sp)),
                                       trailing: IconButton(
                                           onPressed: () => Dialogs.showMorph(
                                               title: "Eliminar",
@@ -169,7 +142,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                                       .listaCategoria = data;
                                                 });
                                               }),
-                                          icon: Icon(Icons.delete, size: 18.sp, color: ThemaMain.red))),
+                                          icon: Icon(Icons.delete, size: 16.sp, color: ThemaMain.red))),
                                   overlayHeight: 52.h,
                                   onChanged: (value) {
                                     if (value != null) {
@@ -218,7 +191,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               width: 45.w,
                               child: SpinBox(
                                   min: 0,
-                                  max: 10000,
+                                  max: 999999,
                                   keyboardType: TextInputType.numberWithOptions(
                                       signed: false),
                                   value: widget.provider.gastoActual.monto ?? 0,
@@ -286,106 +259,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     vertical: .5.h, horizontal: 2.w),
                                 hintText: "Notas de gasto")))
                   ])))),
-      SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-              style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                      (widget.provider.gastoActual.monto != null &&
-                              widget.provider.gastoActual.monto! > 0.0)
-                          ? ThemaMain.green
-                          : ThemaMain.darkGrey)),
-              onPressed: () async {
-                if (widget.provider.gastoActual.categoriaId != null) {
-                  if (widget.provider.gastoActual.monto != null &&
-                      widget.provider.gastoActual.monto! > 0.0) {
-                    log("${widget.provider.gastoActual.toJson()}");
-                    await Dialogs.showMorph(
-                        title: "Ingresar gasto",
-                        description: "¿Desea ingresar esta tarjeta de gasto?",
-                        loadingTitle: "Ingresando...",
-                        onAcceptPressed: (context) async {
-                          final now = DateTime.now();
-                          var id = (await GastosController.getLastId());
-                          //generar files en biblioteca
-                          List<String> names = [];
-                          for (var i = 0;
-                              i < widget.provider.imagenesActual.length;
-                              i++) {
-                            await ImageGen.generar(
-                                archivo: widget.provider.imagenesActual[i],
-                                name: "gasto_${i + 1}_$id");
-                            names.add("gasto_${i + 1}_$id.jpg");
-                          }
-                          //?La tabla de gasto es para notificar si dicha tarjeta es modificable
-                          final finalTemp = widget.provider.gastoActual
-                              .copyWith(
-                                  id: id,
-                                  metodoPagoId:
-                                      widget.provider.metodoSelect!.id,
-                                  gasto: 1,
-                                  nota: widget.provider.notas.text,
-                                  ultimaFecha: widget.provider.selectProxima ==
-                                          null
-                                      ? null
-                                      : Textos.fechaYMD(
-                                          fecha:
-                                              widget.provider.selectProxima!),
-                                  fecha: widget.provider.gastoActual.fecha ??
-                                      Textos.fechaYMDHMS(fecha: now),
-                                  dia: widget.provider.gastoActual.dia ??
-                                      (now.day).toString(),
-                                  mes: widget.provider.gastoActual.mes ??
-                                      (now.month).toString(),
-                                  evidencia: names);
-                          log("${finalTemp.toJson()}");
-                          await OperacionBidon.restador(
-                              gasto: finalTemp, resta: finalTemp.monto!);
-                          await GastosController.insert(finalTemp);
-                          widget.provider.listaGastos =
-                              await GastosController.getConfigurado();
-
-                          widget.provider.selectProxima =
-                              widget.provider.selectProxima;
-                          widget.provider.gastoActual = GastoModelo(
-                              id: null,
-                              monto: null,
-                              categoriaId: finalTemp.categoriaId,
-                              metodoPagoId: finalTemp.metodoPagoId,
-                              fecha: null,
-                              dia: null,
-                              mes: null,
-                              peridico: null,
-                              ultimaFecha: null,
-                              periodo: PeriodoModelo(
-                                  year: null,
-                                  mes: null,
-                                  dia: null,
-                                  modificable: null),
-                              gasto: null,
-                              evidencia: [],
-                              nota: null);
-                          //Limpia de variables locales
-                          widget.provider.imagenesActual = [];
-                          widget.provider.notas.text = "";
-                          widget.provider.notas.selection =
-                              TextSelection.collapsed(offset: 0);
-                          widget.provider.selectFecha = DateTime.now();
-                          showToast("Tarjeta de gasto Guardada con exito");
-                        });
-                  } else {
-                    showToast("ingrese un monto mayor a 0");
-                  }
-                } else {
-                  showToast("Ingrese una categoria de gasto");
-                }
-              },
-              icon: Icon(LineIcons.wallet, size: 22.sp, color: Colors.white),
-              label: Text("Guardar Gasto",
-                  style: TextStyle(
-                      fontSize: 16.sp,
-                      color: ThemaMain.white,
-                      fontWeight: FontWeight.bold))))
+      GastoSendWidget(gastoKey: widget.gastoKey)
     ]);
   }
 }

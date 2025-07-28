@@ -21,7 +21,7 @@ class ListBidonesWidget extends StatelessWidget {
             "Monto inicial: \$${Textos.moneda(moneda: bidon.montoInicial)}\nMonto corte: \$${Textos.moneda(moneda: bidon.montoFinal)}",
             style: TextStyle(fontSize: 14.sp)),
         trailing: IconButton(
-            onPressed: () => delete(bidon.id),
+            onPressed: () => delete(bidon.id!),
             icon:
                 Icon(Icons.delete_sweep, size: 20.sp, color: ThemaMain.pink)));
   }

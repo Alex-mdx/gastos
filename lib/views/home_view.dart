@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
+import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -30,28 +35,52 @@ class _MyWidgetState extends State<HomeView> {
             onAcceptPressed: (context) async =>
                 SystemNavigator.pop(animated: true)),
         child: Scaffold(
-            body: Consumer<GastoProvider>(
-                builder: (context, provider, child) =>
-                    Paginado(provider: provider)),
-            bottomNavigationBar: BottomNavigationBar(
-                showUnselectedLabels: false,
-                currentIndex: navigator.index,
-                type: BottomNavigationBarType.fixed,
-                unselectedItemColor: ThemaMain.darkBlue,
-                selectedItemColor: ThemaMain.second,
-                backgroundColor: ThemaMain.primary,
-                selectedLabelStyle:
-                    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-                onTap: (index) async {
-                  navigator.index = index;
-                  await navigator.animateToPage(index);
-                },
-                items: [
-                  _buildBottomNavigationBarItem(
-                      Icons.request_quote, 'Historial'),
-                  _buildBottomNavigationBarItem(Icons.payments, 'Gastos'),
-                  _buildBottomNavigationBarItem(Icons.auto_graph, 'Graficos')
-                ])));
+          body: Consumer<GastoProvider>(
+              builder: (context, provider, child) => SliderDrawer(
+                  key: provider.sliderDrawerKey,
+                  sliderOpenSize: 25.w,
+                  animationDuration: 300,
+                  appBar: Placeholder(),
+                  slider: Container(
+                      color: ThemaMain.appbar,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Column(children: [
+                              SizedBox(height: 10.h),
+                              Text(
+                                  "Version\n${provider.paquete?.version}${kDebugMode ? "\n${Preferences.version}" : ""}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(fontSize: 16.sp))
+                            ]),
+                            VerticalDivider(width: 1.w, indent: 9.h)
+                          ])),
+                  child: Scaffold(
+                      body: Paginado(provider: provider),
+                      bottomNavigationBar: BottomNavigationBar(
+                          showUnselectedLabels: false,
+                          currentIndex: navigator.index,
+                          type: BottomNavigationBarType.fixed,
+                          unselectedItemColor: ThemaMain.darkBlue,
+                          selectedItemColor: ThemaMain.second,
+                          backgroundColor: ThemaMain.primary,
+                          selectedLabelStyle: TextStyle(
+                              fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          onTap: (index) async {
+                            navigator.index = index;
+                            await navigator.animateToPage(index);
+                          },
+                          items: [
+                            _buildBottomNavigationBarItem(
+                                Icons.request_quote, 'Historial'),
+                            _buildBottomNavigationBarItem(
+                                Icons.payments, 'Gastos'),
+                            _buildBottomNavigationBarItem(
+                                Icons.auto_graph, 'Graficos')
+                          ])))),
+        ));
   }
 }
 
@@ -64,6 +93,7 @@ class Paginado extends StatefulWidget {
 }
 
 class PaginadoState extends State<Paginado> {
+  Timer? verificacion;
   @override
   void initState() {
     super.initState();

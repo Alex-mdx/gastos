@@ -87,6 +87,9 @@ class _GraficoCategoriasState extends State<GraficoCategorias> {
           yValueMapper: (DatosGrafico dato, _) => dato.monto,
           markerSettings: MarkerSettings(
               isVisible: true,
+              height: 9.sp,
+              width: 9.sp,
+              borderWidth: 6.sp,
               shape: DataMarkerType.circle,
               borderColor: ThemaMain.second)));
     });
@@ -99,7 +102,7 @@ class _GraficoCategoriasState extends State<GraficoCategorias> {
     return SizedBox(
         height: 65.h,
         child: FutureBuilder(
-            future: _crearSeries(ahora.subtract(Duration(days: 30 * 1)), ahora),
+            future: _crearSeries(ahora.subtract(Duration(days: 29 * 1)), ahora),
             builder: (context, snapshot) {
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.done) {

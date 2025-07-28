@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/bidones_controller.dart';
@@ -7,16 +8,49 @@ import 'package:gastos/models/gasto_model.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../models/bidones_model.dart';
+import 'image_gen.dart';
+import 'textos.dart';
 
-class OperacionBidon {
+class OperacionGasto {
+  static Future<void> gasto(
+      {required GastoModelo gasto,
+      required int metodoPago,
+      required DateTime? newTime,
+      required List<Uint8List> evidencia,
+      required String? notas}) async {
+    final now = DateTime.now();
+    var id = (await GastosController.getLastId());
+    //generar files en biblioteca
+    List<String> names = [];
+    for (var i = 0; i < evidencia.length; i++) {
+      await ImageGen.generar(archivo: evidencia[i], name: "gasto_${i + 1}_$id");
+      names.add("gasto_${i + 1}_$id.jpg");
+    }
+    //?La tabla de gasto es para notificar si dicha tarjeta es modificable
+    final finalTemp = gasto.copyWith(
+        id: id,
+        metodoPagoId: metodoPago,
+        gasto: 1,
+        nota: notas,
+        ultimaFecha: null,
+        fecha: newTime != null
+            ? Textos.fechaYMDHMS(fecha: newTime)
+            : Textos.fechaYMDHMS(fecha: now),
+        dia: (newTime?.day ?? now.day).toString(),
+        mes: (newTime?.month ?? now.month).toString(),
+        evidencia: names);
+    log("${finalTemp.toJson()}");
+    await OperacionGasto.restador(gasto: finalTemp, resta: finalTemp.monto!);
+    await GastosController.insert(finalTemp);
+  }
+
   static Future<void> restador(
       {required GastoModelo gasto, required double resta}) async {
     List<BidonesModel> coincidencias =
         await BidonesController.buscarCoincidencia(
             gasto.metodoPagoId!, gasto.categoriaId!);
     for (var bidon in coincidencias) {
-      await actualizar(id: bidon.id);
-      List<int> addGasto = [...bidon.categoria, gasto.id!];
+      List<int> addGasto = [...bidon.gastos, gasto.id!];
       final now = DateTime.now();
       var montoRestado = bidon.montoFinal - (resta);
       log("${bidon.toJson()}\nRestado: $montoRestado");
@@ -30,7 +64,6 @@ class OperacionBidon {
         var objetoSaldado =
             bidon.copyWith(fechaFinal: now, gastos: addGasto, montoFinal: 0);
         BidonesModel newBidon = BidonesModel(
-            id: await BidonesController.getLastId(),
             identificador: bidon.identificador,
             nombre: bidon.nombre,
             montoInicial: bidon.montoInicial,

@@ -199,7 +199,6 @@ class _DialogBidonesState extends State<DialogBidones> {
             if (widget.bidon?.inhabilitado == 1) {
               showToast("Bidon inhablitado");
             } else {
-              int id = await BidonesController.getLastId();
               String word = Textos.randomWord(10);
               final now = DateTime.now();
               if (nombre.text != "") {
@@ -214,7 +213,6 @@ class _DialogBidonesState extends State<DialogBidones> {
                         loadingTitle: "Guardando",
                         onAcceptPressed: (context) async {
                           BidonesModel bidon = BidonesModel(
-                              id: widget.bidon?.id ?? id,
                               identificador:
                                   widget.bidon?.identificador ?? word,
                               nombre: nombre.text,
@@ -228,13 +226,12 @@ class _DialogBidonesState extends State<DialogBidones> {
                               cerrado: widget.bidon?.cerrado ?? 0,
                               inhabilitado: widget.bidon?.inhabilitado ?? 0,
                               gastos: widget.bidon?.gastos ?? []);
-                          log("${bidon.toJson()}");
+                          log("${widget.bidon?.toJson()} - ${bidon.toJson()}");
                           if (widget.bidon == null) {
                             await BidonesController.insert(bidon);
                           } else {
                             await BidonesController.update(bidon);
-                          }
-                          setState(() {});
+                          } 
                           Navigation.pop();
                         });
                   } else {

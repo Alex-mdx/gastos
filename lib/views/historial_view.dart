@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
@@ -60,6 +61,13 @@ class _HistorialViewState extends State<HistorialView> {
     final provider = Provider.of<GastoProvider>(context);
     return Scaffold(
         appBar: AppBar(
+            leading: kDebugMode
+                ? IconButton(
+                    iconSize: 20.sp,
+                    onPressed: () =>
+                        provider.sliderDrawerKey.currentState?.toggle(),
+                    icon: Icon(Icons.menu))
+                : null,
             toolbarHeight: 6.h,
             title: Text("Historial", style: TextStyle(fontSize: 20.sp))),
         body: SfCalendar(
