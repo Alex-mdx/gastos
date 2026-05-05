@@ -39,13 +39,6 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _vibrarDia = false;
-  bool get vibrarDia => _vibrarDia;
-  set vibrarDia(bool valor) {
-    _vibrarDia = valor;
-    notifyListeners();
-  }
-
   /* DateTime? _selectProxima;
   DateTime? get selectProxima => _selectProxima;
   set selectProxima(DateTime? valor) {

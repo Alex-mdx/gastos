@@ -24,8 +24,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.modx.gastos"
-    compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -39,10 +39,10 @@ android {
 
     defaultConfig {
         applicationId = "com.modx.gastos"
-        minSdk = 23
-        targetSdk = 35
-        versionCode = 13
-        versionName = "0.2.6"
+        minSdkVersion = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = 17
+        versionName = "0.2.91"
         multiDexEnabled true
     }
     signingConfigs {
@@ -63,26 +63,19 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    packagingOptions {
+      jniLibs {
+        useLegacyPackaging = true
+      }
+  }
+
     aaptOptions {
         noCompress 'wav', 'mp3', 'ogg'
     }
 }
 
-afterEvaluate {
-    mergeReleaseJniLibFolders.doLast {
-        def archTypes = ["arm-release", "arm64-release"]
-        archTypes.forEach { item ->
-        copy {
-            from zipTree("$flutterRoot/bin/cache/artifacts/engine/android-$item/flutter.jar")
-            include 'lib/*/libflutter.so'
-            into "$buildDir/intermediates/jniLibs/release/"
-            eachFile {
-                it.path = it.path.replaceFirst("lib/", "")
-                }
-            }
-        }
-    }
-}
+
 
 flutter {
     source = "../.."

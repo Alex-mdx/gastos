@@ -26,8 +26,8 @@ class GenerateExcel {
       showToast("Generando csv de gastos");
       var excel = Excel.createExcel();
       Sheet sheet1 = excel['Gastos'];
-
-      var gastos = await GastosController.getAll();
+      try {
+        var gastos = await GastosController.getAll();
       if (gastos.isNotEmpty) {
         sheet1.appendRow(gastos.first
             .toJson()
@@ -40,8 +40,11 @@ class GenerateExcel {
               element.toJson().values.map((i) => TextCellValue("$i")).toList());
         }
       }
-
-      Sheet sheet2 = excel['Categorias'];
+      } catch (e) {
+        log("Error al generar respaldo de gastos: $e");
+      }
+      try {
+        Sheet sheet2 = excel['Categorias'];
       var categorias = await CategoriaController.getItems();
       if (categorias.isNotEmpty) {
         sheet2.appendRow(categorias.first
@@ -56,9 +59,12 @@ class GenerateExcel {
               .map((i) => TextCellValue(i.toString()))
               .toList());
         }
+      } 
+      } catch (e) {
+        log("Error al generar respaldo de categorias: $e");
       }
-
-      Sheet sheet3 = excel['MetodoPago'];
+      try {
+        Sheet sheet3 = excel['MetodoPago'];
       var metodoPago = await MetodoGastoController.getItems();
       if (metodoPago.isNotEmpty) {
         sheet3.appendRow(metodoPago.first
@@ -74,13 +80,16 @@ class GenerateExcel {
               .toList());
         }
       }
-
-      var presupuesto = await PresupuestoController.getItem();
-      if (presupuesto != null) {
-        Sheet sheet4 = excel['Presupuesto'];
-        sheet4.appendRow(presupuesto
-            .toJson()
-            .keys
+      } catch (e) {
+        log("Error al generar respaldo de categorias: $e");
+      }
+      try {
+        var presupuesto = await PresupuestoController.getItem();
+        if (presupuesto != null) {
+          Sheet sheet4 = excel['Presupuesto'];
+          sheet4.appendRow(presupuesto
+              .toJson()
+              .keys
             .map((e) => TextCellValue(e.toString()))
             .toList());
 
@@ -90,8 +99,11 @@ class GenerateExcel {
             .map((i) => TextCellValue(i.toString()))
             .toList());
       }
-
-      Sheet sheet5 = excel['BidonesPresupuesto'];
+      } catch (e) {
+        log("Error al generar respaldo de presupuesto: $e");
+      }
+      try {
+        Sheet sheet5 = excel['BidonesPresupuesto'];
       var bidones = await BidonesController.getItems();
       if (bidones.isNotEmpty) {
         sheet5.appendRow(bidones.first
@@ -107,6 +119,10 @@ class GenerateExcel {
               .toList());
         }
       }
+      } catch (e) {
+        log("Error al generar respaldo de bidones: $e");
+      }
+      
 
       final direccion = await getDownloadsDirectory();
       showToast("Guardando respaldo generado");
@@ -135,7 +151,7 @@ class GenerateExcel {
   }
 
   static Future<File?> importarGlobal() async {
-    FilePickerResult? pick = await FilePicker.platform.pickFiles(
+    FilePickerResult? pick = await FilePicker.pickFiles(
         allowMultiple: false,
         type: FileType.custom,
         dialogTitle: "Ingrese los datos de sus gastos",
@@ -150,7 +166,7 @@ class GenerateExcel {
   }
 
   static Future<bool> read(File? csv) async {
-    //try {
+    try {
     if (csv != null) {
       showToast("Leyendo datos");
       var bytes = csv.readAsBytesSync();
@@ -407,10 +423,11 @@ class GenerateExcel {
     } else {
       showToast("No se encontro ningun archivo");
     }
-    /* } catch (e) {
+    } catch (e) {
+      log("Error al leer datos\n$e");
       showToast("Error al leer datos\n$e");
       return false;
-    } */
+    }
 
     return true;
   }

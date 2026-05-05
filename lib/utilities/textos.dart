@@ -44,6 +44,10 @@ class Textos {
     return DateFormat('yyyy-MM-dd').format(fecha);
   }
 
+  static DateTime YMD({required DateTime fecha}) {
+    return DateTime( fecha.year,fecha.month,fecha.day);
+  }
+
   static String fechaHMS({required DateTime fecha}) {
     String formatoFechaHora = DateFormat('HH:mm:ss').format(fecha);
     return formatoFechaHora;
@@ -81,5 +85,35 @@ class Textos {
       cadenaAleatoria += caracteres[indice];
     }
     return cadenaAleatoria;
+  }
+
+  static String conversionDiaNombre(DateTime fecha, DateTime now) {
+    var newNow = YMD(fecha: now);
+    var newFecha = YMD(fecha: fecha);
+    String tipo = "NULL";
+    var diferencia = (newNow.difference(newFecha)).inDays;
+    switch (diferencia) {
+      case -1:
+        tipo = "Mañana";
+        break;
+      case 0:
+        tipo = "Hoy";
+        break;
+      case 1:
+        tipo = "Ayer";
+        break;
+      case 2:
+        tipo = "Antier";
+        break;
+
+      default:
+        if (diferencia.isNegative) {
+          tipo = "Dentro de ${diferencia.abs()} dias";
+        } else {
+          tipo = "$diferencia d";
+        }
+        break;
+    }
+    return tipo;
   }
 }

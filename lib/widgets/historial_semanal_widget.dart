@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
@@ -91,11 +90,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                             width: 14.5.w,
                             height: 7.h,
                             child: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                ? ShakeWidget(
-                                    duration: Duration(seconds: 1),
-                                    shakeConstant: ShakeHorizontalConstant2(),
-                                    autoPlay: widget.provider.vibrarDia,
-                                    child: animation(index))
+                                ? animation(index)
                                 : tarjeta(index, false)),
                         itemCount: dias.length)))),
         TextButton(

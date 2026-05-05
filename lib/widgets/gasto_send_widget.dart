@@ -5,7 +5,6 @@ import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vibration/vibration.dart';
 import '../controllers/gastos_controller.dart';
 import '../models/gasto_model.dart';
 import '../models/periodo_model.dart';
@@ -95,36 +94,14 @@ class _GastoSendWidgetState extends State<GastoSendWidget> {
                   key: _zoCollectionKey,
                   destinationKey: widget.gastoKey,
                   animationDuration: (provider.gastoActual.monto ?? 0) >= 10000
-                      ? Duration(seconds: 1, milliseconds: 350)
+                      ? Duration(seconds: 2)
                       : (provider.gastoActual.monto ?? 0) >= 1000
-                          ? Duration(seconds: 1, milliseconds: 500)
+                          ? Duration(seconds: 1, milliseconds: 700)
                           : (provider.gastoActual.monto ?? 0) >= 100
-                              ? Durations.extralong3
+                              ? Duration(seconds: 1, milliseconds: 400)
                               : (provider.gastoActual.monto ?? 0) >= 10
-                                  ? Durations.long4
-                                  : Durations.medium3,
-                  onAnimationComplete: () async {
-                    setState(() {
-                      provider.vibrarDia = true;
-                    });
-
-                    (provider.gastoActual.monto ?? 0) >= 10000
-                        ? await Vibration.vibrate(duration: 50, amplitude: 5)
-                        : (provider.gastoActual.monto ?? 0) >= 1000
-                            ? await Vibration.vibrate(
-                                duration: 40, amplitude: 5)
-                            : (provider.gastoActual.monto ?? 0) >= 100
-                                ? await Vibration.vibrate(
-                                    duration: 30, amplitude: 5)
-                                : (provider.gastoActual.monto ?? 0) >= 10
-                                    ? await Vibration.vibrate(
-                                        duration: 20, amplitude: 5)
-                                    : await Vibration.vibrate(
-                                        duration: 15, amplitude: 5);
-                    setState(() {
-                      provider.vibrarDia = false;
-                    });
-                  },
+                                  ?  Duration(seconds: 1, milliseconds: 100)
+                                  : Durations.extralong2,onAnimationComplete: () {},
                   onTap: null,
                   collectionWidget: (provider.gastoActual.monto ?? 0) >= 10000
                       ? Icon(LineIcons.fileInvoiceWithUsDollar, size: 23.sp)

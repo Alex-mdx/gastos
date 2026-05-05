@@ -48,22 +48,26 @@ class _MyWidgetState extends State<CardGastoWidget> {
                     Center(
                         child: TextButton.icon(
                             onPressed: () async {
-                              widget
-                                  .provider.selectFecha = (await showDatePicker(
+                              var temp = (await showDatePicker(
                                       context: context,
                                       initialDatePickerMode: DatePickerMode.day,
                                       initialEntryMode:
                                           DatePickerEntryMode.calendarOnly,
-                                      initialDate: now,
+                                      initialDate:
+                                          widget.provider.selectFecha ?? now,
+                                      currentDate: now,
                                       firstDate: now.subtract(
                                           const Duration(days: 365 * 15)),
                                       lastDate: now)) ??
                                   now;
+                              setState(() {
+                                widget.provider.selectFecha = temp;
+                              });
                             },
                             icon: Icon(Icons.edit_calendar,
                                 size: 22.sp, color: ThemaMain.darkBlue),
                             label: Text(
-                                "Fecha de ingreso\n${Textos.fechaYMD(fecha: widget.provider.selectFecha ?? now)}",
+                                "Fecha de ingreso\n${Textos.fechaYMD(fecha: widget.provider.selectFecha ?? now)} - ${Textos.conversionDiaNombre(widget.provider.selectFecha ?? now, now)}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ThemaMain.darkBlue,

@@ -45,7 +45,6 @@ class GastosView extends StatelessWidget {
                         },
                         icon: Icon(Icons.precision_manufacturing_sharp)),
                   const ButtonPromedioWidget(),
-                  if (kDebugMode)
                     IconButton(
                         iconSize: 24.sp,
                         onPressed: () => showDialog(

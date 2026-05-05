@@ -40,7 +40,7 @@ class NotificacionesFun {
             android: initializationSettingsAndroid,
             iOS: initializationSettingsDarwin);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    await flutterLocalNotificationsPlugin.initialize(settings:  initializationSettings,
         onDidReceiveNotificationResponse: (details) {
       // Manejar cuando se toca la notificación
     });
@@ -68,7 +68,7 @@ class NotificacionesFun {
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
     names.shuffle();
-    await flutterLocalNotificationsPlugin.show(
-        id, 'Control de Gastos', names.first, platformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(id: 
+        id,body:  'Control de Gastos',title:  names.first,notificationDetails:  platformChannelSpecifics);
   }
 }

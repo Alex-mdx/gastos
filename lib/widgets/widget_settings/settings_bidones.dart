@@ -26,7 +26,20 @@ class _SettingsBidonesState extends State<SettingsBidones> {
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
       SizedBox(
           width: double.infinity,
-          child: Card(
+          child: bd.Badge(badgeContent: IconButton.filled(onPressed: () {
+            Dialogs.showMorph(
+                title: "Eliminar bidon",
+                description:
+                    "Se va a eliminar los datos del bidon",
+                loadingTitle: "Eliminando",
+                onAcceptPressed: (context) async {
+                  await BidonesController.deleteAll();
+                  setState(() {
+                    showToast("Bidon eliminado");
+                  });
+                });
+          }, icon: Icon(Icons.delete)),
+              child: Card(
               elevation: 0,
               color: Colors.white,
               child: Padding(
@@ -132,7 +145,7 @@ class _SettingsBidonesState extends State<SettingsBidones> {
                         } else {
                           return CircularProgressIndicator();
                         }
-                      })))),
+                      }))))),
       ElevatedButton(
           onPressed: () => showDialog(
               context: context, builder: (context) => DialogBidones()),
