@@ -5,8 +5,6 @@ import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/utilities/generate_excel.dart';
 import 'package:gastos/utilities/zip_funcion.dart';
 import 'package:mime/mime.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 
 class DetectionMime {
   static Future<void> operacion(List<File> files) async {
@@ -21,17 +19,7 @@ class DetectionMime {
           break;
 
         case 'image/jpeg':
-          final direccion = await getDownloadsDirectory();
-          // Obtener el nombre base del archivo con su extesnion
-          String name = p.basename(file.path);
-          // Crear la nueva ruta del archivo en la carpeta destino
-          final filePath = "${direccion!.path}/$name";
-          // Leer los bytes del archivo original
-          var fileBytes = await file.readAsBytes();
-          // Escribir los bytes en la nueva ubicación
-          final newFile = File(filePath);
-          await newFile.writeAsBytes(fileBytes);
-          debugPrint('Archivo guardado en: $filePath');
+          debugPrint('Archivo de imagen restaurado por unZip: ${file.path}');
           // Procesar JPG
           break;
 

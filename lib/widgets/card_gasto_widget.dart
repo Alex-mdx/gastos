@@ -1,11 +1,10 @@
-import 'dart:developer';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
-import 'package:gastos/controllers/categoria_controller.dart';
+import 'package:gastos/widgets/generics/search_categorias.dart';
+import 'package:gastos/widgets/generics/textfield_money.dart';
+import 'package:intl/intl.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
-import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/gasto_send_widget.dart';
@@ -30,9 +29,24 @@ class _MyWidgetState extends State<CardGastoWidget> {
   DateTime now = DateTime.now();
   SingleSelectController<CategoriaModel> controller =
       SingleSelectController(null);
+  late TextEditingController montoController;
+
   @override
   void initState() {
     super.initState();
+    double initialMonto = widget.provider.gastoActual.monto ?? 0.0;
+    montoController = TextEditingController(
+        text: initialMonto > 0
+            ? NumberFormat.currency(
+                    locale: 'en_US', symbol: '', decimalDigits: 2)
+                .format(initialMonto)
+            : '');
+  }
+
+  @override
+  void dispose() {
+    montoController.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,87 +91,19 @@ class _MyWidgetState extends State<CardGastoWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
-                              width: 65.w,
-                              child: CustomDropdown.searchRequest(
-                                  futureRequest: (p0) async =>
-                                      await CategoriaController.buscar(p0),
-                                  searchHintText: "Nombre categoria de gasto",
-                                  noResultFoundText: "Sin resultados",
-                                  controller: controller,
-                                  closedHeaderPadding: EdgeInsets.symmetric(
-                                      horizontal: 1.w, vertical: 0),
-                                  decoration: CustomDropdownDecoration(
-                                      expandedFillColor: ThemaMain.background,
-                                      closedFillColor: ThemaMain.background,
-                                      prefixIcon: Icon(LineIcons.wavyMoneyBill,
-                                          color: ThemaMain.green, size: 22.sp),
-                                      searchFieldDecoration:
-                                          SearchFieldDecoration(
-                                              fillColor:
-                                                  ThemaMain.dialogbackground),
-                                      closedSuffixIcon: controller.value != null
-                                          ? IconButton(
-                                              iconSize: 20.sp,
-                                              onPressed: () => setState(() {
-                                                    controller.clear();
-                                                  }),
-                                              icon: Icon(Icons.close_rounded,
-                                                  color: ThemaMain.red,
-                                                  size: 20.sp))
-                                          : Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 1.h),
-                                              child: Icon(
-                                                  Icons
-                                                      .keyboard_double_arrow_down,
-                                                  color: ThemaMain.primary,
-                                                  size: 20.sp))),
-                                  headerBuilder:
-                                      (context, selectedItem, enabled) => Text(
-                                          selectedItem.nombre,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: ThemaMain.darkGrey,
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.bold)),
-                                  hintText: 'Categoria de Gasto',
-                                  items: widget.provider.listaCategoria,
-                                  itemsListPadding: const EdgeInsets.all(0),
-                                  listItemPadding: const EdgeInsets.all(0),
-                                  listItemBuilder: (context, item, isSelected, onItemSelect) => ListTile(
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
-                                      title: Text(item.nombre, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp, fontWeight: FontWeight.bold)),
-                                      subtitle: Text(item.descripcion, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: ThemaMain.darkGrey, fontSize: 13.sp)),
-                                      trailing: IconButton(
-                                          onPressed: () => Dialogs.showMorph(
-                                              title: "Eliminar",
-                                              description: "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
-                                              loadingTitle: "Eliminando",
-                                              onAcceptPressed: (context) async {
-                                                await CategoriaController
-                                                    .deleteItem(item.id!);
-                                                final data =
-                                                    await CategoriaController
-                                                        .getItems();
-                                                setState(() {
-                                                  controller.clear();
-                                                  widget.provider
-                                                      .listaCategoria = data;
-                                                });
-                                              }),
-                                          icon: Icon(Icons.delete, size: 16.sp, color: ThemaMain.red))),
-                                  overlayHeight: 52.h,
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      log("$value");
-                                      final modelTemp = widget
-                                          .provider.gastoActual
-                                          .copyWith(categoriaId: value.id);
-                                      widget.provider.gastoActual = modelTemp;
-                                      log("${widget.provider.gastoActual.toJson()}");
-                                    }
-                                  })),
+                              width: 75.w,
+                              child: SearchCategorias(
+                                controller: controller,
+                                list: widget.provider.listaCategoria,
+                                fun: (p0) {
+                                  final modelTemp =
+                widget.provider.gastoActual.copyWith(categoriaId: p0.id);
+
+            widget.provider.gastoActual = modelTemp;
+                                },
+                                delete: (p0) =>
+                                  widget.provider.listaCategoria = p0
+                              )),
                           IconButton.filled(
                               onPressed: () => showDialog(
                                   context: context,
@@ -171,70 +117,49 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                     size: 22.sp, color: Colors.white)
                               ]))
                         ]),
-                    OverflowBar(
-                        overflowAlignment: OverflowBarAlignment.center,
-                        alignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          badges.Badge(
-                              badgeStyle: badges.BadgeStyle(
-                                  badgeColor: ThemaMain.primary),
-                              showBadge:
-                                  widget.provider.imagenesActual.isNotEmpty,
-                              badgeContent: Text(
-                                  "${widget.provider.imagenesActual.length}",
-                                  style: TextStyle(
-                                      fontSize: 14.sp, color: ThemaMain.white)),
-                              child: IconButton.filled(
-                                  onPressed: () => showDialog(
-                                      context: context,
-                                      builder: (context) =>
-                                          const DialogCamara()),
-                                  icon: Icon(Icons.add_photo_alternate,
-                                      size: 22.sp, color: Colors.white))),
-                          SizedBox(
-                              width: 45.w,
-                              child: SpinBox(
-                                  min: 0,
-                                  max: 999999,
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      signed: false),
-                                  value: widget.provider.gastoActual.monto ?? 0,
-                                  decimals: 2,
-                                  textStyle: TextStyle(
-                                      fontSize: 16.sp,
-                                      color: ThemaMain.darkBlue),
-                                  incrementIcon:
-                                      Icon(LineIcons.plusCircle, size: 22.sp),
-                                  decrementIcon:
-                                      Icon(LineIcons.minusCircle, size: 22.sp),
-                                  decoration: InputDecoration(
-                                      fillColor: ThemaMain.background,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 2.w, vertical: 1.h),
-                                      icon: Icon(Icons.attach_money,
-                                          size: 20.sp, color: ThemaMain.green)),
-                                  direction: Axis.vertical,
-                                  step: 1,
-                                  autofocus: false,
-                                  interval: Durations.long1,
-                                  spacing: 0,
-                                  onSubmitted: (p0) {
-                                    final tempModel = widget
-                                        .provider.gastoActual
-                                        .copyWith(monto: p0);
-                                    widget.provider.gastoActual = tempModel;
-                                  },
-                                  onChanged: (value) {
-                                    final tempModel = widget
-                                        .provider.gastoActual
-                                        .copyWith(monto: value);
-                                    widget.provider.gastoActual = tempModel;
-                                  }))
-                        ]),
+                    Padding(
+                        padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                        child: OverflowBar(
+                            overflowAlignment: OverflowBarAlignment.center,
+                            alignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              badges.Badge(
+                                  badgeStyle: badges.BadgeStyle(
+                                      badgeColor: ThemaMain.primary),
+                                  showBadge:
+                                      widget.provider.imagenesActual.isNotEmpty,
+                                  badgeContent: Text(
+                                      "${widget.provider.imagenesActual.length}",
+                                      style: TextStyle(
+                                          fontSize: 14.sp,
+                                          color: ThemaMain.white)),
+                                  child: IconButton.filled(
+                                      onPressed: () => showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                              const DialogCamara()),
+                                      icon: Icon(Icons.add_photo_alternate,
+                                          size: 22.sp, color: Colors.white))),
+                              SizedBox(
+                                  width: 45.w,
+                                  child: TextfieldMoney(
+                                      text: montoController,
+                                      field: (p0) {
+                                        final tempModel = widget
+                                            .provider.gastoActual
+                                            .copyWith(monto: p0);
+                                        widget.provider.gastoActual = tempModel;
+                                      }))
+                            ])),
                     TextButton(
                         onPressed: () => showDialog(
                             context: context,
-                            builder: (context) => DialogMetodoPago(tipo: true)),
+                            builder: (context) => DialogMetodoPago(
+                                tipo: true,
+                                metodoSelect: widget.provider.metodoSelect,
+                                fun: (p0) {
+                                  widget.provider.metodoSelect = p0;
+                                })),
                         child: Text(
                             "Metodo de pago: ${widget.provider.metodoSelect?.nombre ?? "Sin metodo valido"}",
                             style: TextStyle(

@@ -72,6 +72,11 @@ class GastosController {
       for (var element in gasto) {
         List<String> evidencia = [];
         for (var i = 0; i < element.evidencia.length; i++) {
+          String e = element.evidencia[i].toString();
+          if (e.endsWith(".jpg") || e.endsWith(".jpeg") || e.endsWith(".png")) {
+            evidencia.add(e);
+            continue;
+          }
           var bytes = pr.Parser.toUint8List(element.evidencia[i]);
           if (bytes != null) {
             final filePath =
@@ -81,6 +86,7 @@ class GastosController {
             await file.writeAsBytes(bytes);
           } else {
             debugPrint("mal parseo: ${element.evidencia[i]}");
+            evidencia.add(e); // Preservar el valor original si falla el parseo
           }
         }
         var newModel = element.copyWith(evidencia: evidencia);

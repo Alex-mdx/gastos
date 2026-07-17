@@ -7,29 +7,29 @@ class ThemaMain {
       ? const Color.fromARGB(255, 18, 107, 223)
       : const Color.fromARGB(255, 7, 145, 99);
   static Color second =
-      (Preferences.thema ? LightTheme.second : DarkTheme.second);
+      (Preferences.isLightTheme ? LightTheme.second : DarkTheme.second);
   static Color white = Colors.white;
   static Color black = Colors.black;
 
-  static Color green = (Preferences.thema ? LightTheme.green : DarkTheme.green);
-  static Color red = (Preferences.thema ? LightTheme.red : DarkTheme.red);
+  static Color green = (Preferences.isLightTheme ? LightTheme.green : DarkTheme.green);
+  static Color red = (Preferences.isLightTheme ? LightTheme.red : DarkTheme.red);
   static Color yellow =
-      (Preferences.thema ? LightTheme.yellow : DarkTheme.yellow);
-  static Color pink = (Preferences.thema ? LightTheme.pink : DarkTheme.pink);
+      (Preferences.isLightTheme ? LightTheme.yellow : DarkTheme.yellow);
+  static Color pink = (Preferences.isLightTheme ? LightTheme.pink : DarkTheme.pink);
   static Color purple =
-      (Preferences.thema ? LightTheme.purple : DarkTheme.purple);
+      (Preferences.isLightTheme ? LightTheme.purple : DarkTheme.purple);
 
   static Color background =
-      (Preferences.thema ? LightTheme.background : DarkTheme.background);
-  static Color dialogbackground = (Preferences.thema
+      (Preferences.isLightTheme ? LightTheme.background : DarkTheme.background);
+  static Color dialogbackground = (Preferences.isLightTheme
       ? LightTheme.dialogbackground
       : DarkTheme.dialogbackground);
   static Color darkGrey =
-      (Preferences.thema ? LightTheme.darkGrey : DarkTheme.darkGrey);
+      (Preferences.isLightTheme ? LightTheme.darkGrey : DarkTheme.darkGrey);
   static Color darkBlue =
-      (Preferences.thema ? LightTheme.darkBlue : DarkTheme.darkBlue);
+      (Preferences.isLightTheme ? LightTheme.darkBlue : DarkTheme.darkBlue);
 
-  static Color grey = (Preferences.thema ? LightTheme.grey : DarkTheme.grey);
+  static Color grey = (Preferences.isLightTheme ? LightTheme.grey : DarkTheme.grey);
 }
 
 class LightTheme {

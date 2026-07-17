@@ -47,7 +47,7 @@ class _SettingViewState extends State<SettingView> {
                   OverflowBar(spacing: 1.w, children: [
                     ElevatedButton.icon(
                         icon: Icon(
-                            Preferences.thema ? LineIcons.sun : LineIcons.moon,
+                            Preferences.isLightTheme ? LineIcons.sun : LineIcons.moon,
                             size: 20.sp),
                         onPressed: () => Dialogs.showMorph(
                             title: "Cambiar tema",
@@ -56,7 +56,7 @@ class _SettingViewState extends State<SettingView> {
                             loadingTitle: "Saliendo",
                             onAcceptPressed: (context) async {
                               setState(() {
-                                Preferences.thema = !Preferences.thema;
+                                Preferences.isLightTheme = !Preferences.isLightTheme;
                               });
                               await SystemNavigator.pop();
                             }),

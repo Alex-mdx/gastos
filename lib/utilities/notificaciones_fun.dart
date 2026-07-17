@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificacionesFun {
   static List<String> names = [
@@ -70,5 +71,52 @@ class NotificacionesFun {
     names.shuffle();
     await flutterLocalNotificationsPlugin.show(id: 
         id,body:  'Control de Gastos',title:  names.first,notificationDetails:  platformChannelSpecifics);
+  }
+
+  static Future<void> scheduleDaily(int id, int hour, int minute) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'daily_channel_id', 'Recordatorios Diarios',
+            enableVibration: true,
+            importance: Importance.high,
+            priority: Priority.high,
+            showWhen: true,
+            color: LightTheme.green,
+            colorized: true,
+            channelShowBadge: true,
+            setAsGroupSummary: true,
+            styleInformation: BigTextStyleInformation('',
+                htmlFormatContentTitle: true,
+                htmlFormatBigText: true,
+                summaryText: 'Resumen',
+                htmlFormatSummaryText: true),
+            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
+            icon: '@mipmap/ic_launcher');
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    names.shuffle();
+
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(id: 
+        id,
+        body: names.first,
+        title: 'Control de Gastos',
+        scheduledDate: scheduledDate,
+        notificationDetails: platformChannelSpecifics,
+        androidScheduleMode:
+            AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: DateTimeComponents.time);
+  }
+
+  static Future<void> cancel(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id: id);
   }
 }

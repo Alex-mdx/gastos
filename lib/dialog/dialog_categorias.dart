@@ -6,6 +6,7 @@ import 'package:gastos/models/categoria_model.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/services/dialog_services.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
+import 'package:gastos/utilities/textos.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -57,8 +58,8 @@ class DialogCategorias extends StatelessWidget {
                         log("${id + 1}");
                         CategoriaModel objeto = CategoriaModel(
                             id: id + 1,
-                            nombre: tipoGasto.text,
-                            descripcion: descripcion.text);
+                            nombre: Textos.normalizar(tipoGasto.text) ,
+                            descripcion: Textos.normalizar( descripcion.text));
                         await CategoriaController.insert(objeto);
                         provider.listaCategoria =
                             await CategoriaController.getItems();

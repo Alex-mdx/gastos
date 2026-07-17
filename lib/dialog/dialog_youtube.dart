@@ -13,12 +13,13 @@ class _DialogYoutubeState extends State<DialogYoutube> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-        child: Column(mainAxisSize: MainAxisSize.min,children: [
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
       YoutubePlayer(
-          showVideoProgressIndicator: true,
-          controller: YoutubePlayerController(
-              initialVideoId: 'iLnmTe5Q2Qw',
-              flags: YoutubePlayerFlags(autoPlay: false,mute: false,showLiveFullscreenButton: false,useHybridComposition: true)))
+          controller: YoutubePlayerController.fromVideoId(
+              videoId: 'iLnmTe5Q2Qw',
+              autoPlay: false,
+              params: const YoutubePlayerParams(
+                  showFullscreenButton: true, showControls: true)))
     ]));
   }
 }

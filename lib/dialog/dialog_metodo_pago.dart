@@ -12,7 +12,10 @@ import 'package:substring_highlight/substring_highlight.dart';
 
 class DialogMetodoPago extends StatelessWidget {
   final bool tipo;
-  const DialogMetodoPago({super.key, required this.tipo});
+  final MetodoPagoModel? metodoSelect;
+  final Function(MetodoPagoModel) fun;
+  const DialogMetodoPago(
+      {super.key, required this.tipo, this.metodoSelect, required this.fun});
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +38,21 @@ class DialogMetodoPago extends StatelessWidget {
                             selectedTileColor: tipo ? ThemaMain.grey : null,
                             onTap: () {
                               if (tipo) {
-                                provider.metodoSelect = metodo;
+                                fun(metodo);
+                                // provider.metodoSelect = metodo;
                                 Navigation.pop();
                               }
                             },
                             selected: tipo
-                                ? provider.metodoSelect?.id == metodo.id
+                                ? metodoSelect?.id == metodo.id
                                 : metodo.defecto == 1,
                             dense: tipo
-                                ? provider.metodoSelect?.id == metodo.id
+                                ? metodoSelect?.id == metodo.id
                                 : metodo.defecto == 1,
                             leading: Icon(Icons.payment,
                                 size: 20.sp,
                                 color: tipo
-                                    ? provider.metodoSelect?.id == metodo.id
+                                    ? metodoSelect?.id == metodo.id
                                         ? ThemaMain.green
                                         : ThemaMain.darkBlue
                                     : metodo.defecto == 1

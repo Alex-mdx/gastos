@@ -28,7 +28,13 @@ class _SettingMetodoPagoState extends State<SettingMetodoPago> {
         IconButton.filled(
             iconSize: 20.sp,
             onPressed: () => showDialog(
-                context: context, builder: (context) => DialogMetodoPago(tipo: false)),
+                context: context,
+                builder: (context) => DialogMetodoPago(
+                    tipo: false,
+                    metodoSelect: provider.metodoSelect,
+                    fun: (p0) {
+                      provider.metodoSelect = p0;
+                    })),
             icon: Icon(Icons.more_horiz, color: ThemaMain.green))
       ])
     ]);

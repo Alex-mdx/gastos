@@ -1,7 +1,9 @@
 import 'package:dropbox_client/dropbox_client.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
@@ -17,10 +19,14 @@ import 'utilities/services/navigation_key.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context) =>
-      super.createHttpClient(context)
-        ..badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
+  HttpClient createHttpClient(SecurityContext? context) {
+    final client = super.createHttpClient(context);
+    if (kDebugMode) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+    }
+    return client;
+  }
 }
 
 Future<void> main() async {
@@ -28,7 +34,11 @@ Future<void> main() async {
   await MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
-  await Dropbox.init("lzox3hgfaiaiiim", "lzox3hgfaiaiiim", "ssm0ec4jtrnadyz");
+  await dotenv.load(fileName: ".env");
+  await Dropbox.init(
+      dotenv.env['DROPBOX_KEY'] ?? "",
+      dotenv.env['DROPBOX_SECRET'] ?? "",
+      dotenv.env['DROPBOX_TOKEN'] ?? "");
   await NotificacionesFun.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
@@ -47,10 +57,10 @@ class Main extends StatelessWidget {
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
           duration: const Duration(seconds: 4),
-          backgroundColor: Preferences.thema ? Colors.black : Colors.white,
+          backgroundColor: Preferences.isLightTheme ? Colors.white : Colors.black,
           textStyle: TextStyle(
               fontSize: 15.sp,
-              color: Preferences.thema ? Colors.white : Colors.black),
+              color: Preferences.isLightTheme ? Colors.black : Colors.white),
           child: MaterialApp(
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
@@ -62,8 +72,8 @@ class Main extends StatelessWidget {
               ],
               debugShowCheckedModeBanner: false,
               title: 'Gastos',
-              themeMode: Preferences.thema ? ThemeMode.light : ThemeMode.dark,
-              theme: Preferences.thema ? light : dark,
+              themeMode: Preferences.isLightTheme ? ThemeMode.light : ThemeMode.dark,
+              theme: Preferences.isLightTheme ? light : dark,
               navigatorKey: NavigationKey.navigatorKey,
               initialRoute: AppRoutes.initialRoute,
               routes: AppRoutes.routes)));

@@ -49,9 +49,9 @@ class Preferences {
   static set recordatorioAct2(bool value) =>
       _preferences?.setBool('recordatorioAct2', value);
 
-  static bool get thema => _preferences?.getBool('thema') ?? true;
-  static set thema(bool value) => _preferences?.setBool('thema', value);
-  
+  static bool get isLightTheme => _preferences?.getBool('isLightTheme') ?? true;
+  static set isLightTheme(bool value) => _preferences?.setBool('isLightTheme', value);
+
   static bool get version => _preferences?.getBool('version') ?? true;
   static set version(bool value) => _preferences?.setBool('version', value);
 }

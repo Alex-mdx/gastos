@@ -164,30 +164,24 @@ class _DialogSettingNotificacionesState
                               int id2 = 30;
                               var result = await Permisos.notificacion();
                               if (result) {
-                                await Background.cancelBackgroundTask(
-                                    "task_$id1");
-                                await Background.cancelBackgroundTask(
-                                    "task_$id2");
-                                Preferences.recordatorioAct1 = act1;
-                                Preferences.recordatorioAct2 = act2;
-                                Preferences.recordatorio1 = horaPreferencia1;
-                                Preferences.recordatorio2 = horaPreferencia2;
-                                if (act1) {
-                                  await Background.scheduleDailyBackgroundTask(
-                                      hour: hora1.hour,
-                                      minute: hora1.minute,
-                                      taskId: "task_$id1",
-                                      taskFunction: () async =>
-                                          await NotificacionesFun.show(id1));
-                                }
-                                if (act2) {
-                                  await Background.scheduleDailyBackgroundTask(
-                                      hour: hora2.hour,
-                                      minute: hora2.minute,
-                                      taskId: "task_$id2",
-                                      taskFunction: () async =>
-                                          await NotificacionesFun.show(id2));
-                                }
+                                  await Background.cancelBackgroundTask(
+                                      "task_$id1");
+                                  await Background.cancelBackgroundTask(
+                                      "task_$id2");
+                                  await NotificacionesFun.cancel(id1);
+                                  await NotificacionesFun.cancel(id2);
+                                  Preferences.recordatorioAct1 = act1;
+                                  Preferences.recordatorioAct2 = act2;
+                                  Preferences.recordatorio1 = horaPreferencia1;
+                                  Preferences.recordatorio2 = horaPreferencia2;
+                                  if (act1) {
+                                    await NotificacionesFun.scheduleDaily(
+                                        id1, hora1.hour, hora1.minute);
+                                  }
+                                  if (act2) {
+                                    await NotificacionesFun.scheduleDaily(
+                                        id2, hora2.hour, hora2.minute);
+                                  }
                                 await Permission.ignoreBatteryOptimizations
                                     .request();
                                     
