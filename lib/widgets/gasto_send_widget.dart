@@ -73,6 +73,8 @@ class _GastoSendWidgetState extends State<GastoSendWidget> {
                             gasto: null,
                             evidencia: [],
                             nota: null);
+                        provider.categoriaController.clear();
+                        provider.montoController.clear();
                         provider.imagenesActual = [];
                         provider.notas.text = "";
                         provider.notas.selection =
@@ -100,8 +102,9 @@ class _GastoSendWidgetState extends State<GastoSendWidget> {
                           : (provider.gastoActual.monto ?? 0) >= 100
                               ? Duration(seconds: 1, milliseconds: 400)
                               : (provider.gastoActual.monto ?? 0) >= 10
-                                  ?  Duration(seconds: 1, milliseconds: 100)
-                                  : Durations.extralong2,onAnimationComplete: () {},
+                                  ? Duration(seconds: 1, milliseconds: 100)
+                                  : Durations.extralong2,
+                  onAnimationComplete: () {},
                   onTap: null,
                   collectionWidget: (provider.gastoActual.monto ?? 0) >= 10000
                       ? Icon(LineIcons.fileInvoiceWithUsDollar, size: 23.sp)

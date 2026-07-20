@@ -33,23 +33,30 @@ class DialogHistorialPago extends StatefulWidget {
 
 class _DialogHistorialPagoState extends State<DialogHistorialPago> {
   bool editar = false;
-  late GastoModelo tempGasto;
+  GastoModelo? tempGasto;
   TextEditingController controller = TextEditingController();
   SingleSelectController<CategoriaModel> selects = SingleSelectController(null);
   MetodoPagoModel? metodoSelect;
+
+  TextEditingController notasController = TextEditingController();
+  List<String> images = [];
+
   @override
   void initState() {
     super.initState();
+    init();
   }
 
-  Future<void> name() async {
+  Future<void> init() async {
     tempGasto = widget.gasto;
     controller.text = widget.gasto.monto.toString();
+    notasController.text = widget.gasto.nota ?? "";
+    images = tempGasto?.evidencia ?? [];
     var cate =
-        await CategoriaController.getItem(id: tempGasto.categoriaId ?? -1);
+        await CategoriaController.getItem(id: tempGasto?.categoriaId ?? -1);
     selects.value = cate;
     metodoSelect =
-        await MetodoGastoController.getItem(id: tempGasto.metodoPagoId ?? -1);
+        await MetodoGastoController.getItem(id: tempGasto?.metodoPagoId ?? -1);
   }
 
   @override
@@ -86,14 +93,45 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                     }),
                 icon: Icon(Icons.delete, color: ThemaMain.red, size: 20.sp))
           ]),
-      Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Fecha: ${tempGasto.fecha}",
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
-            Icon(Icons.timelapse, size: 18.sp, color: ThemaMain.green)
-          ]),
+      InkWell(
+          onTap: () async {
+            if (!editar) return;
+            DateTime now = DateTime.now();
+            var temp = (await showDatePicker(
+                    context: context,
+                    initialDatePickerMode: DatePickerMode.day,
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    initialDate: now,
+                    currentDate: DateTime.parse(tempGasto?.fecha ?? ""),
+                    firstDate: now.subtract(const Duration(days: 365 * 15)),
+                    lastDate: now)) ??
+                DateTime.parse(tempGasto?.fecha ?? "");
+            setState(() {
+              tempGasto?.dia = temp.day.toString();
+              tempGasto?.mes = temp.month.toString();
+              tempGasto?.fecha = Textos.fechaYMDHMS(
+                  fecha: DateTime(
+                      temp.year,
+                      temp.month,
+                      temp.day,
+                      DateTime.parse(tempGasto?.fecha ?? "").hour,
+                      DateTime.parse(tempGasto?.fecha ?? "").minute,
+                      DateTime.parse(tempGasto?.fecha ?? "").second));
+            });
+          },
+          child: Padding(
+            padding: editar ? EdgeInsets.all(8.sp) : EdgeInsets.zero,
+            child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Fecha: ${tempGasto?.fecha}",
+                      style: TextStyle(
+                          fontSize: 15.sp, fontWeight: FontWeight.bold)),
+                  Icon(Icons.timelapse, size: 18.sp, color: ThemaMain.green)
+                ]),
+          )),
       Container(
           constraints: BoxConstraints(maxHeight: 60.h),
           child: ListView(
@@ -103,32 +141,46 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                 cardMontos(
                     lCabeza: "Monto",
                     tipo: 1,
-                    rCabeza: "\$${Textos.moneda(moneda: tempGasto.monto!)}",
+                    controller: controller,
+                    monto: (p0) => setState(() {
+                          tempGasto?.monto = p0;
+                        }),
+                    rCabeza:
+                        "\$${Textos.moneda(moneda: tempGasto?.monto ?? 0)}",
                     lRelleno: provider.presupuesto?.activo == 0 ||
                             provider.presupuesto == null
                         ? ThemaMain.primary
                         : provider.porcentualColor(
                             provider.obtenerPorcentajeDia(
-                                DateTime.parse(tempGasto.fecha!).weekday - 1,
-                                tempGasto.monto!))),
+                                DateTime.parse(tempGasto?.fecha ?? "").weekday -
+                                    1,
+                                tempGasto!.monto!))),
                 cardMontos(
                     lCabeza: "Categoria de gasto",
                     tipo: 2,
+                    singleSelect: selects,
+                    fun: (p0) => setState(() {
+                          tempGasto?.categoriaId = p0?.id;
+                        }),
                     rCabeza: provider.listaCategoria
                             .firstWhereOrNull((element) =>
-                                element.id == tempGasto.categoriaId)
+                                element.id == tempGasto?.categoriaId)
                             ?.nombre ??
                         "Desconocido",
                     lRelleno: ThemaMain.primary),
                 cardMontos(
                     lCabeza: "Metodo de gasto",
                     tipo: 3,
+                    metodoSelect: metodoSelect,
+                    metodo: (p0) => setState(() {
+                          tempGasto?.metodoPagoId = p0.id;
+                        }),
                     rCabeza:
-                        "${provider.metodo.firstWhereOrNull((element) => element.id == tempGasto.metodoPagoId)?.nombre}",
+                        "${provider.metodo.firstWhereOrNull((element) => element.id == tempGasto?.metodoPagoId)?.nombre}",
                     lRelleno: ThemaMain.primary),
                 FutureBuilder(
                     future: BidonesController.getItemByGasto(
-                        gastoid: tempGasto.id!),
+                        gastoid: tempGasto?.id ?? -1),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return cardMontos(
@@ -156,17 +208,41 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.sp)))),
-                      Padding(
-                          padding: EdgeInsets.all(6.sp),
-                          child: AnimatedReadMoreText(
-                              tempGasto.nota == "" || tempGasto.nota == null
-                                  ? "Sin notas"
-                                  : tempGasto.nota.toString(),
-                              textStyle: TextStyle(fontSize: 15.sp),
-                              maxLines: 3,
-                              readMoreText: "...",
-                              readLessText: ". menos",
-                              buttonTextStyle: TextStyle(fontSize: 15.sp)))
+                      editar
+                          ? TextField(
+                              controller: notasController,
+                              maxLines: 2,
+                              minLines: 1,
+                              style: TextStyle(fontSize: 15.sp),
+                              decoration: InputDecoration(
+                                  hintText: "Notas",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 1.w, vertical: .5.h),
+                                  border: OutlineInputBorder(),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: ThemaMain.primary,
+                                          width: 1.sp)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: ThemaMain.primary,
+                                          width: 1.sp)),
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: ThemaMain.primary,
+                                          width: 1.sp))))
+                          : Padding(
+                              padding: EdgeInsets.all(6.sp),
+                              child: AnimatedReadMoreText(
+                                  tempGasto?.nota == "" ||
+                                          tempGasto?.nota == null
+                                      ? "Sin notas"
+                                      : tempGasto!.nota.toString(),
+                                  textStyle: TextStyle(fontSize: 15.sp),
+                                  maxLines: 3,
+                                  readMoreText: "...",
+                                  readLessText: ". menos",
+                                  buttonTextStyle: TextStyle(fontSize: 15.sp)))
                     ])),
                 const Divider(),
                 Card(
@@ -185,24 +261,24 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.sp)))),
-                      tempGasto.evidencia.isEmpty
+                      images.isEmpty
                           ? Text("Lista de Evidencias Vacias",
                               style: TextStyle(fontSize: 16.sp))
                           : Wrap(
-                              children: tempGasto.evidencia.map((e) {
-                              return IconButton(
-                                  icon: Icon(Icons.photo, size: 20.sp),
-                                  onPressed: () async {
-                                    debugPrint(e);
-                                    var file = await ImageGen.find(e);
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            DialogHistorialPagoFoto(
-                                                file: file,
-                                                idGasto: tempGasto.id!));
-                                  });
-                            }).toList())
+                              children: images
+                                  .map((e) => IconButton(
+                                      icon: Icon(Icons.photo, size: 20.sp),
+                                      onPressed: () async {
+                                        debugPrint(e);
+                                        var file = await ImageGen.find(e);
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                DialogHistorialPagoFoto(
+                                                    file: file,
+                                                    idGasto: tempGasto!.id!));
+                                      }))
+                                  .toList())
                     ]))
               ])),
       if (editar)
@@ -216,7 +292,17 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                           "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
                       loadingTitle: "Actualizando",
                       onAcceptPressed: (context) async {
-                        /* final newModel = gasto.periodo. */
+                        final newModel = widget.gasto.copyWith(
+                            monto: double.parse(controller.text),
+                            categoriaId: selects.value?.id,
+                            metodoPagoId: metodoSelect?.id,
+                            evidencia: images,
+                            nota: notasController.text);
+                        await GastosController.updateItem(newModel);
+                        var xTemp = await GastosController.getConfigurado();
+                        setState(() {
+                          provider.listaGastos = xTemp;
+                        });
                       });
                 },
                 icon: Icon(Icons.save, size: 24.sp)))
@@ -229,21 +315,38 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
       required Color lRelleno,
       required int tipo,
       TextEditingController? controller,
-      SingleSelectController<CategoriaModel>? singleSelect,
       Function(double)? monto,
+      SingleSelectController<CategoriaModel>? singleSelect,
       Function(CategoriaModel?)? fun,
-      Function(CategoriaModel)? delete,
       Function(MetodoPagoModel)? metodo,
       MetodoPagoModel? metodoSelect}) {
     return Card(
         elevation: 0,
         child: Row(children: [
           Expanded(
-              flex: 3,
+              flex: editar ? 2 : 3,
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: lRelleno,
+                      borderRadius:
+                          BorderRadius.horizontal(left: Radius.circular(10))),
+                  child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 1.w, vertical: .5.h),
+                      child: Text(lCabeza,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.sp))))),
+          Expanded(
+              flex: 4,
               child: editar
                   ? tipo == 1
                       ? TextfieldMoney(
-                          text: controller!, field: (p0) => monto!(p0))
+                          size: 16.sp,
+                          text: controller!,
+                          field: (p0) => monto!(p0))
                       : tipo == 2
                           ? SearchCategorias(
                               controller: singleSelect!,
@@ -259,31 +362,16 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                         metodo!(p0);
                                       })),
                               child: Text(
-                                  "Metodo de pago: ${metodoSelect?.nombre ?? "Sin metodo valido"}",
+                                  metodoSelect?.nombre ?? "Sin metodo valido",
                                   style: TextStyle(
                                       color: ThemaMain.darkBlue,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16.sp)))
-                  : Container(
-                      decoration: BoxDecoration(
-                          color: lRelleno,
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(10))),
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 1.w, vertical: .5.h),
-                          child: Text(lCabeza,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.sp))))),
-          Expanded(
-              flex: 4,
-              child: Padding(
-                  padding: EdgeInsets.all(6.sp),
-                  child: Text(rCabeza,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16.sp))))
+                  : Padding(
+                      padding: EdgeInsets.all(6.sp),
+                      child: Text(rCabeza,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16.sp))))
         ]));
   }
 }

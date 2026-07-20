@@ -26,129 +26,138 @@ class _SettingsBidonesState extends State<SettingsBidones> {
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
       SizedBox(
           width: double.infinity,
-          child: bd.Badge(badgeContent: IconButton.filled(onPressed: () {
-            Dialogs.showMorph(
-                title: "Eliminar bidon",
-                description:
-                    "Se va a eliminar los datos del bidon",
-                loadingTitle: "Eliminando",
-                onAcceptPressed: (context) async {
-                  await BidonesController.deleteAll();
-                  setState(() {
-                    showToast("Bidon eliminado");
-                  });
-                });
-          }, icon: Icon(Icons.delete)),
+          child: bd.Badge(
+              badgeStyle: bd.BadgeStyle(badgeColor: Colors.transparent),
+              badgeContent: IconButton.filled(
+                  onPressed: () {
+                    Dialogs.showMorph(
+                        title: "Eliminar bidon",
+                        description: "Se va a eliminar los datos del bidon",
+                        loadingTitle: "Eliminando",
+                        onAcceptPressed: (context) async {
+                          await BidonesController.deleteAll();
+                          setState(() {
+                            showToast("Bidon eliminado");
+                          });
+                        });
+                  },
+                  icon: Icon(Icons.delete, size: 18.sp)),
               child: Card(
-              elevation: 0,
-              color: Colors.white,
-              child: Padding(
-                  padding: EdgeInsets.all(8.sp),
-                  child: FutureBuilder(
-                      future: BidonesController.getItemsByAbierto(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return snapshot.data!.isNotEmpty
-                              ? Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  alignment: WrapAlignment.spaceAround,
-                                  spacing: 1.w,
-                                  children: snapshot.data!
-                                      .map((bidones) => bd.Badge(
-                                          onTap: () => Dialogs.showMorph(
-                                              title: "Actualizar bidon",
-                                              description:
-                                                  "Se va a actualizar los datos del bidon",
-                                              loadingTitle: "Actualizando",
-                                              onAcceptPressed: (context) async {
-                                                await OperacionGasto.actualizar(
-                                                    id: bidones.id!);
-                                                setState(() {
-                                                  showToast(
-                                                      "Bidon actualizado");
-                                                });
-                                              }),
-                                          badgeStyle: bd.BadgeStyle(
-                                              badgeColor: ThemaMain.primary),
-                                          badgeContent: Icon(Icons.refresh,
-                                              size: 18.sp,
-                                              color: ThemaMain.white),
-                                          position: bd.BadgePosition.topEnd(
-                                              top: 0, end: -10),
-                                          showBadge: bidones.gastos.isNotEmpty,
-                                          badgeAnimation:
-                                              bd.BadgeAnimation.slide(),
-                                          child: Card(
-                                              color: ThemaMain.dialogbackground,
-                                              child: SizedBox(
-                                                  width: 31.w,
-                                                  child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        TextButton(
-                                                            onPressed: () => showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder: (context) =>
-                                                                    DialogBidones(
-                                                                        bidon:
-                                                                            bidones)),
-                                                            child: Text(
-                                                                "${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : Textos.moneda(moneda: (((bidones.montoFinal) / bidones.montoInicial)) * 100, digito: 1)))}%\n\$${Textos.moneda(moneda: bidones.montoFinal)}",
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        LinearProgressIndicator(
-                                                            minHeight: 1.h,
-                                                            valueColor: AlwaysStoppedAnimation(
-                                                                bidones.inhabilitado ==
+                  elevation: 0,
+                  color: Colors.white,
+                  child: Padding(
+                      padding: EdgeInsets.all(8.sp),
+                      child: FutureBuilder(
+                          future: BidonesController.getItemsByAbierto(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return snapshot.data!.isNotEmpty
+                                  ? Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.spaceAround,
+                                      spacing: 1.w,
+                                      children: snapshot.data!
+                                          .map((bidones) => bd.Badge(
+                                              onTap: () => Dialogs.showMorph(
+                                                  title: "Actualizar bidon",
+                                                  description:
+                                                      "Se va a actualizar los datos del bidon",
+                                                  loadingTitle: "Actualizando",
+                                                  onAcceptPressed:
+                                                      (context) async {
+                                                    await OperacionGasto
+                                                        .actualizar(
+                                                            id: bidones.id!);
+                                                    setState(() {
+                                                      showToast(
+                                                          "Bidon actualizado");
+                                                    });
+                                                  }),
+                                              badgeStyle: bd.BadgeStyle(
+                                                  badgeColor:
+                                                      ThemaMain.primary),
+                                              badgeContent: Icon(Icons.refresh,
+                                                  size: 18.sp,
+                                                  color: ThemaMain.white),
+                                              position: bd.BadgePosition.topEnd(
+                                                  top: 0, end: -10),
+                                              showBadge:
+                                                  bidones.gastos.isNotEmpty,
+                                              badgeAnimation:
+                                                  bd.BadgeAnimation.slide(),
+                                              child: Card(
+                                                  color: ThemaMain
+                                                      .dialogbackground,
+                                                  child: SizedBox(
+                                                      width: 31.w,
+                                                      child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            TextButton(
+                                                                onPressed: () => showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder: (context) =>
+                                                                        DialogBidones(
+                                                                            bidon:
+                                                                                bidones)),
+                                                                child: Text(
+                                                                    "${bidones.nombre}\n${((bidones.montoFinal == 0 ? 0 : Textos.moneda(moneda: (((bidones.montoFinal) / bidones.montoInicial)) * 100, digito: 1)))}%\n\$${Textos.moneda(moneda: bidones.montoFinal)}",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        fontSize: 15
+                                                                            .sp,
+                                                                        fontWeight:
+                                                                            FontWeight.bold))),
+                                                            LinearProgressIndicator(
+                                                                minHeight: 1.h,
+                                                                valueColor: AlwaysStoppedAnimation(bidones
+                                                                            .inhabilitado ==
                                                                         0
                                                                     ? ThemaMain
                                                                         .darkBlue
                                                                     : ThemaMain
                                                                         .darkGrey),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        borderRadius),
-                                                            semanticsValue:
-                                                                "${bidones.montoInicial}",
-                                                            value: bidones
-                                                                        .montoFinal ==
-                                                                    0
-                                                                ? 0
-                                                                : ((bidones
-                                                                        .montoFinal) /
-                                                                    bidones
-                                                                        .montoInicial))
-                                                      ])))))
-                                      .toList())
-                              : Center(
-                                  child: Text("Sin bidones creados",
-                                      style: TextStyle(fontSize: 16.sp)));
-                        } else if (snapshot.hasError) {
-                          return Text("${snapshot.error}",
-                              style: TextStyle(fontSize: 12.sp));
-                        } else if (!snapshot.hasData) {
-                          return Text("Sin bidones creados",
-                              style: TextStyle(fontSize: 16.sp));
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      }))))),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            borderRadius),
+                                                                semanticsValue:
+                                                                    "${bidones.montoInicial}",
+                                                                value: bidones
+                                                                            .montoFinal ==
+                                                                        0
+                                                                    ? 0
+                                                                    : ((bidones
+                                                                            .montoFinal) /
+                                                                        bidones
+                                                                            .montoInicial))
+                                                          ])))))
+                                          .toList())
+                                  : Center(
+                                      child: Text("Sin bidones creados",
+                                          style: TextStyle(fontSize: 16.sp)));
+                            } else if (snapshot.hasError) {
+                              return Text("${snapshot.error}",
+                                  style: TextStyle(fontSize: 12.sp));
+                            } else if (!snapshot.hasData) {
+                              return Text("Sin bidones creados",
+                                  style: TextStyle(fontSize: 16.sp));
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          }))))),
       ElevatedButton(
           onPressed: () => showDialog(
-              context: context, builder: (context) => DialogBidones()),
+                  context: context, builder: (context) => DialogBidones())
+              .then((value) => setState(() {})),
           child: Text("Crear",
               style: TextStyle(color: ThemaMain.green, fontSize: 16.sp)))
     ]);

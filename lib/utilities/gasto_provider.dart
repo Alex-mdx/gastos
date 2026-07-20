@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:gastos/controllers/categoria_controller.dart';
@@ -78,6 +79,21 @@ class GastoProvider with ChangeNotifier {
   PresupuestoModel? get presupuesto => _presupuesto;
   set presupuesto(PresupuestoModel? valor) {
     _presupuesto = valor;
+    notifyListeners();
+  }
+
+  SingleSelectController<CategoriaModel> _categoriaController =
+      SingleSelectController(null);
+  SingleSelectController<CategoriaModel> get categoriaController => _categoriaController;
+  set categoriaController(SingleSelectController<CategoriaModel> valor) {
+    _categoriaController = valor;
+    notifyListeners();
+  }
+
+  TextEditingController _montoController = TextEditingController(text: '');
+  TextEditingController get montoController => _montoController;
+  set montoController(TextEditingController valor) {
+    _montoController = valor;
     notifyListeners();
   }
 

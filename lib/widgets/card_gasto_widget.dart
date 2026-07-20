@@ -1,8 +1,6 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/widgets/generics/search_categorias.dart';
 import 'package:gastos/widgets/generics/textfield_money.dart';
-import 'package:intl/intl.dart';
 import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/textos.dart';
@@ -13,7 +11,6 @@ import 'package:sizer/sizer.dart';
 import '../dialog/dialog_camara.dart';
 import 'package:badges/badges.dart' as badges;
 import '../dialog/dialog_categorias.dart';
-import '../models/categoria_model.dart';
 
 class CardGastoWidget extends StatefulWidget {
   final GastoProvider provider;
@@ -27,25 +24,14 @@ class CardGastoWidget extends StatefulWidget {
 
 class _MyWidgetState extends State<CardGastoWidget> {
   DateTime now = DateTime.now();
-  SingleSelectController<CategoriaModel> controller =
-      SingleSelectController(null);
-  late TextEditingController montoController;
 
   @override
   void initState() {
     super.initState();
-    double initialMonto = widget.provider.gastoActual.monto ?? 0.0;
-    montoController = TextEditingController(
-        text: initialMonto > 0
-            ? NumberFormat.currency(
-                    locale: 'en_US', symbol: '', decimalDigits: 2)
-                .format(initialMonto)
-            : '');
   }
 
   @override
   void dispose() {
-    montoController.dispose();
     super.dispose();
   }
 
@@ -93,17 +79,19 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           SizedBox(
                               width: 75.w,
                               child: SearchCategorias(
-                                controller: controller,
-                                list: widget.provider.listaCategoria,
-                                fun: (p0) {
-                                  final modelTemp =
-                widget.provider.gastoActual.copyWith(categoriaId: p0.id);
+                                  controller: widget.provider.categoriaController,
+                                  list: widget.provider.listaCategoria,
+                                  inSideBar: true,
+                                  fun: (p0) {
+                                    final modelTemp = widget
+                                        .provider.gastoActual
+                                        .copyWith(categoriaId: p0.id);
 
-            widget.provider.gastoActual = modelTemp;
-                                },
-                                delete: (p0) =>
-                                  widget.provider.listaCategoria = p0
-                              )),
+                                    widget.provider.gastoActual = modelTemp;
+                                  },
+                                  delete: (p0) => setState(() {
+                                        widget.provider.listaCategoria = p0;
+                                      }))),
                           IconButton.filled(
                               onPressed: () => showDialog(
                                   context: context,
@@ -143,7 +131,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               SizedBox(
                                   width: 45.w,
                                   child: TextfieldMoney(
-                                      text: montoController,
+                                      text: widget.provider.montoController,
+                                      size: 18.sp,
                                       field: (p0) {
                                         final tempModel = widget
                                             .provider.gastoActual

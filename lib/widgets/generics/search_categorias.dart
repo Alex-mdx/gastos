@@ -15,13 +15,15 @@ class SearchCategorias extends StatefulWidget {
   final List<CategoriaModel> list;
   final Function(CategoriaModel) fun;
   final Function(List<CategoriaModel>)? delete;
+  final bool inSideBar;
 
   const SearchCategorias(
       {super.key,
       required this.controller,
       required this.list,
       required this.fun,
-      this.delete});
+      this.delete,
+      this.inSideBar = false});
 
   @override
   State<SearchCategorias> createState() => _SearchCategoriasState();
@@ -32,7 +34,7 @@ class _SearchCategoriasState extends State<SearchCategorias> {
   Widget build(BuildContext context) {
     return CustomDropdown.searchRequest(
         futureRequest: (p0) async => await CategoriaController.buscar(p0),
-        searchHintText: "Nombre categoria de gasto",
+        searchHintText: "Buscar categoria",
         noResultFoundText: "Sin resultados",
         controller: widget.controller,
         closedHeaderPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
@@ -68,8 +70,10 @@ class _SearchCategoriasState extends State<SearchCategorias> {
         itemsListPadding: EdgeInsets.all(0),
         listItemPadding:
             EdgeInsets.only(top: 1.h, bottom: 0, left: 0, right: 0),
-        hideSelectedFieldWhenExpanded: true,
+        hideSelectedFieldWhenExpanded: widget.inSideBar,
         excludeSelected: true,
+        autofocusOnSearch: false,
+        selectOnItemTap: true,
         listItemBuilder: (context, item, isSelected, onItemSelect) => ListTile(
             dense: isSelected,
             tileColor: isSelected
@@ -83,24 +87,24 @@ class _SearchCategoriasState extends State<SearchCategorias> {
                     color: ThemaMain.darkBlue,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold)),
-            trailing: widget.delete != null ?  IconButton(
-                onPressed: () => Dialogs.showMorph(
-                    title: "Eliminar",
-                    description:
-                        "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
-                    loadingTitle: "Eliminando",
-                    onAcceptPressed: (context) async {
-                      await CategoriaController.deleteItem(item.id!);
-                      final data = await CategoriaController.getItems();
-                      setState(() {
-                        widget.controller.clear();
-                        widget.delete!(data);
-                      });
-                    }),
-                icon: Icon(Icons.delete, size: 16.sp, color: ThemaMain.red)) : null),
+            trailing: widget.delete != null
+                ? IconButton(
+                    onPressed: () => Dialogs.showMorph(
+                        title: "Eliminar",
+                        description:
+                            "¿Desea eliminar la categoria de gasto '${item.nombre}'? una vez eliminado aquellos gastos con esa categoria la perderan",
+                        loadingTitle: "Eliminando",
+                        onAcceptPressed: (context) async {
+                          await CategoriaController.deleteItem(item.id!);
+                          final data = await CategoriaController.getItems();
+                          setState(() {
+                            widget.controller.clear();
+                            widget.delete!(data);
+                          });
+                        }),
+                    icon: Icon(Icons.delete, size: 16.sp, color: ThemaMain.red))
+                : null),
         overlayHeight: 35.h,
-        autofocusOnSearch: true,
-        selectOnItemTap: true,
         onChanged: (p0) {
           log("$p0");
           if (p0 != null) {

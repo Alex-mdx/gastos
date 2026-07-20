@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 
 import 'navigation_services.dart';
 
@@ -88,7 +89,8 @@ class _ConfirmDialogState extends State<MorphDialog>
                             child: InkWell(
                                 splashFactory: InkSparkle
                                     .constantTurbulenceSeedSplashFactory,
-                                highlightColor: Colors.grey[255],
+                                highlightColor:
+                                    ThemaMain.green.withValues(alpha: .5),
                                 onTap: () {
                                   _switchState();
                                   widget.onAcceptPressed?.call(context);

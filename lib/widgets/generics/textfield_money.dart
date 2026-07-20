@@ -9,8 +9,9 @@ class TextfieldMoney extends StatefulWidget {
   final TextEditingController text;
   final Function(double) field;
   final FocusScopeNode? focus;
+  final double size;
   const TextfieldMoney(
-      {super.key, required this.text, required this.field, this.focus});
+      {super.key, required this.text, required this.field, this.focus, required this.size});
 
   @override
   State<TextfieldMoney> createState() => _TextfieldMoneyState();
@@ -32,7 +33,7 @@ class _TextfieldMoneyState extends State<TextfieldMoney> {
         keyboardType: TextInputType.number,
         inputFormatters: [CurrencyInputFormatter()],
         style: TextStyle(
-            fontSize: 18.sp,
+            fontSize: widget.size,
             fontWeight: FontWeight.bold,
             color: ThemaMain.darkBlue),
         textAlign: TextAlign.center,
@@ -48,7 +49,7 @@ class _TextfieldMoneyState extends State<TextfieldMoney> {
         },
         decoration: InputDecoration(
             hintText: '0.00',
-            hintStyle: TextStyle(color: ThemaMain.grey, fontSize: 15.sp),
+            hintStyle: TextStyle(color: ThemaMain.grey, fontSize: widget.size),
             filled: true,
             fillColor: ThemaMain.background,
             contentPadding:
