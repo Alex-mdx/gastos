@@ -80,13 +80,18 @@ class _SearchCategoriasState extends State<SearchCategorias> {
                 ? ThemaMain.primary.withAlpha(125)
                 : ThemaMain.second,
             contentPadding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0),
-            title: Text("${item.nombre} |- ${item.descripcion}",
+            title: Text.rich(
+                TextSpan(children: [
+                  TextSpan(
+                      text: item.nombre,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                      text: " |- ${item.descripcion}",
+                      style: const TextStyle(fontWeight: FontWeight.normal))
+                ]),
                 maxLines: isSelected ? 1 : 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: ThemaMain.darkBlue,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold)),
+                style: TextStyle(color: ThemaMain.darkBlue, fontSize: 14.sp)),
             trailing: widget.delete != null
                 ? IconButton(
                     onPressed: () => Dialogs.showMorph(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
@@ -11,7 +12,11 @@ class TextfieldMoney extends StatefulWidget {
   final FocusScopeNode? focus;
   final double size;
   const TextfieldMoney(
-      {super.key, required this.text, required this.field, this.focus, required this.size});
+      {super.key,
+      required this.text,
+      required this.field,
+      this.focus,
+      required this.size});
 
   @override
   State<TextfieldMoney> createState() => _TextfieldMoneyState();
@@ -31,6 +36,7 @@ class _TextfieldMoneyState extends State<TextfieldMoney> {
         },
         controller: widget.text,
         keyboardType: TextInputType.number,
+        maxLength: 12,
         inputFormatters: [CurrencyInputFormatter()],
         style: TextStyle(
             fontSize: widget.size,
@@ -48,6 +54,7 @@ class _TextfieldMoneyState extends State<TextfieldMoney> {
           widget.field(doubleValue);
         },
         decoration: InputDecoration(
+            counterText: '',
             hintText: '0.00',
             hintStyle: TextStyle(color: ThemaMain.grey, fontSize: widget.size),
             filled: true,
@@ -57,7 +64,7 @@ class _TextfieldMoneyState extends State<TextfieldMoney> {
             prefixIcon:
                 Icon(Icons.attach_money, size: 20.sp, color: ThemaMain.green),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide.none)));
   }
 }

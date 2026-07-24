@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
+import '../controllers/metodo_gasto_controller.dart';
+
 class SqlGenerator {
+
+static Future<void> ads() async {
+    await SqlGenerator.existColumna(
+        add: "icon", database: MetodoGastoController.database, nombreDB: "metodo_pago");
+   
+  }
+
   static Future<bool> existColumna(
       {required String add,
       required Future<sql.Database> Function() database,

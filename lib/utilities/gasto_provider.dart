@@ -11,6 +11,7 @@ import 'package:gastos/models/metodo_pago_model.dart';
 import 'package:gastos/models/periodo_model.dart';
 import 'package:gastos/models/presupuesto_model.dart';
 import 'package:gastos/utilities/preferences.dart';
+import 'package:gastos/utilities/sql_generator.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:get/get.dart';
@@ -84,7 +85,8 @@ class GastoProvider with ChangeNotifier {
 
   SingleSelectController<CategoriaModel> _categoriaController =
       SingleSelectController(null);
-  SingleSelectController<CategoriaModel> get categoriaController => _categoriaController;
+  SingleSelectController<CategoriaModel> get categoriaController =>
+      _categoriaController;
   set categoriaController(SingleSelectController<CategoriaModel> valor) {
     _categoriaController = valor;
     notifyListeners();
@@ -141,6 +143,7 @@ class GastoProvider with ChangeNotifier {
   }
 
   Future<void> obtenerDato() async {
+    await SqlGenerator.ads();
     listaCategoria = await CategoriaController.getItems();
     listaGastos = await GastosController.getConfigurado();
     presupuesto = await PresupuestoController.getItem();
@@ -149,6 +152,7 @@ class GastoProvider with ChangeNotifier {
     metodoSelect = metodo.firstWhereOrNull((element) => element.defecto == 1);
     paquete = await PackageInfo.fromPlatform();
     Preferences.version = Textos.contieneLetras(paquete!.version);
+
     //DropboxGen.verificarLogeo();
   }
 

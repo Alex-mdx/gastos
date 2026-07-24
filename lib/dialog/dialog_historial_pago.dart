@@ -14,10 +14,13 @@ import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:gastos/widgets/generics/search_categorias.dart';
 import 'package:gastos/widgets/generics/textfield_money.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 import '../models/categoria_model.dart';
+import '../utilities/camara_fun.dart';
+import '../utilities/preferences.dart';
 import '../utilities/services/navigation_services.dart';
 import '../utilities/textos.dart';
 import 'dialog_historial_pago_foto.dart';
@@ -129,7 +132,9 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                   Text("Fecha: ${tempGasto?.fecha}",
                       style: TextStyle(
                           fontSize: 15.sp, fontWeight: FontWeight.bold)),
-                  Icon(Icons.timelapse, size: 18.sp, color: ThemaMain.green)
+                  Icon(Icons.timelapse,
+                      size: 18.sp,
+                      color: editar ? ThemaMain.green : ThemaMain.primary)
                 ]),
           )),
       Container(
@@ -249,18 +254,39 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                     elevation: 0,
                     child: Column(children: [
                       Container(
+                          alignment: Alignment.center,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               color: ThemaMain.green,
                               borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(10))),
-                          child: Padding(
-                              padding: EdgeInsets.all(6.sp),
-                              child: Text("Evidencia Adjunta",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.sp)))),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            Padding(
+                                padding: EdgeInsets.all(6.sp),
+                                child: Text("Evidencia Adjunta",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sp))),
+                            if (editar)
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                      padding: WidgetStatePropertyAll(
+                                          EdgeInsets.symmetric(
+                                              horizontal: 1.w, vertical: 0))),
+                                  onPressed: () => showDialog(
+                                      context: context,
+                                      builder: (context) => showFoto(
+                                          tempGasto!.id!,
+                                          images.length,
+                                          (p0) => setState(() {
+                                                images.addAll(p0);
+                                              }))),
+                                  child: Text("Agregar",
+                                      style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.bold)))
+                          ])),
                       images.isEmpty
                           ? Text("Lista de Evidencias Vacias",
                               style: TextStyle(fontSize: 16.sp))
@@ -276,7 +302,19 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                                             builder: (context) =>
                                                 DialogHistorialPagoFoto(
                                                     file: file,
-                                                    idGasto: tempGasto!.id!));
+                                                    idGasto: tempGasto!.id!,
+                                                    deleteEvidence: editar
+                                                        ? (p0) {
+                                                            if (tempGasto!
+                                                                .evidencia
+                                                                .contains(e)) {
+                                                              setState(() {
+                                                                images
+                                                                    .remove(e);
+                                                              });
+                                                            }
+                                                          }
+                                                        : null));
                                       }))
                                   .toList())
                     ]))
@@ -292,6 +330,12 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                           "¿Desea guardar los cambios realizados en esta tarjeta de gasto?",
                       loadingTitle: "Actualizando",
                       onAcceptPressed: (context) async {
+                        final originalEvidencia = widget.gasto.evidencia ?? [];
+                        for (var img in originalEvidencia) {
+                          if (!images.contains(img)) {
+                            await ImageGen.delete(img);
+                          }
+                        }
                         final newModel = widget.gasto.copyWith(
                             monto: double.parse(controller.text),
                             categoriaId: selects.value?.id,
@@ -303,10 +347,75 @@ class _DialogHistorialPagoState extends State<DialogHistorialPago> {
                         setState(() {
                           provider.listaGastos = xTemp;
                         });
+                        Navigation.pop();
                       });
                 },
                 icon: Icon(Icons.save, size: 24.sp)))
     ]));
+  }
+
+  Dialog showFoto(int id, int lengthFoto, Function(List<String>) funcion) {
+    return Dialog(
+        child: Padding(
+            padding: EdgeInsets.all(8.sp),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Text('Ingresar evidencia', style: TextStyle(fontSize: 18.sp)),
+              Wrap(alignment: WrapAlignment.spaceAround, children: [
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      var data = await CamaraFun.getScanner(
+                          calidad: Preferences.calidadFoto);
+                      if (data != null) {
+                        await ImageGen.generar(
+                            archivo: data, name: "gasto_${lengthFoto}_$id");
+                        funcion(["gasto_${lengthFoto + 1}_$id.jpg"]);
+                      }
+                    },
+                    label: Text('Escaner', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.document_scanner, size: 20.sp)),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? photo = await picker.pickImage(
+                          maxHeight: 1280,
+                          maxWidth: 720,
+                          imageQuality: Preferences.calidadFoto.toInt(),
+                          source: ImageSource.camera,
+                          requestFullMetadata: false);
+                      if (photo != null) {
+                        final data = await photo.readAsBytes();
+                        await ImageGen.generar(
+                            archivo: data, name: "gasto_${lengthFoto}_$id");
+                        funcion(["gasto_${lengthFoto + 1}_$id.jpg"]);
+                      }
+                    },
+                    label: Text('Camara', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.camera_alt, size: 20.sp)),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      final List<XFile> images = await picker.pickMultiImage(
+                          imageQuality: Preferences.calidadFoto.toInt(),
+                          maxHeight: 1280,
+                          maxWidth: 720,
+                          limit: 10,
+                          requestFullMetadata: false);
+                      if (images.isNotEmpty) {
+                        List<String> names = [];
+                        for (var i = 0; i < images.length; i++) {
+                          final data = (await images[i].readAsBytes());
+                          await ImageGen.generar(
+                              archivo: data,
+                              name: "gasto_${i + lengthFoto}_$id");
+                          names.add("gasto_${i + lengthFoto}_$id.jpg");
+                        }
+                        funcion(names);
+                      }
+                    },
+                    label: Text('Galeria', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.image_search, size: 20.sp))
+              ])
+            ])));
   }
 
   Card cardMontos(

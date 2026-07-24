@@ -32,7 +32,8 @@ class ImageGen {
             await archivo.delete();
             debugPrint('Archivo eliminado: ${archivo.path}');
           } catch (e) {
-            debugPrint('Error al eliminar el archivo: ${archivo.path}, error: $e');
+            debugPrint(
+                'Error al eliminar el archivo: ${archivo.path}, error: $e');
           }
         }
       }
@@ -55,6 +56,15 @@ class ImageGen {
     }
     debugPrint('Archivo no encontrado.');
     return null; // Retornar null si no se encuentra el archivo
+  }
+
+  static Future<bool> delete(String nombre) async {
+    var file = await find(nombre);
+    if (file != null) {
+      await file.delete(recursive: true);
+      return true;
+    }
+    return false;
   }
 
   static Future<File?> generar(

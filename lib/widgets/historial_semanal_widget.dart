@@ -82,14 +82,17 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                     fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
                                         ? 15.sp
                                         : 13.sp,
-                                    fontStyle: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                        ? FontStyle.normal
-                                        : FontStyle.italic,
+                                    fontStyle:
+                                        dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                                            ? FontStyle.normal
+                                            : FontStyle.italic,
                                     fontWeight: FontWeight.bold))),
                         oppositeContentsBuilder: (context, index) => SizedBox(
                             width: 14.5.w,
                             height: 7.h,
-                            child: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
+                            child: dias[index]
+                                    .toLowerCase()
+                                    .contains(DateFormat('EEEE', 'es').format(now))
                                 ? animation(index)
                                 : tarjeta(index, false)),
                         itemCount: dias.length)))),
@@ -174,6 +177,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                     style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
                         color: widget.provider.porcentualColor(
                             (100 * widget.provider.promedioTotalSemana()) /
                                 widget.provider.presupuesto!.presupuesto!)),
@@ -207,10 +211,10 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
         child: Padding(
             padding: EdgeInsets.all(2.sp),
             child: AnimatedDefaultTextStyle(
-                overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
                     fontSize: 14.sp,
+                    overflow: TextOverflow.ellipsis,
                     fontWeight: hoy ? FontWeight.bold : FontWeight.normal,
                     color: widget.provider.presupuesto?.activo == 1
                         ? widget.provider.porcentualColor(widget.provider
@@ -218,10 +222,12 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                 widget.provider.promediarDiaSemana(index)))
                         : ThemaMain.primary),
                 duration: Duration(seconds: 2),
-                child: AnimatedFlipCounter(
-                    value: widget.provider.promediarDiaSemana(index),
-                    duration: Durations.long1,
-                    fractionDigits: 1,
-                    prefix: "\$"))));
+                child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: AnimatedFlipCounter(
+                        value: widget.provider.promediarDiaSemana(index),
+                        duration: Durations.long1,
+                        fractionDigits: 1,
+                        prefix: "\$")))));
   }
 }

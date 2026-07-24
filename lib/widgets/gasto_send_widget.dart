@@ -120,7 +120,9 @@ class _GastoSendWidgetState extends State<GastoSendWidget> {
                   child:
                       Icon(LineIcons.wallet, size: 24.sp, color: Colors.white)),
               InkWell(
-                  onTap: () => debugPrint("press"),
+                  canRequestFocus: false,
+                  enableFeedback: false,
+                  onTap: null,
                   child: SizedBox(height: 24.sp, width: 24.sp))
             ]),
             label: Text("Guardar Gasto",

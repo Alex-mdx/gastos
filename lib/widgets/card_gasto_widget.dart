@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/widgets/generics/multiselect_generic.dart';
 import 'package:gastos/widgets/generics/search_categorias.dart';
 import 'package:gastos/widgets/generics/textfield_money.dart';
-import 'package:gastos/dialog/dialog_metodo_pago.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
@@ -79,7 +79,8 @@ class _MyWidgetState extends State<CardGastoWidget> {
                           SizedBox(
                               width: 75.w,
                               child: SearchCategorias(
-                                  controller: widget.provider.categoriaController,
+                                  controller:
+                                      widget.provider.categoriaController,
                                   list: widget.provider.listaCategoria,
                                   inSideBar: true,
                                   fun: (p0) {
@@ -106,7 +107,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                               ]))
                         ]),
                     Padding(
-                        padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                        padding: EdgeInsets.only(top: 3.h, bottom: 2.h),
                         child: OverflowBar(
                             overflowAlignment: OverflowBarAlignment.center,
                             alignment: MainAxisAlignment.spaceAround,
@@ -129,10 +130,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                       icon: Icon(Icons.add_photo_alternate,
                                           size: 22.sp, color: Colors.white))),
                               SizedBox(
-                                  width: 45.w,
+                                  width: 46.w,
                                   child: TextfieldMoney(
                                       text: widget.provider.montoController,
                                       size: 18.sp,
+                                      focus: currentFocus,
                                       field: (p0) {
                                         final tempModel = widget
                                             .provider.gastoActual
@@ -140,21 +142,10 @@ class _MyWidgetState extends State<CardGastoWidget> {
                                         widget.provider.gastoActual = tempModel;
                                       }))
                             ])),
-                    TextButton(
-                        onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => DialogMetodoPago(
-                                tipo: true,
-                                metodoSelect: widget.provider.metodoSelect,
-                                fun: (p0) {
-                                  widget.provider.metodoSelect = p0;
-                                })),
-                        child: Text(
-                            "Metodo de pago: ${widget.provider.metodoSelect?.nombre ?? "Sin metodo valido"}",
-                            style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                                color: ThemaMain.darkBlue))),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 1.h),
+                      child: MultiselectGeneric(provider: widget.provider),
+                    ),
                     SizedBox(
                         height: 6.h,
                         child: TextField(
@@ -166,12 +157,11 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             autofocus: false,
                             expands: true,
                             maxLines: null,
-                            style: TextStyle(
-                                fontSize: 15.sp, color: ThemaMain.darkGrey),
+                            style: TextStyle(fontSize: 15.sp),
                             controller: widget.provider.notas,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                                hintStyle: TextStyle(color: ThemaMain.grey),
+                                hintStyle: TextStyle(color: ThemaMain.darkGrey),
                                 fillColor: ThemaMain.background,
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: .5.h, horizontal: 2.w),

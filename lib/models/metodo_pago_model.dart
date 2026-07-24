@@ -10,6 +10,7 @@ class MetodoPagoModel {
   int status;
   int defecto;
   Color color;
+  IconData? icon;
 
   MetodoPagoModel(
       {required this.id,
@@ -18,7 +19,8 @@ class MetodoPagoModel {
       required this.denominacion,
       required this.status,
       required this.defecto,
-      required this.color});
+      required this.color,
+      this.icon});
 
   MetodoPagoModel copyWith(
           {int? id,
@@ -27,7 +29,8 @@ class MetodoPagoModel {
           String? denominacion,
           int? status,
           int? defecto,
-          Color? color}) =>
+          Color? color,
+          IconData? icon}) =>
       MetodoPagoModel(
           id: id ?? this.id,
           nombre: nombre ?? this.nombre,
@@ -35,7 +38,8 @@ class MetodoPagoModel {
           denominacion: denominacion ?? this.denominacion,
           status: status ?? this.status,
           defecto: defecto ?? this.defecto,
-          color: color ?? this.color);
+          color: color ?? this.color,
+          icon: icon ?? this.icon);
 
   factory MetodoPagoModel.fromJson(Map<String, dynamic> json) =>
       MetodoPagoModel(
@@ -45,7 +49,8 @@ class MetodoPagoModel {
           denominacion: json["denominacion"],
           status: Parser.toInt(json["status"]) ?? 1,
           defecto: Parser.toInt(json["defecto"]) ?? 1,
-          color: Color(json["color"] ?? ThemaMain.primary));
+          color: Color(json["color"] ?? ThemaMain.primary),
+          icon: Parser.stringToIconData(json["icon"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -54,6 +59,7 @@ class MetodoPagoModel {
         "denominacion": denominacion,
         "status": status,
         "defecto": defecto,
-        "color": color.toARGB32()
+        "color": color.toARGB32(),
+        "icon": '${icon?.codePoint}_${icon?.fontFamily}',
       };
 }

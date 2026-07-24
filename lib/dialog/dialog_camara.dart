@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:gastos/utilities/camara_fun.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/preferences.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
@@ -90,61 +91,75 @@ class _DialogCamaraState extends State<DialogCamara> {
     final provider = Provider.of<GastoProvider>(context);
     return Dialog(
         child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.sp),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               Text('Ingresar evidencia', style: TextStyle(fontSize: 18.sp)),
-              ElevatedButton.icon(
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? photo = await picker.pickImage(
-                        maxHeight: 1280,
-                        maxWidth: 720,
-                        imageQuality: Preferences.calidadFoto.toInt(),
-                        source: ImageSource.camera,
-                        requestFullMetadata: false);
-                    if (photo != null) {
-                      final data = await photo.readAsBytes();
-                      setState(() {
-                        provider.imagenesActual.add(data);
-                      });
-                    }
-                  },
-                  label: Text('Camara', style: TextStyle(fontSize: 16.sp)),
-                  icon: Icon(Icons.camera_alt, size: 20.sp)),
-              ElevatedButton.icon(
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final List<XFile> images = await picker.pickMultiImage(
-                        imageQuality: Preferences.calidadFoto.toInt(),
-                        maxHeight: 1280,
-                        maxWidth: 720,
-                        limit: 10,
-                        requestFullMetadata: false);
-                    if (images.isNotEmpty) {
-                      for (var element in images) {
-                        final data = (await element.readAsBytes());
+              Wrap(alignment: WrapAlignment.spaceAround, children: [
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      var data = await CamaraFun.getScanner(
+                          calidad: Preferences.calidadFoto);
+                      if (data != null) {
                         setState(() {
                           provider.imagenesActual.add(data);
                         });
                       }
-                    }
-                  },
-                  label: Text('Galeria', style: TextStyle(fontSize: 16.sp)),
-                  icon: Icon(Icons.image_search, size: 20.sp)),
-              Divider(),
-              Column(mainAxisSize: MainAxisSize.min, children: [
-                provider.imagenesActual.isEmpty
-                    ? Center(
-                        child: Text(
-                            "No ha ingresado ninguna evidencia fotografica",
-                            style: TextStyle(fontSize: 15.sp),
-                            textAlign: TextAlign.center))
-                    : Wrap(
-                        spacing: 0,
-                        runSpacing: 0,
-                        children: provider.imagenesActual
-                            .map((e) => iconEvidencia(context, e, provider))
-                            .toList())
+                    },
+                    label: Text('Escaner', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.document_scanner, size: 20.sp)),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? photo = await picker.pickImage(
+                          maxHeight: 1280,
+                          maxWidth: 720,
+                          imageQuality: Preferences.calidadFoto.toInt(),
+                          source: ImageSource.camera,
+                          requestFullMetadata: false);
+                      if (photo != null) {
+                        final data = await photo.readAsBytes();
+                        setState(() {
+                          provider.imagenesActual.add(data);
+                        });
+                      }
+                    },
+                    label: Text('Camara', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.camera_alt, size: 20.sp)),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final ImagePicker picker = ImagePicker();
+                      final List<XFile> images = await picker.pickMultiImage(
+                          imageQuality: Preferences.calidadFoto.toInt(),
+                          maxHeight: 1280,
+                          maxWidth: 720,
+                          limit: 10,
+                          requestFullMetadata: false);
+                      if (images.isNotEmpty) {
+                        for (var element in images) {
+                          final data = (await element.readAsBytes());
+                          setState(() {
+                            provider.imagenesActual.add(data);
+                          });
+                        }
+                      }
+                    },
+                    label: Text('Galeria', style: TextStyle(fontSize: 16.sp)),
+                    icon: Icon(Icons.image_search, size: 20.sp)),
+                Divider(),
+                Column(mainAxisSize: MainAxisSize.min, children: [
+                  provider.imagenesActual.isEmpty
+                      ? Center(
+                          child: Text(
+                              "No ha ingresado ninguna evidencia fotografica",
+                              style: TextStyle(fontSize: 15.sp),
+                              textAlign: TextAlign.center))
+                      : Wrap(
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: provider.imagenesActual
+                              .map((e) => iconEvidencia(context, e, provider))
+                              .toList())
+                ])
               ])
             ])));
   }

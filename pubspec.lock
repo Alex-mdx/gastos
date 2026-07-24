@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.6"
+  animated_toggle_switch:
+    dependency: "direct main"
+    description:
+      name: animated_toggle_switch
+      sha256: faecb2339cde5e7d299389cf7e01cf35305a3ba212ae8ff51c02ce8385d1d273
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.7"
   archive:
     dependency: "direct main"
     description:
@@ -49,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
+  auto_size_text:
+    dependency: "direct main"
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   background_fetch:
     dependency: "direct main"
     description:
@@ -326,6 +342,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flutter_doc_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_doc_scanner
+      sha256: bd292288b64e1ec0ad9ac0b04454cef104fea9d63f7408cb70170591f92e11c6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.21"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -945,10 +969,10 @@ packages:
     dependency: transitive
     description:
       name: rive
-      sha256: "84a640f48122679e48397935ed1b971db19ef2e44bfcbae60e42fb5ce29a0a4e"
+      sha256: b3aa3bb588efa03224c163772e6f8ecabe66dc80f6f56fb097d4defa308ce2cb
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.9"
+    version: "0.14.10"
   rive_animated_icon:
     dependency: "direct main"
     description:
@@ -961,10 +985,10 @@ packages:
     dependency: transitive
     description:
       name: rive_native
-      sha256: "85dc8413398f7540eab9b73c6d704ecd5051ab9c57e539eed85ccd2a69f119aa"
+      sha256: "1caedaeb1b8310ed9cc07319d33e3b0b9b435263a533b645132c60be88db8efa"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.9"
+    version: "0.1.10"
   share_plus:
     dependency: "direct main"
     description:
@@ -1142,58 +1166,58 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
-      sha256: dc0f0813012c9585a0e200d039c3bfa60c1b778b957936c6d2267c252d180455
+      sha256: d0e0d7ae47dfaeca16dcf5f42028157fea76fee79da8c5f9d0c4f5a021b72d79
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_charts
-      sha256: b4cdec0d6065f4f2becb5103fee82db89cf315ab6508cd21bc39d60477ed29a7
+      sha256: f2c3e7009d8d3a1ea77d04bcd8e77259712b0b5dd01a07bbc3ba78c2a9e42681
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "1997047ac91baa1e3c626394fa77e56d86bb00ab0d5de755ca73d617500aa948"
+      sha256: "4e5825c8b0cbbc9ec66140dcbc0948d136bb8c0a9ac8b00bd762f1ed520ca4e8"
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
-      sha256: "7b80d57073678d4537c163132fd12d7c5c9dfed2aa1c3c764fd1345a1494962d"
+      sha256: "2fc0f83f5921658e64d61faab8b6710f9895368d9d55b2baca41cb1c6eb5d3d4"
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   syncfusion_flutter_sliders:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_sliders
-      sha256: "7cba850fc48d3e13eebad4986ed7a03fc6202636e4be352c2996dc8f7a298751"
+      sha256: "965f43ded9e587b4dba9c09249bd8d12725fc3e416108563055a88ab9161f944"
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   syncfusion_localizations:
     dependency: transitive
     description:
       name: syncfusion_localizations
-      sha256: "8fca17ed61ea731a62a0a040e9a3eecda622b156530d7f3605ddbc96ac015466"
+      sha256: "813de880899541c9799b1e192ebdbf26653e2c3afa39926ca19622be274cdd24"
       url: "https://pub.dev"
     source: hosted
-    version: "34.1.31"
+    version: "34.1.32"
   synchronized:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "93b153dcb6a26dcddee6ca087dd634b53e38c10b5aa163e8e49501a776456153"
+      sha256: "61894a1956de6b4fc1aefd0892e109514a1a706cbece3ac59decd90ff5a7a423"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.1"
+    version: "3.4.1+1"
   term_glyph:
     dependency: transitive
     description:

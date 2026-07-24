@@ -12,8 +12,12 @@ import '../utilities/theme/theme_color.dart';
 class DialogHistorialPagoFoto extends StatefulWidget {
   final File? file;
   final int idGasto;
+  final Function(bool)? deleteEvidence;
   const DialogHistorialPagoFoto(
-      {super.key, required this.file, required this.idGasto});
+      {super.key,
+      required this.file,
+      required this.idGasto,
+      this.deleteEvidence});
 
   @override
   State<DialogHistorialPagoFoto> createState() =>
@@ -79,9 +83,21 @@ class _DialogHistorialPagoFotoState extends State<DialogHistorialPagoFoto> {
                       errorBuilder: (context, error, stackTrace) =>
                           Icon(Icons.image, size: 30.sp),
                       fit: BoxFit.contain))),
-      IconButton(
-          onPressed: () => Navigation.pop(),
-          icon: Icon(Icons.arrow_back_ios, size: 20.sp))
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        IconButton(
+            onPressed: () => Navigation.pop(),
+            icon: Icon(Icons.arrow_back_ios, size: 20.sp)),
+        if (widget.deleteEvidence != null)
+          IconButton(
+              onPressed: () async => await Dialogs.showMorph(
+                  title: "Eliminar",
+                  description: "¿Desea eliminar esta evidencia?",
+                  loadingTitle: "Eliminando",
+                  onAcceptPressed: (context) async {
+                    await widget.deleteEvidence!(true);
+                  }),
+              icon: Icon(Icons.delete, color: ThemaMain.red, size: 22.sp))
+      ])
     ]);
   }
 }

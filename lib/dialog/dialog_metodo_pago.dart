@@ -49,7 +49,7 @@ class DialogMetodoPago extends StatelessWidget {
                             dense: tipo
                                 ? metodoSelect?.id == metodo.id
                                 : metodo.defecto == 1,
-                            leading: Icon(Icons.payment,
+                            leading: Icon(metodoSelect?.icon ?? Icons.payment,
                                 size: 20.sp,
                                 color: tipo
                                     ? metodoSelect?.id == metodo.id

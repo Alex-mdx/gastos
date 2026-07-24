@@ -24,7 +24,8 @@ class DialogCategorias extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text('Ingresar Tipo de Gasto',
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
-          TextField(maxLines: 2,
+          TextField(
+              maxLines: 2,
               minLines: 1,
               controller: tipoGasto,
               textCapitalization: TextCapitalization.sentences,
@@ -58,8 +59,8 @@ class DialogCategorias extends StatelessWidget {
                         log("${id + 1}");
                         CategoriaModel objeto = CategoriaModel(
                             id: id + 1,
-                            nombre: Textos.normalizar(tipoGasto.text) ,
-                            descripcion: Textos.normalizar( descripcion.text));
+                            nombre: Textos.normalizar(tipoGasto.text),
+                            descripcion: Textos.normalizar(descripcion.text));
                         await CategoriaController.insert(objeto);
                         provider.listaCategoria =
                             await CategoriaController.getItems();
@@ -67,7 +68,7 @@ class DialogCategorias extends StatelessWidget {
                       });
                 }
               },
-              child: const Text('Ingresar'))
+              child: Text('Ingresar', style: TextStyle(fontSize: 16.sp)))
         ]));
   }
 }

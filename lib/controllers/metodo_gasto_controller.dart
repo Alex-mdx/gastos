@@ -14,7 +14,8 @@ class MetodoGastoController {
       denominacion TEXT,
       status INTEGER,
       defecto INTEGER,
-      color INTEGER
+      color INTEGER,
+      icon INTEGER
       )""");
   }
 

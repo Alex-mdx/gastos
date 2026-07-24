@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
+import 'package:line_icons/line_icons.dart';
 
 class Parser {
   static int? toInt(var variableBool) {
@@ -54,6 +56,33 @@ class Parser {
     } catch (e) {
       log('error: $e');
       return null;
+    }
+  }
+
+  static IconData? stringToIconData(String? iconString) {
+    try {
+      if (iconString == null) {
+        return Icons.payment;
+      }
+      // Dividimos el string usando el delimitador
+      final parts = iconString.split('_');
+      if (parts.length != 2) {
+        return Icons.payment; // Retorna nulo si el formato es incorrecto
+      }
+
+      // Convertimos la primera parte (codePoint) a int
+      final codePoint = int.parse(parts[0]);
+
+      // La segunda parte es el fontFamily
+      final fontFamily = parts[1];
+
+      // Usamos el constructor de IconData para crear el objeto
+      return IconData(codePoint,
+          fontFamily: fontFamily, fontPackage: 'line_icons');
+    } catch (e) {
+      // Manejo de errores si la conversión falla
+      debugPrint('Error converting string to IconData: $e');
+      return Icons.payment;
     }
   }
 }
