@@ -144,7 +144,7 @@ class _MyWidgetState extends State<CardGastoWidget> {
                             ])),
                     Padding(
                       padding: EdgeInsets.only(bottom: 1.h),
-                      child: MultiselectGeneric(provider: widget.provider),
+                      child: MultiselectGeneric(provider: widget.provider)
                     ),
                     SizedBox(
                         height: 6.h,

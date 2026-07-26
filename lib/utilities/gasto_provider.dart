@@ -251,7 +251,7 @@ class GastoProvider with ChangeNotifier {
   }
 
   List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales) {
-    DateTime ahora = DateTime.now();
+    DateTime ahora = DateTime.now(); 
     int diaSemanaActual = ahora.weekday;
     DateTime inicioSemana = DateTime.parse(Textos.fechaYMD(
         fecha: ahora.subtract(Duration(days: diaSemanaActual - 1))));

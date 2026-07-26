@@ -54,14 +54,7 @@ class _MultiselectGenericState extends State<MultiselectGeneric> {
             styleAnimationType: AnimationType.onHover,
             styleBuilder: (i) => ToggleStyle(indicatorColor: i.color),
             style: ToggleStyle(
-                borderColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset: Offset(0, 1.5))
-                ]));
+                borderColor: ThemaMain.darkBlue,
+                borderRadius: BorderRadius.circular(10.0)));
   }
 }

@@ -39,7 +39,7 @@ dependencies:
   image: ^4.2.0
   image_picker: ^1.1.2
   internet_connection_checker_plus: ^3.0.0
-  intl: 0.20.2
+  intl: ^0.20.2
   line_icons: ^2.0.3
   local_auth: ^3.0.1
   auto_size_text: ^3.0.0
@@ -56,6 +56,7 @@ dependencies:
   pro_image_editor: ^13.2.0
   provider: ^6.1.2
   rive_animated_icon: ^2.0.2
+  flutter_date_pickers: ^0.4.3
   share_plus: ^13.2.0
   shared_preferences: ^2.3.3
   sizer: ^3.0.4
@@ -72,6 +73,7 @@ dependencies:
   youtube_player_flutter: ^10.0.1
   zo_collection_animation: ^0.0.1
   flutter_doc_scanner: ^0.0.21
+  flutter_material_color_picker: ^1.2.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0

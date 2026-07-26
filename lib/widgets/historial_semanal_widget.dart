@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/dialog/dialog_week_picker.dart';
 import 'package:gastos/utilities/gasto_provider.dart';
 import 'package:gastos/utilities/textos.dart';
 import 'package:gastos/utilities/theme/theme_app.dart';
@@ -75,31 +76,51 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                         connectorStyle: ConnectorStyle.dashedLine,
                         contentsAlign: ContentsAlign.reverse,
                         indicatorStyle: IndicatorStyle.outlined,
-                        contentsBuilder: (context, index) => Padding(
-                            padding: EdgeInsets.symmetric(horizontal: .2.w),
-                            child: Text(dias[index],
-                                style: TextStyle(
-                                    fontSize: dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                        ? 15.sp
-                                        : 13.sp,
-                                    fontStyle:
-                                        dias[index].toLowerCase().contains(DateFormat('EEEE', 'es').format(now))
-                                            ? FontStyle.normal
-                                            : FontStyle.italic,
-                                    fontWeight: FontWeight.bold))),
+                        contentsBuilder: (context, index) {
+                          bool isNow = dias[index]
+                              .toLowerCase()
+                              .contains(DateFormat('EEEE', 'es').format(now));
+                          return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: .2.w),
+                              child: Text(dias[index],
+                                  style: TextStyle(
+                                      fontSize: isNow ? 15.sp : 13.sp,
+                                      fontStyle: isNow
+                                          ? FontStyle.normal
+                                          : FontStyle.italic,
+                                      fontWeight: FontWeight.bold)));
+                        },
                         oppositeContentsBuilder: (context, index) => SizedBox(
                             width: 14.5.w,
                             height: 7.h,
-                            child: dias[index]
-                                    .toLowerCase()
-                                    .contains(DateFormat('EEEE', 'es').format(now))
+                            child: dias[index].toLowerCase().contains(
+                                    DateFormat('EEEE', 'es').format(now))
                                 ? animation(index)
                                 : tarjeta(index, false)),
                         itemCount: dias.length)))),
-        TextButton(
-            child: Text("Semana ${Textos.getNumeroSemana(now)}",
-                style: TextStyle(fontSize: 16.sp)),
-            onPressed: () {})
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Icon(LineIcons.arrowCircleLeft, size: 18.sp),
+                  onPressed: () {}),
+              TextButton(
+                  child: Text("Semana ${Textos.getNumeroSemana(now)}",
+                      style: TextStyle(fontSize: 16.sp)),
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        builder: (context) => DialogWeekPicker(
+                            initialDate: now,
+                            onChanged: (fecha) {
+                              now = fecha;
+                            }));
+                  }),
+              IconButton(
+                  icon: Icon(LineIcons.arrowCircleRight, size: 18.sp),
+                  onPressed: () {})
+            ])
       ]),
       Row(children: [
         Expanded(
