@@ -35,10 +35,8 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   await Preferences.init();
   await dotenv.load(fileName: ".env");
-  await Dropbox.init(
-      dotenv.env['DROPBOX_KEY'] ?? "",
-      dotenv.env['DROPBOX_SECRET'] ?? "",
-      dotenv.env['DROPBOX_TOKEN'] ?? "");
+  await Dropbox.init(dotenv.env['DROPBOX_KEY'] ?? "",
+      dotenv.env['DROPBOX_SECRET'] ?? "", dotenv.env['DROPBOX_TOKEN'] ?? "");
   await NotificacionesFun.init();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
@@ -57,7 +55,8 @@ class Main extends StatelessWidget {
           dismissOtherOnShow: true,
           position: ToastPosition.bottom,
           duration: const Duration(seconds: 4),
-          backgroundColor: Preferences.isLightTheme ? Colors.white : Colors.black,
+          backgroundColor:
+              Preferences.isLightTheme ? Colors.white : Colors.black,
           textStyle: TextStyle(
               fontSize: 15.sp,
               color: Preferences.isLightTheme ? Colors.black : Colors.white),
@@ -72,7 +71,8 @@ class Main extends StatelessWidget {
               ],
               debugShowCheckedModeBanner: false,
               title: 'Gastos',
-              themeMode: Preferences.isLightTheme ? ThemeMode.light : ThemeMode.dark,
+              themeMode:
+                  Preferences.isLightTheme ? ThemeMode.light : ThemeMode.dark,
               theme: Preferences.isLightTheme ? light : dark,
               navigatorKey: NavigationKey.navigatorKey,
               initialRoute: AppRoutes.initialRoute,

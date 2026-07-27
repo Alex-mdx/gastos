@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gastos/dialog/dialog_week_picker.dart';
@@ -9,6 +7,8 @@ import 'package:gastos/utilities/theme/theme_app.dart';
 import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timelines_plus/timelines_plus.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -26,7 +26,6 @@ class HistorialSemanalWidget extends StatefulWidget {
 
 class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
   bool change = false;
-  Timer? verificacion;
 
   List<String> dias = [
     "Lunes",
@@ -37,30 +36,15 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     "Sábado",
     "Domingo"
   ];
-  var now = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    time();
-  }
-
-  void time() {
-    verificacion = Timer.periodic(
-        Duration(minutes: 1),
-        (timer) => setState(() {
-              now = DateTime.now();
-            }));
-  }
-
-  @override
-  void dispose() {
-    verificacion?.cancel();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<GastoProvider>(context);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Stack(alignment: Alignment.topCenter, children: [
         SizedBox(
@@ -77,9 +61,9 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                         contentsAlign: ContentsAlign.reverse,
                         indicatorStyle: IndicatorStyle.outlined,
                         contentsBuilder: (context, index) {
-                          bool isNow = dias[index]
-                              .toLowerCase()
-                              .contains(DateFormat('EEEE', 'es').format(now));
+                          bool isNow = dias[index].toLowerCase().contains(
+                              DateFormat('EEEE', 'es')
+                                  .format(provider.todayNow));
                           return Padding(
                               padding: EdgeInsets.symmetric(horizontal: .2.w),
                               child: Text(dias[index],
@@ -88,15 +72,19 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                                       fontStyle: isNow
                                           ? FontStyle.normal
                                           : FontStyle.italic,
-                                      fontWeight: FontWeight.bold)));
+                                      fontWeight: isNow
+                                          ? FontWeight.bold
+                                          : FontWeight.normal)));
                         },
                         oppositeContentsBuilder: (context, index) => SizedBox(
-                            width: 14.5.w,
+                            width: 14.w,
                             height: 7.h,
                             child: dias[index].toLowerCase().contains(
-                                    DateFormat('EEEE', 'es').format(now))
-                                ? animation(index)
-                                : tarjeta(index, false)),
+                                    DateFormat('EEEE', 'es').format(
+                                        provider.selectFecha ?? DateTime.now()))
+                                ? animation(index, provider.todayNow,
+                                    fonsize: 14.sp)
+                                : tarjeta(index, false, provider.todayNow)),
                         itemCount: dias.length)))),
         Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -104,22 +92,28 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
             children: [
               IconButton(
                   icon: Icon(LineIcons.arrowCircleLeft, size: 18.sp),
-                  onPressed: () {}),
+                  onPressed: () => provider.todayNow =
+                      provider.todayNow.subtract(Duration(days: 7))),
               TextButton(
-                  child: Text("Semana ${Textos.getNumeroSemana(now)}",
+                  child: Text(
+                      "Semana ${Textos.getNumeroSemana(provider.todayNow)}",
                       style: TextStyle(fontSize: 16.sp)),
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        builder: (context) => DialogWeekPicker(
-                            initialDate: now,
-                            onChanged: (fecha) {
-                              now = fecha;
-                            }));
-                  }),
+                  onPressed: () async => showDialog(
+                      context: context,
+                      builder: (context) => DialogWeekPicker(
+                          initialDate: provider.todayNow,
+                          onChanged: (fecha) => provider.todayNow = fecha))),
               IconButton(
                   icon: Icon(LineIcons.arrowCircleRight, size: 18.sp),
-                  onPressed: () {})
+                  onPressed: () {
+                    if (provider.todayNow.day < DateTime.now().day) {
+                      provider.todayNow =
+                          provider.todayNow.add(Duration(days: 7));
+                    } else {
+                      showToast(
+                          "No se puede adelantar mas la semana a la fecha actual");
+                    }
+                  })
             ])
       ]),
       Row(children: [
@@ -155,7 +149,7 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
         Expanded(
             flex: 5,
             child: AnimatedFlipCounter(
-                value: widget.provider.promedioTotalSemana(),
+                value: widget.provider.promedioTotalSemana(provider.todayNow),
                 duration: Durations.long3,
                 fractionDigits: 2,
                 prefix: "\$",
@@ -185,30 +179,37 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
                     backgroundColor: ThemaMain.dialogbackground,
                     barRadius: Radius.circular(borderRadius),
                     lineHeight: 1.2.h,
-                    percent: ((widget.provider.promedioTotalSemana()) /
+                    percent: ((widget.provider
+                                    .promedioTotalSemana(provider.todayNow)) /
                                 widget.provider.presupuesto!.presupuesto!) >
                             1
                         ? 1
-                        : (widget.provider.promedioTotalSemana()) /
+                        : (widget.provider
+                                .promedioTotalSemana(provider.todayNow)) /
                             widget.provider.presupuesto!.presupuesto!,
-                    progressColor: widget.provider.porcentualColor(
-                        (100 * widget.provider.promedioTotalSemana()) /
-                            widget.provider.presupuesto!.presupuesto!)),
+                    progressColor: widget.provider.porcentualColor((100 *
+                            widget.provider
+                                .promedioTotalSemana(provider.todayNow)) /
+                        widget.provider.presupuesto!.presupuesto!)),
                 AnimatedDefaultTextStyle(
                     style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis,
-                        color: widget.provider.porcentualColor(
-                            (100 * widget.provider.promedioTotalSemana()) /
-                                widget.provider.presupuesto!.presupuesto!)),
+                        color: widget.provider.porcentualColor((100 *
+                                widget.provider
+                                    .promedioTotalSemana(provider.todayNow)) /
+                            widget.provider.presupuesto!.presupuesto!)),
                     duration: Durations.medium1,
                     child: AnimatedFlipCounter(
                         value: change
                             ? (widget.provider.presupuesto!.presupuesto! -
-                                    widget.provider.promedioTotalSemana())
+                                    widget.provider
+                                        .promedioTotalSemana(provider.todayNow))
                                 .abs()
-                            : (100 * widget.provider.promedioTotalSemana()) /
+                            : (100 *
+                                    widget.provider.promedioTotalSemana(
+                                        provider.todayNow)) /
                                 widget.provider.presupuesto!.presupuesto!,
                         duration: Durations.long3,
                         fractionDigits: change ? 2 : 1,
@@ -219,34 +220,37 @@ class _HistorialSemanalWidget extends State<HistorialSemanalWidget> {
     ]);
   }
 
-  Widget animation(int index) {
+  Widget animation(int index, DateTime ahora, {double? fonsize}) {
     return ZoCollectionDestination(
-        key: widget.gastoKey, child: tarjeta(index, true));
+        key: widget.gastoKey,
+        child: tarjeta(index, true, ahora, fonsize: fonsize));
   }
 
-  Widget tarjeta(int index, bool hoy) {
+  Widget tarjeta(int index, bool hoy, DateTime ahora, {double? fonsize}) {
     return Card(
         shadowColor: ThemaMain.darkGrey,
         elevation: hoy ? 3 : 0,
         color: hoy ? ThemaMain.dialogbackground : null,
         child: Padding(
-            padding: EdgeInsets.all(2.sp),
+            padding: EdgeInsets.all(hoy ? 2.sp : 1.sp),
             child: AnimatedDefaultTextStyle(
                 maxLines: 1,
                 style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: fonsize ?? 13.sp,
                     overflow: TextOverflow.ellipsis,
                     fontWeight: hoy ? FontWeight.bold : FontWeight.normal,
                     color: widget.provider.presupuesto?.activo == 1
                         ? widget.provider.porcentualColor(widget.provider
-                            .obtenerPorcentajeDia(index,
-                                widget.provider.promediarDiaSemana(index)))
+                            .obtenerPorcentajeDia(
+                                index,
+                                widget.provider
+                                    .promediarDiaSemana(index, ahora)))
                         : ThemaMain.primary),
                 duration: Duration(seconds: 2),
                 child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: AnimatedFlipCounter(
-                        value: widget.provider.promediarDiaSemana(index),
+                        value: widget.provider.promediarDiaSemana(index, ahora),
                         duration: Durations.long1,
                         fractionDigits: 1,
                         prefix: "\$")))));

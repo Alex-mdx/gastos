@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:gastos/utilities/services/navigation_services.dart';
 import 'package:gastos/utilities/textos.dart';
+import 'package:gastos/utilities/theme/theme_color.dart';
 import 'package:sizer/sizer.dart';
 
 class DialogWeekPicker extends StatefulWidget {
@@ -17,7 +18,6 @@ class DialogWeekPicker extends StatefulWidget {
 class _DialogWeekPickerState extends State<DialogWeekPicker> {
   late DateTime _selectedDate;
   final DateTime _firstDate = DateTime(2020);
-  final DateTime _lastDate = DateTime(2030);
 
   @override
   void initState() {
@@ -43,8 +43,24 @@ class _DialogWeekPickerState extends State<DialogWeekPicker> {
               _selectedDate = newPeriod.start;
             });
           },
+          datePickerStyles: DatePickerRangeStyles(
+              selectedPeriodStartDecoration: BoxDecoration(
+                  color: ThemaMain.primary,
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+              selectedPeriodLastDecoration: BoxDecoration(
+                  color: ThemaMain.primary,
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+              selectedSingleDateDecoration: BoxDecoration(
+                  color: ThemaMain.primary,
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0))),
+              currentDateStyle: TextStyle(
+                  color: ThemaMain.green,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp),
+              selectedDateStyle:
+                  TextStyle(color: ThemaMain.second, fontSize: 16.sp)),
           firstDate: _firstDate,
-          lastDate: _lastDate),
+          lastDate: DateTime.now()),
       Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         TextButton(
             onPressed: () => Navigation.pop(), child: const Text('Cancelar')),
@@ -56,7 +72,8 @@ class _DialogWeekPickerState extends State<DialogWeekPicker> {
               int targetWeekday = baseDate.weekday;
               int currentWeekday = _selectedDate.weekday;
               int difference = targetWeekday - currentWeekday;
-              DateTime resultDate = _selectedDate.add(Duration(days: difference));
+              DateTime resultDate =
+                  _selectedDate.add(Duration(days: difference));
 
               widget.onChanged(resultDate);
               Navigation.pop();

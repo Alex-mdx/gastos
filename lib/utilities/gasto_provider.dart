@@ -142,6 +142,13 @@ class GastoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime _todayNow = DateTime.now();
+  DateTime get todayNow => _todayNow;
+  set todayNow(DateTime valor) {
+    _todayNow = valor;
+    notifyListeners();
+  }
+
   Future<void> obtenerDato() async {
     await SqlGenerator.ads();
     listaCategoria = await CategoriaController.getItems();
@@ -164,11 +171,11 @@ class GastoProvider with ChangeNotifier {
     return monto;
   }
 
-  double promedioTotalSemana() {
+  double promedioTotalSemana(DateTime ahora) {
     double monto = 0.0;
     var newGastos = listaGastos;
     if (Preferences.promedio) {
-      newGastos = gastosFiltrados(listaGastos);
+      newGastos = gastosFiltrados(listaGastos, ahora);
     }
     for (var i = 0; i < 7; i++) {
       var sumatoria = contarSemana(
@@ -191,10 +198,10 @@ class GastoProvider with ChangeNotifier {
     return monto;
   }
 
-  double promediarDiaSemana(int index) {
+  double promediarDiaSemana(int index, DateTime ahora) {
     var newGastos = listaGastos;
     if (Preferences.promedio) {
-      newGastos = gastosFiltrados(listaGastos);
+      newGastos = gastosFiltrados(listaGastos, ahora);
     }
     return contarSemana(
                 fechas: newGastos.map((e) => DateTime.parse(e.fecha!)).toList(),
@@ -250,8 +257,7 @@ class GastoProvider with ChangeNotifier {
     return contador;
   }
 
-  List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales) {
-    DateTime ahora = DateTime.now(); 
+  List<GastoModelo> gastosFiltrados(List<GastoModelo> actuales, DateTime ahora) {
     int diaSemanaActual = ahora.weekday;
     DateTime inicioSemana = DateTime.parse(Textos.fechaYMD(
         fecha: ahora.subtract(Duration(days: diaSemanaActual - 1))));
