@@ -3,18 +3,38 @@
 Proyecto personal para el manejo de gastos personales, usando datos locales partiendo del SQLite, para persistencia de datos, y calculo de gastos partiendo de rango de fechas, presupuesto por semana y/o por día, así como evidencia fotográfica y uso de calendario para la mejor visualización de estos mismos, para un mejor y excelente control de gastos por persona.
 
 ## Changelog
+### Versión 0.2.92
+#### Implementaciones 🆕
+- Modificacion de tarjetas de gastos desde la pantalla de historial.
+- Navegacion por numero de semana desde la parte superior de la ventana de gastos.
+- Ahora las categorias se ordenan por mayor a menor uso.
+- Ahora puedes seleccionar un icono para el **metodo de pago**.
+#### Correcciones 🔧
+- Correccion de eliminacion de evidencias al descargarlo desde dropbox.
+- Ya funcionan los bidones de manera correcta y puedes eliminarlos todos.
+- Al momento de guardar el gasto ahora la animacion de dinero va al dia seleccionado.
+- Navegar entre pantallas ya no mostrará el menu emergente de cambio de pantallas.
+#### Mejoras 📈
+- Se mejoro la interfaz del selector de categorias.
+- Los montos de los gastos desde la tarjeta del dia de la semana son mas legibles.
+- Se cambió la selección de método de pago a un deslizable.
+- Ahora el ingreso de monto es un campo de texto de tipo numerico.
+---
 ### Versión 0.2.91
 #### Implementaciones 🆕
-  - Visor de evidencias.
+- Visor de evidencias.
+---
 ### Versión 0.2.9
 #### Correcciones 🔧
-  - Suspension de de Bidones
-  - Correccion de pantalla de presupuesto por dia.
+- Suspension de de Bidones
+- Correccion de pantalla de presupuesto por dia.
 #### Mejoras 📈
 - Mejora de interfaz grafica.
+---
 ### Versión 0.2.5
 #### Correcciones 🔧
 - Algoritmo de bidon corregido.
+---
 ### Versión 0.2.4
 #### Correcciones 🔧
 - Montos en el historial mas legible.
@@ -71,32 +91,32 @@ Proyecto personal para el manejo de gastos personales, usando datos locales part
 - Evidencia convertida a foto.
 - Al habilitar los presupuestos, el botón de cambio muestra una barra de porcentaje respectivo al sobrante del presupuesto.
 #### Implementaciones 🆕
-  - Implementación de **Método de pago**, por defecto estará el efectivo, se podrán crear mas, con su respectiva denominación.
-  - Botón de visualización de evidencias generales desde la pantalla principal de gastos.
-  - Conexión con **Dropbox** para respaldo de información total en la nube.
-  - **Bidones de presupuesto**, crea un sub presupuesto enlazado a su categoría de gasto o su método de gasto que se vacía y se vuelve a rellenar dependiendo de su configuración.
-  - Tema oscuro y claro activable.
-  - Graficas de gastos integradas su consumo.
-  ---
+- Implementación de **Método de pago**, por defecto estará el efectivo, se podrán crear mas, con su respectiva denominación.
+- Botón de visualización de evidencias generales desde la pantalla principal de gastos.
+- Conexión con **Dropbox** para respaldo de información total en la nube.
+- **Bidones de presupuesto**, crea un sub presupuesto enlazado a su categoría de gasto o su método de gasto que se vacía y se vuelve a rellenar dependiendo de su configuración.
+- Tema oscuro y claro activable.
+- Graficas de gastos integradas su consumo.
+---
 ### Versión 0.1.3
-  - Mejora al navegar por el calendario
-  - Corrección al momento de editar su imagen (la rueda de carga no desaparecía).
+- Mejora al navegar por el calendario
+- Corrección al momento de editar su imagen (la rueda de carga no desaparecía).
 ---
 ### Versión 0.1.2
-  - Corrección al instalar la app, que no se encontraba en los archivos del teléfono.
-  - Corrección al momento de editar su imagen.
+- Corrección al instalar la app, que no se encontraba en los archivos del teléfono.
+- Corrección al momento de editar su imagen.
 ---
 ### Versión 0.1.1
-  - Corrección de la palabra ~~galleria~~ a Galería ಠ~ಠ.
-  - Corrección de diseño y optimización en la tarjeta de gastos.
-  - Corrección de visualización de gastos en el historial.
-  - Implementación de edición de foto de evidencia.
-  - Implementación de vista de cambio de gasto actual en función al gasto limite al tocar el **limite %**.
-  - Implementación del botón "Eliminar datos", usando autentificación biométrica local del dispositivo.
-  - Optimización en la obtención de datos en el historial de gastos.
-  - **Opción habilitada**: Rango máximo para calculo de gasto.
-  - Optimización en la obtención de datos de gastos para su análisis.
-  - Eliminación del anuncio en pantalla completa al entrar en configuraciones
+- Corrección de la palabra ~~galleria~~ a Galería ಠ~ಠ.
+- Corrección de diseño y optimización en la tarjeta de gastos.
+- Corrección de visualización de gastos en el historial.
+- Implementación de edición de foto de evidencia.
+- Implementación de vista de cambio de gasto actual en función al gasto limite al tocar el **limite %**.
+- Implementación del botón "Eliminar datos", usando autentificación biométrica local del dispositivo.
+- Optimización en la obtención de datos en el historial de gastos.
+- **Opción habilitada**: Rango máximo para calculo de gasto.
+- Optimización en la obtención de datos de gastos para su análisis.
+- Eliminación del anuncio en pantalla completa al entrar en configuraciones
 ---
 ### Versión 0.1.0
-  - Lanzamiento de app
+- Lanzamiento de app

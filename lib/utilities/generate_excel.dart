@@ -28,58 +28,61 @@ class GenerateExcel {
       Sheet sheet1 = excel['Gastos'];
       try {
         var gastos = await GastosController.getAll();
-      if (gastos.isNotEmpty) {
-        sheet1.appendRow(gastos.first
-            .toJson()
-            .keys
-            .map((e) => TextCellValue(e.toString()))
-            .toList());
-        for (var element in gastos) {
-          log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
-          sheet1.appendRow(
-              element.toJson().values.map((i) => TextCellValue("$i")).toList());
+        if (gastos.isNotEmpty) {
+          sheet1.appendRow(gastos.first
+              .toJson()
+              .keys
+              .map((e) => TextCellValue(e.toString()))
+              .toList());
+          for (var element in gastos) {
+            log("${element.toJson().values.map((e) => TextCellValue(e.toString())).toList()}");
+            sheet1.appendRow(element
+                .toJson()
+                .values
+                .map((i) => TextCellValue("$i"))
+                .toList());
+          }
         }
-      }
       } catch (e) {
         log("Error al generar respaldo de gastos: $e");
       }
       try {
         Sheet sheet2 = excel['Categorias'];
-      var categorias = await CategoriaController.getItems();
-      if (categorias.isNotEmpty) {
-        sheet2.appendRow(categorias.first
-            .toJson()
-            .keys
-            .map((e) => TextCellValue(e.toString()))
-            .toList());
-        for (var element in categorias) {
-          sheet2.appendRow(element
+        var categorias = await CategoriaController.getItems();
+        if (categorias.isNotEmpty) {
+          sheet2.appendRow(categorias.first
               .toJson()
-              .values
-              .map((i) => TextCellValue(i.toString()))
+              .keys
+              .map((e) => TextCellValue(e.toString()))
               .toList());
+          for (var element in categorias) {
+            sheet2.appendRow(element
+                .toJson()
+                .values
+                .map((i) => TextCellValue(i.toString()))
+                .toList());
+          }
         }
-      } 
       } catch (e) {
         log("Error al generar respaldo de categorias: $e");
       }
       try {
         Sheet sheet3 = excel['MetodoPago'];
-      var metodoPago = await MetodoGastoController.getItems();
-      if (metodoPago.isNotEmpty) {
-        sheet3.appendRow(metodoPago.first
-            .toJson()
-            .keys
-            .map((e) => TextCellValue(e.toString()))
-            .toList());
-        for (var element in metodoPago) {
-          sheet3.appendRow(element
+        var metodoPago = await MetodoGastoController.getItems();
+        if (metodoPago.isNotEmpty) {
+          sheet3.appendRow(metodoPago.first
               .toJson()
-              .values
-              .map((i) => TextCellValue(i.toString()))
+              .keys
+              .map((e) => TextCellValue(e.toString()))
               .toList());
+          for (var element in metodoPago) {
+            sheet3.appendRow(element
+                .toJson()
+                .values
+                .map((i) => TextCellValue(i.toString()))
+                .toList());
+          }
         }
-      }
       } catch (e) {
         log("Error al generar respaldo de categorias: $e");
       }
@@ -90,39 +93,38 @@ class GenerateExcel {
           sheet4.appendRow(presupuesto
               .toJson()
               .keys
-            .map((e) => TextCellValue(e.toString()))
-            .toList());
+              .map((e) => TextCellValue(e.toString()))
+              .toList());
 
-        sheet4.appendRow(presupuesto
-            .toJson()
-            .values
-            .map((i) => TextCellValue(i.toString()))
-            .toList());
-      }
-      } catch (e) {
-        log("Error al generar respaldo de presupuesto: $e");
-      }
-      try {
-        Sheet sheet5 = excel['BidonesPresupuesto'];
-      var bidones = await BidonesController.getItems();
-      if (bidones.isNotEmpty) {
-        sheet5.appendRow(bidones.first
-            .toJson()
-            .keys
-            .map((e) => TextCellValue(e.toString()))
-            .toList());
-        for (var element in bidones) {
-          sheet5.appendRow(element
+          sheet4.appendRow(presupuesto
               .toJson()
               .values
               .map((i) => TextCellValue(i.toString()))
               .toList());
         }
+      } catch (e) {
+        log("Error al generar respaldo de presupuesto: $e");
       }
+      try {
+        Sheet sheet5 = excel['BidonesPresupuesto'];
+        var bidones = await BidonesController.getItems();
+        if (bidones.isNotEmpty) {
+          sheet5.appendRow(bidones.first
+              .toJson()
+              .keys
+              .map((e) => TextCellValue(e.toString()))
+              .toList());
+          for (var element in bidones) {
+            sheet5.appendRow(element
+                .toJson()
+                .values
+                .map((i) => TextCellValue(i.toString()))
+                .toList());
+          }
+        }
       } catch (e) {
         log("Error al generar respaldo de bidones: $e");
       }
-      
 
       final direccion = await getDownloadsDirectory();
       showToast("Guardando respaldo generado");
@@ -152,7 +154,6 @@ class GenerateExcel {
 
   static Future<File?> importarGlobal() async {
     FilePickerResult? pick = await FilePicker.pickFiles(
-        allowMultiple: false,
         type: FileType.custom,
         dialogTitle: "Ingrese los datos de sus gastos",
         allowedExtensions: ['xlsx', 'zip', 'rar']);
@@ -167,262 +168,267 @@ class GenerateExcel {
 
   static Future<bool> read(File? csv) async {
     try {
-    if (csv != null) {
-      showToast("Leyendo datos");
-      var bytes = csv.readAsBytesSync();
-      var excel = Excel.decodeBytes(bytes);
-      log("${excel.tables.keys}");
-      for (var table in excel.tables.keys) {
-        List<Data?> row = [];
-        var maximo = 0;
-        switch (table) {
-          case "Gastos":
-            if (excel.tables[table]!.rows.length > 1) {
-              showToast("Leyendo Gastos");
-              await GastosController.deleteAll();
-              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                row = excel.tables[table]!.rows[i];
-                maximo = row.length;
-                //! 12 = ?
-                if (i != 0) {
-                  GastoModelo gasto = GastoModelo(
-                      id: 0 < maximo
-                          ? int.tryParse(row[0]!.value.toString())
-                          : null,
-                      categoriaId: 1 < maximo
-                          ? int.tryParse(row[1]!.value.toString())
-                          : null,
-                      monto: 2 < maximo
-                          ? double.parse(row[2]!.value.toString())
-                          : null,
-                      fecha: 3 < maximo ? row[3]!.value.toString() : null,
-                      dia: 4 < maximo ? row[4]!.value.toString() : null,
-                      mes: 5 < maximo ? row[5]!.value.toString() : null,
-                      peridico: 6 < maximo
-                          ? int.tryParse(row[6]!.value.toString())
-                          : null,
-                      ultimaFecha: 7 < maximo
-                          ? row[7]!.value.toString() == "null"
-                              ? null
-                              : row[7]!.value.toString()
-                          : null,
-                      periodo: 8 < maximo
-                          ? PeriodoModelo.fromJson(
-                              jsonDecode(row[8]!.value.toString()))
-                          : PeriodoModelo(
-                              year: null,
-                              mes: null,
-                              dia: null,
-                              modificable: null),
-                      gasto: 9 < maximo
-                          ? int.tryParse(row[9]!.value.toString())
-                          : null,
-                      evidencia: 10 < maximo
-                          ? row[10]!.value.toString() == "null"
-                              ? []
-                              : List<String>.from(
-                                  jsonDecode(row[10]!.value.toString())
-                                      .map((x) => x.toString()))
-                          : [],
-                      nota: 11 < maximo
-                          ? row[11]!.value.toString() == "null"
-                              ? null
-                              : row[11]!.value.toString()
-                          : null,
-                      metodoPagoId: 12 < maximo
-                          ? int.tryParse(row[12]!.value.toString())
-                          : null);
-                  await GastosController.insert(gasto);
+      if (csv != null) {
+        showToast("Leyendo datos");
+        var bytes = csv.readAsBytesSync();
+        var excel = Excel.decodeBytes(bytes);
+        log("${excel.tables.keys}");
+        for (var table in excel.tables.keys) {
+          List<Data?> row = [];
+          var maximo = 0;
+          switch (table) {
+            case "Gastos":
+              if (excel.tables[table]!.rows.length > 1) {
+                showToast("Leyendo Gastos");
+                await GastosController.deleteAll();
+                for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                  row = excel.tables[table]!.rows[i];
+                  maximo = row.length;
+                  //! 12 = ?
+                  if (i != 0) {
+                    GastoModelo gasto = GastoModelo(
+                        id: 0 < maximo
+                            ? int.tryParse(row[0]!.value.toString())
+                            : null,
+                        categoriaId: 1 < maximo
+                            ? int.tryParse(row[1]!.value.toString())
+                            : null,
+                        monto: 2 < maximo
+                            ? double.parse(row[2]!.value.toString())
+                            : null,
+                        fecha: 3 < maximo ? row[3]!.value.toString() : null,
+                        dia: 4 < maximo ? row[4]!.value.toString() : null,
+                        mes: 5 < maximo ? row[5]!.value.toString() : null,
+                        peridico: 6 < maximo
+                            ? int.tryParse(row[6]!.value.toString())
+                            : null,
+                        ultimaFecha: 7 < maximo
+                            ? row[7]!.value.toString() == "null"
+                                ? null
+                                : row[7]!.value.toString()
+                            : null,
+                        periodo: 8 < maximo
+                            ? PeriodoModelo.fromJson(
+                                jsonDecode(row[8]!.value.toString()))
+                            : PeriodoModelo(
+                                year: null,
+                                mes: null,
+                                dia: null,
+                                modificable: null),
+                        gasto: 9 < maximo
+                            ? int.tryParse(row[9]!.value.toString())
+                            : null,
+                        evidencia: 10 < maximo
+                            ? row[10]!.value.toString() == "null"
+                                ? []
+                                : List<String>.from(
+                                    jsonDecode(row[10]!.value.toString())
+                                        .map((x) => x.toString()))
+                            : [],
+                        nota: 11 < maximo
+                            ? row[11]!.value.toString() == "null"
+                                ? null
+                                : row[11]!.value.toString()
+                            : null,
+                        metodoPagoId: 12 < maximo
+                            ? int.tryParse(row[12]!.value.toString())
+                            : null);
+                    await GastosController.insert(gasto);
+                  }
+                  showToast("Guardado de gastos");
                 }
-                showToast("Guardado de gastos");
+              } else {
+                showToast(
+                    "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
               }
-            } else {
-              showToast(
-                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
-            }
 
-            break;
-          case "Categorias":
-            if (excel.tables[table]!.rows.length > 1) {
-              showToast("Leyendo Categorias");
-              await CategoriaController.deleteAll();
-              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                row = excel.tables[table]!.rows[i];
-                maximo = row.length;
-                if (i != 0) {
-                  CategoriaModel cateogoria = CategoriaModel(
-                      id: 0 < maximo
-                          ? int.tryParse(row[0]!.value.toString())
-                          : null,
-                      nombre: 0 < maximo ? row[1]!.value.toString() : "",
-                      descripcion: 0 < maximo ? row[2]!.value.toString() : "");
-                  await CategoriaController.insert(cateogoria);
+              break;
+            case "Categorias":
+              if (excel.tables[table]!.rows.length > 1) {
+                showToast("Leyendo Categorias");
+                await CategoriaController.deleteAll();
+                for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                  row = excel.tables[table]!.rows[i];
+                  maximo = row.length;
+                  if (i != 0) {
+                    CategoriaModel cateogoria = CategoriaModel(
+                        id: 0 < maximo
+                            ? int.tryParse(row[0]!.value.toString())
+                            : null,
+                        nombre: 0 < maximo ? row[1]!.value.toString() : "",
+                        descripcion: 0 < maximo ? row[2]!.value.toString() : "",
+                        usoTotal: 3 < maximo
+                            ? int.parse(row[3]!.value.toString())
+                            : 0);
+                    await CategoriaController.insert(cateogoria);
+                  }
                 }
+                showToast("Guardado de Categorias");
+              } else {
+                showToast(
+                    "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
               }
-              showToast("Guardado de Categorias");
-            } else {
-              showToast(
-                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
-            }
-            break;
+              break;
 
-          case "MetodoPago":
-            if (excel.tables[table]!.rows.length > 1) {
-              showToast("Leyendo Metodos de Pago");
-              await MetodoGastoController.deleteAll();
-              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                row = excel.tables[table]!.rows[i];
-                maximo = row.length;
-                if (i != 0) {
-                  MetodoPagoModel metodoGasto = MetodoPagoModel(
-                      id: 0 < maximo
-                          ? int.tryParse(row[0]!.value.toString())!
-                          : 1,
-                      nombre: 1 < maximo ? row[1]!.value.toString() : "",
-                      cambio: 2 < maximo
-                          ? double.parse(row[2]!.value.toString())
-                          : 1,
-                      denominacion:
-                          3 < maximo ? row[3]!.value.toString() : "MXN",
-                      status:
-                          4 < maximo ? int.parse(row[4]!.value.toString()) : 0,
-                      defecto:
-                          5 < maximo ? int.parse(row[5]!.value.toString()) : 1,
-                      color: 6 < maximo
-                          ? Color(int.parse(row[6]!.value.toString()))
-                          : ThemaMain.primary);
-                  await MetodoGastoController.insert(metodoGasto);
+            case "MetodoPago":
+              if (excel.tables[table]!.rows.length > 1) {
+                showToast("Leyendo Metodos de Pago");
+                await MetodoGastoController.deleteAll();
+                for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                  row = excel.tables[table]!.rows[i];
+                  maximo = row.length;
+                  if (i != 0) {
+                    MetodoPagoModel metodoGasto = MetodoPagoModel(
+                        id: 0 < maximo
+                            ? int.tryParse(row[0]!.value.toString())!
+                            : 1,
+                        nombre: 1 < maximo ? row[1]!.value.toString() : "",
+                        cambio: 2 < maximo
+                            ? double.parse(row[2]!.value.toString())
+                            : 1,
+                        denominacion:
+                            3 < maximo ? row[3]!.value.toString() : "MXN",
+                        status: 4 < maximo
+                            ? int.parse(row[4]!.value.toString())
+                            : 0,
+                        defecto: 5 < maximo
+                            ? int.parse(row[5]!.value.toString())
+                            : 1,
+                        color: 6 < maximo
+                            ? Color(int.parse(row[6]!.value.toString()))
+                            : ThemaMain.primary);
+                    await MetodoGastoController.insert(metodoGasto);
+                  }
                 }
+                showToast("Guardado de Metodo de Pago");
+              } else {
+                showToast(
+                    "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
               }
-              showToast("Guardado de Metodo de Pago");
-            } else {
-              showToast(
-                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
-            }
-            break;
-          case "Presupuesto":
-            if (excel.tables[table]!.rows.length > 1) {
-              showToast("Leyendo Presupuesto");
-              await PresupuestoController.deleteAll();
-              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                row = excel.tables[table]!.rows[i];
-                maximo = row.length;
-                if (i != 0) {
-                  ///ni me acuerdo para que servia el periodo
-                  PresupuestoModel presupuesto = PresupuestoModel(
-                      activo: 0 < maximo
-                          ? int.tryParse(row[0]!.value.toString())!
-                          : 0,
-                      presupuesto: 1 < maximo
-                          ? double.parse(row[1]!.value.toString())
-                          : null,
-                      lunes: 2 < maximo
-                          ? double.parse(row[2]!.value.toString())
-                          : null,
-                      martes: 3 < maximo
-                          ? double.parse(row[3]!.value.toString())
-                          : null,
-                      miercoles: 4 < maximo
-                          ? double.parse(row[4]!.value.toString())
-                          : null,
-                      jueves: 5 < maximo
-                          ? double.parse(row[5]!.value.toString())
-                          : null,
-                      viernes: 6 < maximo
-                          ? double.parse(row[6]!.value.toString())
-                          : null,
-                      sabado: 7 < maximo
-                          ? double.parse(row[7]!.value.toString())
-                          : null,
-                      domingo: 8 < maximo
-                          ? double.parse(row[8]!.value.toString())
-                          : null,
-                      periodo: 9 < maximo
-                          ? int.tryParse(row[9]!.value.toString())
-                          : null);
-                  await PresupuestoController.insert(presupuesto);
+              break;
+            case "Presupuesto":
+              if (excel.tables[table]!.rows.length > 1) {
+                showToast("Leyendo Presupuesto");
+                await PresupuestoController.deleteAll();
+                for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                  row = excel.tables[table]!.rows[i];
+                  maximo = row.length;
+                  if (i != 0) {
+                    ///ni me acuerdo para que servia el periodo
+                    PresupuestoModel presupuesto = PresupuestoModel(
+                        activo: 0 < maximo
+                            ? int.tryParse(row[0]!.value.toString())!
+                            : 0,
+                        presupuesto: 1 < maximo
+                            ? double.parse(row[1]!.value.toString())
+                            : null,
+                        lunes: 2 < maximo
+                            ? double.parse(row[2]!.value.toString())
+                            : null,
+                        martes: 3 < maximo
+                            ? double.parse(row[3]!.value.toString())
+                            : null,
+                        miercoles: 4 < maximo
+                            ? double.parse(row[4]!.value.toString())
+                            : null,
+                        jueves: 5 < maximo
+                            ? double.parse(row[5]!.value.toString())
+                            : null,
+                        viernes: 6 < maximo
+                            ? double.parse(row[6]!.value.toString())
+                            : null,
+                        sabado: 7 < maximo
+                            ? double.parse(row[7]!.value.toString())
+                            : null,
+                        domingo: 8 < maximo
+                            ? double.parse(row[8]!.value.toString())
+                            : null,
+                        periodo: 9 < maximo
+                            ? int.tryParse(row[9]!.value.toString())
+                            : null);
+                    await PresupuestoController.insert(presupuesto);
+                  }
                 }
+                showToast("Guardo Presupuesto");
+              } else {
+                showToast(
+                    "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
               }
-              showToast("Guardo Presupuesto");
-            } else {
-              showToast(
-                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
-            }
-            break;
-          case "BidonesPresupuesto":
-            if (excel.tables[table]!.rows.length > 1) {
-              debugPrint("leyendo");
-              await BidonesController.deleteAll();
-              showToast("Guardo Bidones de Presupuesto");
-              for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
-                row = excel.tables[table]!.rows[i];
-                maximo = row.length;
-                log("bPre: ${row.map((e) => e!.value.toString())} ${i != 0}");
-                if (i != 0) {
-                  BidonesModel bidon = BidonesModel(
-                      id: 0 < maximo
-                          ? int.tryParse(row[0]!.value.toString())!
-                          : 1,
-                      identificador: row[1]!.value.toString(),
-                      nombre: row[2]!.value.toString(),
-                      montoInicial: 3 < maximo
-                          ? double.parse(row[3]!.value.toString())
-                          : 0,
-                      montoFinal: 4 < maximo
-                          ? double.parse(row[4]!.value.toString())
-                          : 0,
-                      metodoPago: 5 < maximo
-                          ? row[5]!.value.toString() == "null"
-                              ? []
-                              : List<int>.from(
-                                  jsonDecode(row[5]?.value.toString() ?? "[]")
-                                      .map((x) => int.parse(x.toString())))
-                          : [],
-                      categoria: 6 < maximo
-                          ? row[6]!.value.toString() == "null"
-                              ? []
-                              : List<int>.from(
-                                  jsonDecode(row[6]?.value.toString() ?? "[]")
-                                      .map((x) => int.parse(x.toString())))
-                          : [],
-                      diasEfecto: 7 < maximo
-                          ? row[7]!.value.toString() == "null"
-                              ? []
-                              : List<int>.from(
-                                  jsonDecode(row[7]?.value.toString() ?? "[]")
-                                      .map((x) => int.parse(x.toString())))
-                          : [],
-                      fechaInicio: DateTime.parse(row[8]!.value.toString()),
-                      fechaFinal: DateTime.parse(row[9]!.value.toString()),
-                      cerrado: 10 < maximo
-                          ? int.parse(row[10]!.value.toString())
-                          : 0,
-                      inhabilitado: 11 < maximo
-                          ? int.parse(row[11]!.value.toString())
-                          : 0,
-                      gastos: 12 < maximo
-                          ? row[12]!.value.toString() == "null"
-                              ? []
-                              : List<int>.from(jsonDecode(row[12]?.value.toString() ?? "[]").map((x) => int.parse(x.toString())))
-                          : []);
-                  log("${bidon.toJson()}");
-                  await BidonesController.insert(bidon);
-                }
+              break;
+            case "BidonesPresupuesto":
+              if (excel.tables[table]!.rows.length > 1) {
+                debugPrint("leyendo");
+                await BidonesController.deleteAll();
                 showToast("Guardo Bidones de Presupuesto");
+                for (var i = 0; i < excel.tables[table]!.rows.length; i++) {
+                  row = excel.tables[table]!.rows[i];
+                  maximo = row.length;
+                  log("bPre: ${row.map((e) => e!.value.toString())} ${i != 0}");
+                  if (i != 0) {
+                    BidonesModel bidon = BidonesModel(
+                        id: 0 < maximo
+                            ? int.tryParse(row[0]!.value.toString())!
+                            : 1,
+                        identificador: row[1]!.value.toString(),
+                        nombre: row[2]!.value.toString(),
+                        montoInicial: 3 < maximo
+                            ? double.parse(row[3]!.value.toString())
+                            : 0,
+                        montoFinal: 4 < maximo
+                            ? double.parse(row[4]!.value.toString())
+                            : 0,
+                        metodoPago: 5 < maximo
+                            ? row[5]!.value.toString() == "null"
+                                ? []
+                                : List<int>.from(
+                                    jsonDecode(row[5]?.value.toString() ?? "[]")
+                                        .map((x) => int.parse(x.toString())))
+                            : [],
+                        categoria: 6 < maximo
+                            ? row[6]!.value.toString() == "null"
+                                ? []
+                                : List<int>.from(
+                                    jsonDecode(row[6]?.value.toString() ?? "[]")
+                                        .map((x) => int.parse(x.toString())))
+                            : [],
+                        diasEfecto: 7 < maximo
+                            ? row[7]!.value.toString() == "null"
+                                ? []
+                                : List<int>.from(
+                                    jsonDecode(row[7]?.value.toString() ?? "[]")
+                                        .map((x) => int.parse(x.toString())))
+                            : [],
+                        fechaInicio: DateTime.parse(row[8]!.value.toString()),
+                        fechaFinal: DateTime.parse(row[9]!.value.toString()),
+                        cerrado: 10 < maximo
+                            ? int.parse(row[10]!.value.toString())
+                            : 0,
+                        inhabilitado: 11 < maximo
+                            ? int.parse(row[11]!.value.toString())
+                            : 0,
+                        gastos: 12 < maximo
+                            ? row[12]!.value.toString() == "null"
+                                ? []
+                                : List<int>.from(jsonDecode(row[12]?.value.toString() ?? "[]").map((x) => int.parse(x.toString())))
+                            : []);
+                    log("${bidon.toJson()}");
+                    await BidonesController.insert(bidon);
+                  }
+                  showToast("Guardo Bidones de Presupuesto");
+                }
+              } else {
+                showToast(
+                    "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
               }
-            } else {
-              showToast(
-                  "Importacion cancelada, Tabla de $table vacia, respaldo corrupto");
-            }
-            break;
-          default:
-            showToast("hoja $table no permitida");
+              break;
+            default:
+              showToast("hoja $table no permitida");
+          }
         }
+        showToast("Importacion finalizada");
+      } else {
+        showToast("No se encontro ningun archivo");
       }
-      showToast("Importacion finalizada");
-    } else {
-      showToast("No se encontro ningun archivo");
-    }
     } catch (e) {
       log("Error al leer datos\n$e");
       showToast("Error al leer datos\n$e");

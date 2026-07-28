@@ -25,6 +25,12 @@ class CategoriaController {
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
+  static Future<void> update(CategoriaModel cate) async {
+    final db = await database();
+    await db.update(nombreDB, cate.toJson(),
+        where: 'id = ?', whereArgs: [cate.id]);
+  }
+
   static Future<int> getLastId() async {
     final db = await database();
     final data =
@@ -35,19 +41,31 @@ class CategoriaController {
     return ((modelo?.id) ?? 0) + 1;
   }
 
-  static Future<CategoriaModel?> getItem({ required int id}) async {
+  static Future<CategoriaModel?> getItem({required int id}) async {
     final db = await database();
-    final categoria =
-        (await db.query(nombreDB,where: "id = ?",whereArgs: [id], orderBy: "nombre")).firstOrNull;
-    
-    return categoria == null? null: CategoriaModel.fromJson(categoria);
+    final categoria = (await db.query(nombreDB,
+            where: "id = ?", whereArgs: [id], orderBy: "nombre"))
+        .firstOrNull;
+
+    return categoria == null ? null : CategoriaModel.fromJson(categoria);
   }
 
-  static Future<List<CategoriaModel>> getItems() async {
+  static Future<List<CategoriaModel>> getItems({String? orderBy}) async {
     final db = await database();
+
+    // Verificamos si existe alguna categoría con uso_total > 0
+    final maxUsoResult =
+        await db.rawQuery("SELECT MAX(uso_total) as max_uso FROM $nombreDB");
+    final int maxUso = (maxUsoResult.first['max_uso'] as int?) ?? 0;
+
+    // Si maxUso es mayor a 0, se ordena por uso_total descendente y luego por nombre.
+    // En caso contrario, se utiliza el orderBy por defecto ("nombre").
+    final String sortOrder =
+        orderBy ?? (maxUso > 0 ? "uso_total DESC, nombre ASC" : "nombre ASC");
+
     List<CategoriaModel> categoriaModelo = [];
     List<Map<String, dynamic>> categoria =
-        await db.query(nombreDB, orderBy: "nombre");
+        await db.query(nombreDB, orderBy: sortOrder);
     for (var element in categoria) {
       categoriaModelo.add(CategoriaModel.fromJson(element));
     }
@@ -61,7 +79,7 @@ class CategoriaController {
         where: "nombre LIKE ?",
         whereArgs: ['%$word%'],
         orderBy: "nombre",
-        limit: 10);
+        limit: 5);
     for (var element in categoria) {
       categoriaModelo.add(CategoriaModel.fromJson(element));
     }

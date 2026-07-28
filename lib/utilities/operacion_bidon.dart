@@ -5,6 +5,7 @@ import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:gastos/models/gasto_model.dart';
 import 'package:oktoast/oktoast.dart';
 
+import '../controllers/categoria_controller.dart';
 import '../models/bidones_model.dart';
 import 'image_gen.dart';
 import 'textos.dart';
@@ -39,6 +40,11 @@ class OperacionGasto {
         evidencia: names);
     log("${finalTemp.toJson()}");
     await OperacionGasto.restador(gasto: finalTemp, resta: finalTemp.monto!);
+    final temp = await CategoriaController.getItem(id: gasto.categoriaId!);
+    if (temp != null) {
+      var actualizacion = temp.copyWith(usoTotal: temp.usoTotal + 1);
+      await CategoriaController.update(actualizacion);
+    }
     await GastosController.insert(finalTemp);
   }
 

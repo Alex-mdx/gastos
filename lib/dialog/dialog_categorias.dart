@@ -60,7 +60,8 @@ class DialogCategorias extends StatelessWidget {
                         CategoriaModel objeto = CategoriaModel(
                             id: id + 1,
                             nombre: Textos.normalizar(tipoGasto.text),
-                            descripcion: Textos.normalizar(descripcion.text));
+                            descripcion: Textos.normalizar(descripcion.text),
+                            usoTotal: 0);
                         await CategoriaController.insert(objeto);
                         provider.listaCategoria =
                             await CategoriaController.getItems();

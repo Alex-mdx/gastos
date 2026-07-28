@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:gastos/controllers/gastos_controller.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
+import '../controllers/categoria_controller.dart';
 import '../controllers/metodo_gasto_controller.dart';
 
 class SqlGenerator {
-
-static Future<void> ads() async {
+  static Future<void> ads() async {
     await SqlGenerator.existColumna(
-        add: "icon", database: MetodoGastoController.database, nombreDB: "metodo_pago");
-   
+        add: "icon",
+        database: MetodoGastoController.database,
+        nombreDB: "metodo_pago");
+    await SqlGenerator.existColumna(
+        add: "uso_total",
+        database: CategoriaController.database,
+        nombreDB: "categoria");
   }
 
   static Future<bool> existColumna(
@@ -57,6 +62,5 @@ static Future<void> ads() async {
 
   static Future<void> logout() async {
     await GastosController.deleteAll();
-    
   }
 }

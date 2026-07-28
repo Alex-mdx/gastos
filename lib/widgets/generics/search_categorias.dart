@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:sizer/sizer.dart';
@@ -61,10 +62,7 @@ class _SearchCategoriasState extends State<SearchCategorias> {
             selectedItem.nombre,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                color: ThemaMain.darkGrey,
-                fontSize: 15.sp,
-                fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold)),
         hintText: 'Categoria de Gasto',
         items: widget.list,
         itemsListPadding: EdgeInsets.all(0),
@@ -86,7 +84,8 @@ class _SearchCategoriasState extends State<SearchCategorias> {
                       text: item.nombre,
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   TextSpan(
-                      text: " |- ${item.descripcion}",
+                      text:
+                          " | ${item.descripcion}${kDebugMode ? " | ${item.usoTotal}" : ""}",
                       style: const TextStyle(fontWeight: FontWeight.normal))
                 ]),
                 maxLines: isSelected ? 1 : 2,

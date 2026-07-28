@@ -115,8 +115,7 @@ class PaginadoState extends State<Paginado> {
   Widget build(BuildContext context) {
     final navigator = Provider.of<NavigationProvider>(context);
     return PageView(
-        allowImplicitScrolling: false,
-        pageSnapping: false,
+        physics: const NeverScrollableScrollPhysics(),
         controller: navigator.pageController,
         children: navigator.pages,
         onPageChanged: (index) => navigator.index = index);
